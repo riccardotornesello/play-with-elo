@@ -10,21 +10,24 @@ import prisma from '../lib/prisma';
 import PlayersList from '../components/players-list/players-list';
 import MatchesList from '../components/matches-list/matches-list';
 
-export default function ServerSidePage({ matches, players }) {
+export default function HomePage({ matches, players }) {
   const { data: session } = useSession();
 
   return (
     <div>
       {session ? (
-        <a
-          href={`/api/auth/signout`}
-          onClick={(e) => {
-            e.preventDefault();
-            signOut();
-          }}
-        >
-          Sign out
-        </a>
+        <>
+          <a
+            href={`/api/auth/signout`}
+            onClick={(e) => {
+              e.preventDefault();
+              signOut();
+            }}
+          >
+            Sign out
+          </a>
+          <a href='/admin'>Admin</a>
+        </>
       ) : (
         <a
           href={`/api/auth/signin`}

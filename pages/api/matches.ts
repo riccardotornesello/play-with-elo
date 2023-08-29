@@ -10,13 +10,12 @@ export default async function handler(
 ) {
   if (req.method === 'POST') {
     // TODO: add input validation
-    // TODO: auth
 
-    // const session = await getServerSession(req, res, authOptions);
-    // if (!session) {
-    //   res.status(401).json({ message: 'Unauthorized' });
-    //   return;
-    // }
+    const session = await getServerSession(req, res, authOptions);
+    if (!session) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
 
     const {
       homePlayerId,

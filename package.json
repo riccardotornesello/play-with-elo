@@ -1,0 +1,32 @@
+{
+  "private": true,
+  "description": "",
+  "repository": "https://github.com/riccardotornesello/play-your-elo.git",
+  "bugs": {
+    "url": "https://github.com/riccardotornesello/play-your-elo/issues"
+  },
+  "homepage": "https://play-your-elo.com",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:generate": "prisma generate"
+  },
+  "author": "Riccardo Tornesello <riccardo.tornesello@gmail.com>",
+  "contributors": [],
+  "dependencies": {
+    "@prisma/client": "^5.2.0",
+    "next": "latest",
+    "next-auth": "latest",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.2",
+    "@types/react": "^18.2.0",
+    "prisma": "^5.2.0",
+    "typescript": "5.2.2"
+  }
+}

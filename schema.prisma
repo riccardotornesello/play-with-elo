@@ -1,0 +1,44 @@
+// schema.prisma
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = "file:./dev.db"
+}
+
+model Match {
+    id       String   @id @default(cuid())
+    playedAt DateTime @default(now())
+
+    homePlayerId String
+    awayPlayerId String
+
+    homePoints Int
+    awayPoints Int
+
+    homeTeam String
+    awayTeam String
+
+    homePlayer Player @relation("home_matches", fields: [homePlayerId], references: [id])
+    awayPlayer Player @relation("away_matches", fields: [awayPlayerId], references: [id])
+}
+
+model Player {
+    id       String @id @default(cuid())
+    fullName String
+    username String @unique
+    elo      Int    @default(0)
+
+    homeMatches Match[] @relation("home_matches")
+    awayMatches Match[] @relation("away_matches")
+}
+
+model Admin {
+    id           String @id @default(cuid())
+    username     String @unique
+    passwordHash String
+    passwordSalt String
+}

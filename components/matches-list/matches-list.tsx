@@ -1,34 +1,47 @@
 import { Match } from '../../lib/prisma';
+import {
+  Heading,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+} from '@chakra-ui/react';
 
 export default function MatchesList({ matches }: { matches: Match[] }) {
   return (
     <>
-      <h3>Recent matches</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Home</th>
-            <th>Away</th>
-            <th>Result</th>
-          </tr>
-        </thead>
+      <Heading as='h3'>Recent matches</Heading>
 
-        <tbody>
-          {matches.map((match) => (
-            <tr key={match.id}>
-              <td>
-                {match.homePlayer.username} ({match.homeTeam})
-              </td>
-              <td>
-                {match.awayPlayer.username} ({match.awayTeam})
-              </td>
-              <td>
-                {match.homePoints}:{match.awayPoints}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TableContainer>
+        <Table variant='striped'>
+          <Thead>
+            <Tr>
+              <Th>Home</Th>
+              <Th>Away</Th>
+              <Th>Result</Th>
+            </Tr>
+          </Thead>
+
+          <Tbody>
+            {matches.map((match) => (
+              <Tr key={match.id}>
+                <Td>
+                  {match.homePlayer.username} ({match.homeTeam})
+                </Td>
+                <Td>
+                  {match.awayPlayer.username} ({match.awayTeam})
+                </Td>
+                <Td>
+                  {match.homePoints}:{match.awayPoints}
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
     </>
   );
 }

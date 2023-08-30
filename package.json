@@ -17,7 +17,12 @@
   "author": "Riccardo Tornesello <riccardo.tornesello@gmail.com>",
   "contributors": [],
   "dependencies": {
+    "@chakra-ui/next-js": "^2.1.5",
+    "@chakra-ui/react": "^2.8.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@prisma/client": "^5.2.0",
+    "framer-motion": "^10.16.1",
     "next": "latest",
     "next-auth": "latest",
     "react": "^18.2.0",

@@ -55,7 +55,7 @@ export default function MatchCreationForm({ players, handleSubmit }) {
         <option value=''>Select a player</option>
         {players.map((player) => (
           <option value={player.id} key={player.id}>
-            {player.fullName} aka {player.username}
+            {player.username || player.fullName}
           </option>
         ))}
       </select>
@@ -72,7 +72,7 @@ export default function MatchCreationForm({ players, handleSubmit }) {
         <option value=''>Select a player</option>
         {players.map((player) => (
           <option value={player.id} key={player.id}>
-            {player.fullName} aka {player.username}
+            {player.username || player.fullName}
           </option>
         ))}
       </select>

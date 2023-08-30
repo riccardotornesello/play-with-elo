@@ -1,28 +1,45 @@
 import { Player } from '../../lib/prisma';
+import {
+  Heading,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+} from '@chakra-ui/react';
 
 export default function PlayersList({ players }: { players: Player[] }) {
   return (
     <>
-      <h3>Best players</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Player</th>
-            <th>Rating</th>
-          </tr>
-        </thead>
+      <Heading as='h3'>Best players</Heading>
 
-        <tbody>
-          {players.map((player) => (
-            <tr key={player.id}>
-              <td>
-                {player.fullName} aka {player.username}
-              </td>
-              <td>{player.elo}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TableContainer>
+        <Table variant='striped'>
+          <Thead>
+            <Tr>
+              <Th>Player</Th>
+              <Th>Rating</Th>
+              <Th>W-D-L</Th>
+            </Tr>
+          </Thead>
+
+          <Tbody>
+            {players.map((player) => (
+              <Tr key={player.id}>
+                <Td>{player.username || player.fullName}</Td>
+                <Td>{player.elo}</Td>
+                <Td>
+                  {player.homeWins + player.awayWins}-
+                  {player.homeDraws + player.awayDraws}-
+                  {player.homeLosses + player.awayLosses}
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
     </>
   );
 }

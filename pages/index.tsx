@@ -14,8 +14,6 @@ import MatchesList from '../components/matches-list/matches-list';
 export default function HomePage({ matches, players }) {
   const { data: session } = useSession();
 
-  console.log(players);
-
   return (
     <div>
       {session ? (

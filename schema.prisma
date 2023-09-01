@@ -10,17 +10,21 @@ datasource db {
 }
 
 model Match {
-    id       String   @id @default(cuid())
-    playedAt DateTime @default(now())
+    id        String   @id @default(cuid())
+    playedAt  DateTime @default(now())
+    createdAt DateTime @default(now())
 
     homePlayerId String
     awayPlayerId String
 
-    homePoints Int
-    awayPoints Int
+    homeScore Int @default(0)
+    awayScore Int @default(0)
 
     homeTeam String
     awayTeam String
+
+    homePointsDifference Float @default(0)
+    awayPointsDifference Float @default(0)
 
     homePlayer Player @relation("home_matches", fields: [homePlayerId], references: [id])
     awayPlayer Player @relation("away_matches", fields: [awayPlayerId], references: [id])
@@ -30,7 +34,7 @@ model Player {
     id       String @id @default(cuid())
     fullName String
     username String @unique
-    elo      Int    @default(0)
+    elo      Float  @default(0)
 
     homeMatches Match[] @relation("home_matches")
     awayMatches Match[] @relation("away_matches")

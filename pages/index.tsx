@@ -83,9 +83,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       LEFT JOIN (
         SELECT
           homePlayerId AS id,
-          COUNT(CASE WHEN homePoints > awayPoints THEN 1 END) AS homeWins,
-          COUNT(CASE WHEN homePoints < awayPoints THEN 1 END) AS homeLosses,
-          COUNT(CASE WHEN homePoints = awayPoints THEN 1 END) AS homeDraws
+          COUNT(CASE WHEN homeScore > awayScore THEN 1 END) AS homeWins,
+          COUNT(CASE WHEN homeScore < awayScore THEN 1 END) AS homeLosses,
+          COUNT(CASE WHEN homeScore = awayScore THEN 1 END) AS homeDraws
         FROM
           Match
         GROUP BY
@@ -94,9 +94,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       LEFT JOIN (
         SELECT
           awayPlayerId AS id,
-          COUNT(CASE WHEN homePoints < awayPoints THEN 1 END) AS awayWins,
-          COUNT(CASE WHEN homePoints > awayPoints THEN 1 END) AS awayLosses,
-          COUNT(CASE WHEN homePoints = awayPoints THEN 1 END) AS awayDraws
+          COUNT(CASE WHEN homeScore < awayScore THEN 1 END) AS awayWins,
+          COUNT(CASE WHEN homeScore > awayScore THEN 1 END) AS awayLosses,
+          COUNT(CASE WHEN homeScore = awayScore THEN 1 END) AS awayDraws
         FROM
           Match
         GROUP BY

@@ -35,7 +35,7 @@ export default function MatchesList({ matches }: { matches: Match[] }) {
                   {match.awayPlayer.username} ({match.awayTeam})
                 </Td>
                 <Td>
-                  {match.homePoints}:{match.awayPoints}
+                  {match.homeScore}:{match.awayScore}
                 </Td>
               </Tr>
             ))}

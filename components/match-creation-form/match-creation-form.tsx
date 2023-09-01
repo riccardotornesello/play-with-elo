@@ -5,8 +5,8 @@ export default function MatchCreationForm({ players, handleSubmit }) {
   const [awayTeam, setAwayTeam] = useState('');
   const [homePlayerId, setHomePlayerId] = useState('');
   const [awayPlayerId, setAwayPlayerId] = useState('');
-  const [homePoints, setHomePoints] = useState('');
-  const [awayPoints, setAwayPoints] = useState('');
+  const [homeScore, setHomePoints] = useState('');
+  const [awayScore, setAwayPoints] = useState('');
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -15,8 +15,8 @@ export default function MatchCreationForm({ players, handleSubmit }) {
       awayTeam,
       homePlayerId,
       awayPlayerId,
-      homePoints,
-      awayPoints,
+      homeScore,
+      awayScore,
     });
   };
 
@@ -78,24 +78,24 @@ export default function MatchCreationForm({ players, handleSubmit }) {
       </select>
       <br />
 
-      <label htmlFor='homePoints'>Home points:</label>
+      <label htmlFor='homeScore'>Home points:</label>
       <br />
       <input
         type='number'
-        id='homePoints'
-        name='homePoints'
-        value={homePoints}
+        id='homeScore'
+        name='homeScore'
+        value={homeScore}
         onChange={(e) => setHomePoints(parseInt(e.target.value))}
       />
       <br />
 
-      <label htmlFor='awayPoints'>Away points:</label>
+      <label htmlFor='awayScore'>Away points:</label>
       <br />
       <input
         type='number'
-        id='awayPoints'
-        name='awayPoints'
-        value={awayPoints}
+        id='awayScore'
+        name='awayScore'
+        value={awayScore}
         onChange={(e) => setAwayPoints(parseInt(e.target.value))}
       />
       <br />

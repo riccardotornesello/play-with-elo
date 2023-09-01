@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { authOptions } from './auth/[...nextauth]';
 import prisma from '../../lib/prisma';
 import { calculateElo } from '../../lib/elo';
+import { sendTelegramNotification } from '../../lib/telegram';
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,11 +21,19 @@ export default async function handler(
     const {
       homePlayerId,
       awayPlayerId,
-      homePoints,
-      awayPoints,
+      homeScore,
+      awayScore,
       homeTeam,
       awayTeam,
+      playedAt,
     } = req.body;
+
+    const oldTopPlayers = await prisma.player.findMany({
+      take: 5,
+      orderBy: {
+        elo: 'desc',
+      },
+    });
 
     const homePlayer = await prisma.player.findUnique({
       where: { id: homePlayerId },
@@ -41,8 +50,8 @@ export default async function handler(
     const [homeNewRating, awayNewRating] = calculateElo(
       homePlayer.elo,
       awayPlayer.elo,
-      homePoints,
-      awayPoints,
+      homeScore,
+      awayScore,
     );
 
     const match = await prisma.match.create({
@@ -57,10 +66,13 @@ export default async function handler(
             id: awayPlayerId,
           },
         },
-        homePoints,
-        awayPoints,
+        homeScore,
+        awayScore,
         homeTeam,
         awayTeam,
+        homePointsDifference: homeNewRating - homePlayer.elo,
+        awayPointsDifference: awayNewRating - awayPlayer.elo,
+        playedAt,
       },
     });
 
@@ -71,6 +83,35 @@ export default async function handler(
     await prisma.player.update({
       where: { id: awayPlayerId },
       data: { elo: awayNewRating },
+    });
+
+    const newTopPlayers = await prisma.player.findMany({
+      take: 5,
+      orderBy: {
+        elo: 'desc',
+      },
+    });
+
+    const ranking = newTopPlayers.map((player, index) => ({
+      username: player.username,
+      points: player.elo,
+      positionDiff: index - oldTopPlayers.findIndex((p) => p.id === player.id),
+    }));
+
+    await sendTelegramNotification({
+      homePlayer: {
+        username: homePlayer.username,
+        score: homeScore,
+        points: homeNewRating,
+        diff: homeNewRating - homePlayer.elo,
+      },
+      awayPlayer: {
+        username: awayPlayer.username,
+        score: awayScore,
+        points: awayNewRating,
+        diff: awayNewRating - awayPlayer.elo,
+      },
+      ranking,
     });
 
     res.status(200).json(match);

@@ -1,4 +1,8 @@
+'use client';
+
 import { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default function MatchCreationForm({ players, handleSubmit }) {
   const [homeTeam, setHomeTeam] = useState('');
@@ -7,6 +11,7 @@ export default function MatchCreationForm({ players, handleSubmit }) {
   const [awayPlayerId, setAwayPlayerId] = useState('');
   const [homeScore, setHomePoints] = useState('');
   const [awayScore, setAwayPoints] = useState('');
+  const [playedAt, setPlayedAt] = useState(new Date());
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -17,6 +22,7 @@ export default function MatchCreationForm({ players, handleSubmit }) {
       awayPlayerId,
       homeScore,
       awayScore,
+      playedAt,
     });
   };
 
@@ -99,6 +105,13 @@ export default function MatchCreationForm({ players, handleSubmit }) {
         onChange={(e) => setAwayPoints(parseInt(e.target.value))}
       />
       <br />
+
+      <DatePicker
+        onChange={(val) => setPlayedAt(val)}
+        selected={playedAt}
+        showTimeSelect
+        dateFormat='Pp'
+      />
 
       <button type='submit'>Submit</button>
     </form>

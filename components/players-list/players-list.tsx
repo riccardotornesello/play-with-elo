@@ -27,7 +27,7 @@ export default function PlayersList({ players }: { players: any[] }) {
           <Tbody>
             {players.map((player) => (
               <Tr key={player.id}>
-                <Td>{player.username || player.fullName}</Td>
+                <Td>{player.username}</Td>
                 <Td>{player.elo}</Td>
                 <Td>
                   {player.homeWins + player.awayWins}-

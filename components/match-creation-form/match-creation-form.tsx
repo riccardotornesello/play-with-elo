@@ -82,7 +82,7 @@ export default function MatchCreationForm({ players }: MatchCreationFormProps) {
                 <option value={undefined}>Select a player</option>
                 {players.map((player) => (
                   <option value={player.id} key={player.id}>
-                    {player.username || player.fullName}
+                    {player.username}
                   </option>
                 ))}
               </Select>
@@ -99,7 +99,7 @@ export default function MatchCreationForm({ players }: MatchCreationFormProps) {
                 <option value=''>Select a player</option>
                 {players.map((player) => (
                   <option value={player.id} key={player.id}>
-                    {player.username || player.fullName}
+                    {player.username}
                   </option>
                 ))}
               </Select>

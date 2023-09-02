@@ -77,7 +77,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       SELECT
         p.id,
         p.username,
-        p.fullName,
         p.elo,
         COALESCE(homeWins.homeWins, 0) as homeWins,
         COALESCE(homeWins.homeLosses, 0) as homeLosses,

@@ -10,7 +10,7 @@ import {
   TableContainer,
 } from '@chakra-ui/react';
 
-export default function MatchesList({ matches }: { matches: Match[] }) {
+export default function MatchesList({ matches }: { matches: any[] }) {
   return (
     <>
       <Heading as='h3'>Recent matches</Heading>

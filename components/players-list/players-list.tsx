@@ -10,7 +10,7 @@ import {
   TableContainer,
 } from '@chakra-ui/react';
 
-export default function PlayersList({ players }: { players: Player[] }) {
+export default function PlayersList({ players }: { players: any[] }) {
   return (
     <>
       <Heading as='h3'>Best players</Heading>

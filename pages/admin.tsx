@@ -3,10 +3,10 @@ import { GetServerSidePropsContext } from 'next';
 import prisma from '../lib/prisma';
 import MatchCreationForm from '../components/match-creation-form/match-creation-form';
 
-export default function AdminPage({ players }) {
+export default function AdminPage({ players }: { players: any }) {
   const [apiStatus, setApiStatus] = useState('idle');
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async (data: any) => {
     setApiStatus('pending');
 
     try {

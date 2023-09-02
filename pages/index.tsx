@@ -11,7 +11,13 @@ import { Heading } from '@chakra-ui/react';
 import PlayersList from '../components/players-list/players-list';
 import MatchesList from '../components/matches-list/matches-list';
 
-export default function HomePage({ matches, players }) {
+export default function HomePage({
+  matches,
+  players,
+}: {
+  matches: any[];
+  players: any[];
+}) {
   const { data: session } = useSession();
 
   return (
@@ -49,6 +55,7 @@ export default function HomePage({ matches, players }) {
   );
 }
 
+// @ts-ignore
 BigInt.prototype.toJSON = function () {
   return Number(this);
 };

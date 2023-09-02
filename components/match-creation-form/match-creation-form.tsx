@@ -4,16 +4,22 @@ import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-export default function MatchCreationForm({ players, handleSubmit }) {
+export default function MatchCreationForm({
+  players,
+  handleSubmit,
+}: {
+  players: any[];
+  handleSubmit: any;
+}) {
   const [homeTeam, setHomeTeam] = useState('');
   const [awayTeam, setAwayTeam] = useState('');
   const [homePlayerId, setHomePlayerId] = useState('');
   const [awayPlayerId, setAwayPlayerId] = useState('');
-  const [homeScore, setHomePoints] = useState('');
-  const [awayScore, setAwayPoints] = useState('');
+  const [homeScore, setHomePoints] = useState(0);
+  const [awayScore, setAwayPoints] = useState(0);
   const [playedAt, setPlayedAt] = useState(new Date());
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: any) => {
     e.preventDefault();
     handleSubmit({
       homeTeam,
@@ -107,7 +113,9 @@ export default function MatchCreationForm({ players, handleSubmit }) {
       <br />
 
       <DatePicker
-        onChange={(val) => setPlayedAt(val)}
+        onChange={(val) => {
+          if (val) setPlayedAt(val);
+        }}
         selected={playedAt}
         showTimeSelect
         dateFormat='Pp'

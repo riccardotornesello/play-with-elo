@@ -11,6 +11,6 @@ if (process.env.NODE_ENV === 'production') {
   prisma = global.prisma;
 }
 
-export type { Player, Admin, Match } from '@prisma/client';
+export type { User, Match } from '@prisma/client';
 
 export default prisma;

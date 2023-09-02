@@ -1,4 +1,3 @@
-import { Player } from '../../lib/prisma';
 import {
   Heading,
   Table,

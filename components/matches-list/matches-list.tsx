@@ -1,4 +1,3 @@
-import { Match } from '../../lib/prisma';
 import {
   Heading,
   Table,

@@ -86,7 +86,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         COALESCE(awayWins.awayLosses, 0) as awayLosses,
         COALESCE(awayWins.awayDraws, 0) as awayDraws
       FROM
-        Player p
+        User p
       LEFT JOIN (
         SELECT
           homePlayerId AS id,

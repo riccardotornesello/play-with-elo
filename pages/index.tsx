@@ -109,15 +109,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         GROUP BY
           awayPlayerId
       ) awayWins ON awayWins.id = p.id
+      WHERE
+        p.isPlayer = true
       ORDER BY
         p.elo DESC
     `,
-
-    /*prisma.player.findMany({
-      orderBy: {
-        elo: 'desc',
-      },
-    }),*/
   ]);
 
   return {

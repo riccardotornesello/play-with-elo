@@ -28,18 +28,21 @@ export default async function handler(
       playedAt,
     } = req.body;
 
-    const oldTopPlayers = await prisma.player.findMany({
+    const oldTopPlayers = await prisma.user.findMany({
       take: 5,
       orderBy: {
         elo: 'desc',
       },
+      where: {
+        isPlayer: true,
+      },
     });
 
-    const homePlayer = await prisma.player.findUnique({
-      where: { id: homePlayerId },
+    const homePlayer = await prisma.user.findUnique({
+      where: { id: homePlayerId, isPlayer: true },
     });
-    const awayPlayer = await prisma.player.findUnique({
-      where: { id: awayPlayerId },
+    const awayPlayer = await prisma.user.findUnique({
+      where: { id: awayPlayerId, isPlayer: true },
     });
 
     if (!homePlayer || !awayPlayer) {
@@ -76,19 +79,22 @@ export default async function handler(
       },
     });
 
-    await prisma.player.update({
+    await prisma.user.update({
       where: { id: homePlayerId },
       data: { elo: homeNewRating },
     });
-    await prisma.player.update({
+    await prisma.user.update({
       where: { id: awayPlayerId },
       data: { elo: awayNewRating },
     });
 
-    const newTopPlayers = await prisma.player.findMany({
+    const newTopPlayers = await prisma.user.findMany({
       take: 5,
       orderBy: {
         elo: 'desc',
+      },
+      where: {
+        isPlayer: true,
       },
     });
 

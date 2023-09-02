@@ -28,15 +28,20 @@ function askPassword(query) {
 async function main() {
     if (process.argv[2] == 'createadmin') {
         const username = process.argv[3]
+        if (!username) {
+            console.log('Please provide a username')
+            return
+        }
+
         const password = await askPassword('Password: ')
 
-        // Create an admin
         const { salt, hash } = await hashPassword(password)
-        await prisma.admin.create({
+        await prisma.user.create({
             data: {
                 username: username,
                 passwordHash: hash,
-                passwordSalt: salt
+                passwordSalt: salt,
+                isAdmin: true,
             }
         })
 

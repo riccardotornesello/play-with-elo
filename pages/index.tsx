@@ -64,9 +64,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const [session, matches, players] = await Promise.all([
     getServerSession(context.req, context.res, authOptions),
     prisma.match.findMany({
-      take: 10,
       orderBy: {
-        playedAt: 'desc',
+        createdAt: 'desc',
       },
       include: {
         homePlayer: true,

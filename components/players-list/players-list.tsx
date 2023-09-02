@@ -21,6 +21,7 @@ export default function PlayersList({ players }: { players: any[] }) {
               <Th>Player</Th>
               <Th>Rating</Th>
               <Th>W-D-L</Th>
+              <Th>Matches played</Th>
             </Tr>
           </Thead>
 
@@ -33,6 +34,14 @@ export default function PlayersList({ players }: { players: any[] }) {
                   {player.homeWins + player.awayWins}-
                   {player.homeDraws + player.awayDraws}-
                   {player.homeLosses + player.awayLosses}
+                </Td>
+                <Td>
+                  {player.homeWins +
+                    player.homeDraws +
+                    player.homeLosses +
+                    player.awayWins +
+                    player.awayDraws +
+                    player.awayLosses}
                 </Td>
               </Tr>
             ))}

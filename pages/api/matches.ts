@@ -23,8 +23,6 @@ export default async function handler(
       awayPlayerId,
       homeScore,
       awayScore,
-      homeTeam,
-      awayTeam,
       playedAt,
     } = req.body;
 
@@ -71,8 +69,6 @@ export default async function handler(
         },
         homeScore,
         awayScore,
-        homeTeam,
-        awayTeam,
         homePointsDifference: homeNewRating - homePlayer.elo,
         awayPointsDifference: awayNewRating - awayPlayer.elo,
         playedAt,

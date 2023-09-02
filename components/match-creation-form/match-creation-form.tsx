@@ -40,8 +40,6 @@ export default function MatchCreationForm({ players }: MatchCreationFormProps) {
       const res = await fetch('/api/matches', {
         method: 'POST',
         body: JSON.stringify({
-          homeTeam: '',
-          awayTeam: '',
           homePlayerId,
           awayPlayerId,
           homeScore,

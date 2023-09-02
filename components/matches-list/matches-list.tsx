@@ -28,10 +28,10 @@ export default function MatchesList({ matches }: { matches: any[] }) {
             {matches.map((match) => (
               <Tr key={match.id}>
                 <Td>
-                  {match.homePlayer.username} ({match.homeTeam})
+                  {match.homePlayer.username}
                 </Td>
                 <Td>
-                  {match.awayPlayer.username} ({match.awayTeam})
+                  {match.awayPlayer.username}
                 </Td>
                 <Td>
                   {match.homeScore}:{match.awayScore}

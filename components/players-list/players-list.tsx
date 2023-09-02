@@ -29,7 +29,7 @@ export default function PlayersList({ players }: { players: any[] }) {
             {players.map((player) => (
               <Tr key={player.id}>
                 <Td>{player.username}</Td>
-                <Td>{player.elo}</Td>
+                <Td>{Math.round(player.elo)}</Td>
                 <Td>
                   {player.homeWins + player.awayWins}-
                   {player.homeDraws + player.awayDraws}-

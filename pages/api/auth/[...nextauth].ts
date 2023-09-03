@@ -37,6 +37,8 @@ export const authOptions: NextAuthOptions = {
           name: user.username,
           isAdmin: user.isAdmin,
           isPlayer: user.isPlayer,
+          email: null,
+          picture: null,
         };
       },
     }),

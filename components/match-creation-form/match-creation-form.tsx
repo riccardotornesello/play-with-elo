@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useMemo } from 'react';
 import {
   Input,
   FormControl,
@@ -10,24 +10,50 @@ import {
   Heading,
   Button,
   Select,
+  Checkbox,
 } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Select as SearchableSelect, SingleValue } from 'chakra-react-select';
 
 export interface MatchCreationFormProps {
   players: any[];
+  teams: any[];
 }
 
-export default function MatchCreationForm({ players }: MatchCreationFormProps) {
+export default function MatchCreationForm({
+  players,
+  teams,
+}: MatchCreationFormProps) {
   // TODO: Add validation
   // TODO: Teams dropdown
   // TODO: Better result handling
+
+  const teamsData = useMemo(() => {
+    return teams.map((team) => ({
+      value: team.id,
+      label: `${team.name} (${team.league_name})`,
+    }));
+  }, [teams]);
 
   const [homePlayerId, setHomePlayerId] = useState('');
   const [awayPlayerId, setAwayPlayerId] = useState('');
   const [homeScore, setHomePoints] = useState(0);
   const [awayScore, setAwayPoints] = useState(0);
+  const [homeTeam, setHomeTeam] = useState<
+    SingleValue<{
+      value: any;
+      label: string;
+    } | null>
+  >(null);
+  const [awayTeam, setAwayTeam] = useState<
+    SingleValue<{
+      value: any;
+      label: string;
+    } | null>
+  >(null);
   const [playedAt, setPlayedAt] = useState(new Date());
+  const [notification, setNotification] = useState(false);
 
   const [apiStatus, setApiStatus] = useState('idle');
 
@@ -44,7 +70,10 @@ export default function MatchCreationForm({ players }: MatchCreationFormProps) {
           awayPlayerId,
           homeScore,
           awayScore,
+          homeTeam: homeTeam ? homeTeam['value'] : null,
+          awayTeam: awayTeam ? awayTeam['value'] : null,
           playedAt,
+          notification,
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -125,6 +154,28 @@ export default function MatchCreationForm({ players }: MatchCreationFormProps) {
               />
             </FormControl>
 
+            <FormControl>
+              <FormLabel>Home team</FormLabel>
+              <SearchableSelect
+                id='homeTeamId'
+                name='homeTeamId'
+                value={homeTeam}
+                onChange={(val) => setHomeTeam(val)}
+                options={teamsData}
+              />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Away team</FormLabel>
+              <SearchableSelect
+                id='awayTeamId'
+                name='awayTeamId'
+                value={awayTeam}
+                onChange={(val) => setAwayTeam(val)}
+                options={teamsData}
+              />
+            </FormControl>
+
             <DatePicker
               onChange={(val) => {
                 if (val) setPlayedAt(val);
@@ -133,6 +184,13 @@ export default function MatchCreationForm({ players }: MatchCreationFormProps) {
               showTimeSelect
               dateFormat='Pp'
             />
+
+            <Checkbox
+              isChecked={notification}
+              onChange={(e) => setNotification(e.target.checked)}
+            >
+              Send on Telegram
+            </Checkbox>
 
             <Button width='full' mt={4} type='submit'>
               Add match

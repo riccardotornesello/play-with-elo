@@ -23,7 +23,10 @@ export default async function handler(
       awayPlayerId,
       homeScore,
       awayScore,
+      homeTeamId,
+      awayTeamId,
       playedAt,
+      notification,
     } = req.body;
 
     const oldTopPlayers = await prisma.user.findMany({
@@ -71,6 +74,8 @@ export default async function handler(
         awayScore,
         homePointsDifference: homeNewRating - homePlayer.elo,
         awayPointsDifference: awayNewRating - awayPlayer.elo,
+        homeTeamId,
+        awayTeamId,
         playedAt,
       },
     });
@@ -100,21 +105,23 @@ export default async function handler(
       positionDiff: index - oldTopPlayers.findIndex((p) => p.id === player.id),
     }));
 
-    await sendTelegramNotification({
-      homePlayer: {
-        username: homePlayer.username,
-        score: homeScore,
-        points: homeNewRating,
-        diff: homeNewRating - homePlayer.elo,
-      },
-      awayPlayer: {
-        username: awayPlayer.username,
-        score: awayScore,
-        points: awayNewRating,
-        diff: awayNewRating - awayPlayer.elo,
-      },
-      ranking,
-    });
+    if (notification) {
+      await sendTelegramNotification({
+        homePlayer: {
+          username: homePlayer.username,
+          score: homeScore,
+          points: homeNewRating,
+          diff: homeNewRating - homePlayer.elo,
+        },
+        awayPlayer: {
+          username: awayPlayer.username,
+          score: awayScore,
+          points: awayNewRating,
+          diff: awayNewRating - awayPlayer.elo,
+        },
+        ranking,
+      });
+    }
 
     res.status(200).json(match);
   } else if (req.method === 'GET') {

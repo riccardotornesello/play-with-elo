@@ -32,14 +32,18 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        return { id: user.id, name: user.username };
+        return {
+          id: user.id,
+          name: user.username,
+          isAdmin: user.isAdmin,
+          isPlayer: user.isPlayer,
+        };
       },
     }),
   ],
   callbacks: {
-    async jwt({ token }) {
-      token.userRole = 'admin';
-      return token;
+    async jwt({ token, user }) {
+      return { ...token, ...user };
     },
   },
 };

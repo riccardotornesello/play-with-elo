@@ -1,7 +1,5 @@
 *.db
 data/
-assets/
-public/
 
 .DS_Store
 

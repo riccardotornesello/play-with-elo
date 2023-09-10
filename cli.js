@@ -13,7 +13,7 @@ async function hashPassword(password) {
     });
 }
 
-function askPassword(query) {
+function askText(query) {
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
@@ -25,6 +25,7 @@ function askPassword(query) {
     }))
 }
 
+
 async function main() {
     if (process.argv[2] == 'createadmin') {
         const username = process.argv[3]
@@ -33,7 +34,8 @@ async function main() {
             return
         }
 
-        const password = await askPassword('Password: ')
+        const email = await askText('Email: ')
+        const password = await askText('Password: ')
 
         const { salt, hash } = await hashPassword(password)
         await prisma.user.create({
@@ -41,6 +43,7 @@ async function main() {
                 username: username,
                 passwordHash: hash,
                 passwordSalt: salt,
+                email: email,
                 isAdmin: true,
             }
         })

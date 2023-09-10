@@ -4,6 +4,9 @@ import prisma from '../../../lib/prisma';
 import { verifyPassword } from '../../../lib/crypto';
 
 export const authOptions: NextAuthOptions = {
+  pages: {
+    signIn: '/auth/signin',
+  },
   providers: [
     CredentialsProvider({
       name: 'Play your elo',

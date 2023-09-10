@@ -25,28 +25,22 @@ const PasswordField = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   };
 
   return (
-    <FormControl>
-      <FormLabel htmlFor='password'>Password</FormLabel>
-      <InputGroup>
-        <InputRightElement>
-          <IconButton
-            variant='text'
-            aria-label={isOpen ? 'Mask password' : 'Reveal password'}
-            icon={isOpen ? <HiEyeOff /> : <HiEye />}
-            onClick={onClickReveal}
-          />
-        </InputRightElement>
-        <Input
-          id='password'
-          ref={mergeRef}
-          name='password'
-          type={isOpen ? 'text' : 'password'}
-          autoComplete='current-password'
-          required
-          {...props}
+    <InputGroup>
+      <Input
+        ref={mergeRef}
+        type={isOpen ? 'text' : 'password'}
+        autoComplete='current-password'
+        {...props}
+      />
+      <InputRightElement>
+        <IconButton
+          variant='text'
+          aria-label={isOpen ? 'Mask password' : 'Reveal password'}
+          icon={isOpen ? <HiEyeOff /> : <HiEye />}
+          onClick={onClickReveal}
         />
-      </InputGroup>
-    </FormControl>
+      </InputRightElement>
+    </InputGroup>
   );
 });
 

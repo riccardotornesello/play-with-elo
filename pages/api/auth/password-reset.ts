@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 import { newPasswordSchema } from '../../../schemas/api';
 import { decodeToken } from '../../../lib/jwt';
-import { hashPassword } from '../../../lib/crypto';
+import { hashPassword } from '../../../lib/crypto-old';
 
 export default async function handler(
   req: NextApiRequest,

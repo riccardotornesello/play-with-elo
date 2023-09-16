@@ -6,6 +6,7 @@ import { useSession, signOut, signIn } from 'next-auth/react';
 import { authOptions } from './api/auth/[...nextauth]';
 // Lib
 import prisma from '../lib/prisma';
+import dbConnect from '../lib/mongodb';
 // Components
 import { Heading } from '@chakra-ui/react';
 import PlayersList from '../components/players-list/players-list';
@@ -61,6 +62,8 @@ BigInt.prototype.toJSON = function () {
 };
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  await dbConnect();
+
   const [session, matches, players] = await Promise.all([
     getServerSession(context.req, context.res, authOptions),
     prisma.match.findMany({

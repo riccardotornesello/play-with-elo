@@ -1,7 +1,8 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import prisma from '../../../lib/prisma';
-import { verifyPassword } from '../../../lib/crypto-old';
+import dbConnect from '../../../lib/mongodb';
+import { authenticateUser } from '../../../models/User';
+import { bcryptCompare } from '../../../lib/crypto';
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -11,7 +12,7 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: 'Play your elo',
       credentials: {
-        username: { label: 'Username', type: 'text', placeholder: 'jsmith' },
+        username: { label: 'Username', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
@@ -19,18 +20,22 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const user = await prisma.user.findUnique({
-          where: { username: credentials.username, isAdmin: true },
-        });
-        if (!user || !user.passwordHash || !user.passwordSalt) {
+        console.log('1')
+
+        await dbConnect();
+
+        const user = await authenticateUser({ username: credentials.username });
+        if (!user) {
           return null;
         }
 
-        const isValid = await verifyPassword(
-          user.passwordHash,
-          user.passwordSalt,
+        console.log('user', user)
+
+        const isValid = await bcryptCompare(
           credentials.password,
+          user.password,
         );
+        console.log('isValid', isValid)
         if (!isValid) {
           return null;
         }
@@ -38,8 +43,6 @@ export const authOptions: NextAuthOptions = {
         return {
           id: user.id,
           name: user.username,
-          isAdmin: user.isAdmin,
-          isPlayer: user.isPlayer,
           email: null,
           picture: null,
         };

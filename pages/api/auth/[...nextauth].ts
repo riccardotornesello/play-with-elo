@@ -20,8 +20,6 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        console.log('1')
-
         await dbConnect();
 
         const user = await authenticateUser({ username: credentials.username });
@@ -29,13 +27,10 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        console.log('user', user)
-
         const isValid = await bcryptCompare(
           credentials.password,
           user.password,
         );
-        console.log('isValid', isValid)
         if (!isValid) {
           return null;
         }

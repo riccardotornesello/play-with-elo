@@ -1,21 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth/next';
 import { z } from 'zod';
+import { authOptions } from '../auth/[...nextauth]';
 import dbConnect from '../../../lib/mongodb';
-import { createUser } from '../../../models/User';
-import { bcryptHash } from '../../../lib/crypto';
+import { createLeague } from '../../../models/League';
 
 const schema = z.object({
-  username: z.string().min(3),
-  email: z.string().email({ message: 'Invalid email address' }),
-  password: z.string().min(8),
+  name: z.string().min(3),
+  description: z.string().min(8),
 });
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
-  // TODO: rate limit
-  // TODO: better error messages
-  // TODO: better password criteria
-  // TODO: better response messages
-  // TODO: authenticate
+  const session = await getServerSession(req, res, authOptions);
+  if (!session || !session.user) {
+    res.status(401).json({ message: 'Unauthorized' });
+    return;
+  }
 
   let parsed;
   try {
@@ -24,13 +24,13 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json(error);
   }
 
-  parsed.password = await bcryptHash(parsed.password);
+  const owner = (session.user as any)._id;
 
   await dbConnect();
 
-  return createUser(parsed)
-    .then((user) => {
-      res.status(200).json(user);
+  return createLeague({ ...parsed, owner })
+    .then((league) => {
+      res.status(200).json(league);
     })
     .catch((error) => {
       res.status(400).json(error);

@@ -1,127 +1,57 @@
-// Next
-import type { GetServerSidePropsContext } from 'next';
-// Auth
-import { getServerSession } from 'next-auth/next';
-import { useSession, signOut, signIn } from 'next-auth/react';
-import { authOptions } from './api/auth/[...nextauth]';
-// Lib
-import prisma from '../lib/prisma';
-import dbConnect from '../lib/mongodb';
-// Components
-import { Heading } from '@chakra-ui/react';
-import PlayersList from '../components/players-list/players-list';
-import MatchesList from '../components/matches-list/matches-list';
+'use client';
 
-export default function HomePage({
-  matches,
-  players,
-}: {
-  matches: any[];
-  players: any[];
-}) {
-  const { data: session } = useSession();
+import {
+  Stack,
+  Flex,
+  Button,
+  Text,
+  VStack,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 
+export default function WithBackgroundImage() {
   return (
-    <div>
-      {session ? (
-        <>
-          <a
-            href={`/api/auth/signout`}
-            onClick={(e) => {
-              e.preventDefault();
-              signOut();
-            }}
+    <Flex
+      w={'full'}
+      h={'100vh'}
+      backgroundImage={
+        'url(https://images.unsplash.com/photo-1600267175161-cfaa711b4a81?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80)'
+      }
+      backgroundSize={'cover'}
+      backgroundPosition={'center center'}
+    >
+      <VStack
+        w={'full'}
+        justify={'center'}
+        px={useBreakpointValue({ base: 4, md: 8 })}
+        bgGradient={'linear(to-r, blackAlpha.600, transparent)'}
+      >
+        <Stack maxW={'2xl'} align={'flex-start'} spacing={6}>
+          <Text
+            color={'white'}
+            fontWeight={700}
+            lineHeight={1.2}
+            fontSize={useBreakpointValue({ base: '3xl', md: '4xl' })}
           >
-            Sign out
-          </a>
-          <a href='/admin'>Admin</a>
-        </>
-      ) : (
-        <a
-          href={`/api/auth/signin`}
-          onClick={(e) => {
-            e.preventDefault();
-            signIn();
-          }}
-        >
-          Admin login
-        </a>
-      )}
-
-      <Heading as='h1'>Who is the strongest in the office?</Heading>
-
-      <PlayersList players={players} />
-      <MatchesList matches={matches} />
-    </div>
+            Play with ELO{' '}
+            <Text as={'span'} color={'blue.400'}>
+              rating system
+            </Text>
+            <br />
+            Website under construction
+          </Text>
+          <Stack direction={'row'}>
+            <Button
+              bg={'blue.400'}
+              rounded={'full'}
+              color={'white'}
+              _hover={{ bg: 'blue.500' }}
+            >
+              Let's get started
+            </Button>
+          </Stack>
+        </Stack>
+      </VStack>
+    </Flex>
   );
-}
-
-// @ts-ignore
-BigInt.prototype.toJSON = function () {
-  return Number(this);
-};
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  await dbConnect();
-
-  const [session, matches, players] = await Promise.all([
-    getServerSession(context.req, context.res, authOptions),
-    prisma.match.findMany({
-      orderBy: {
-        createdAt: 'desc',
-      },
-      include: {
-        homePlayer: true,
-        awayPlayer: true,
-      },
-    }),
-    prisma.$queryRaw`
-      SELECT
-        p.id,
-        p.username,
-        p.elo,
-        COALESCE(homeWins.homeWins, 0) as homeWins,
-        COALESCE(homeWins.homeLosses, 0) as homeLosses,
-        COALESCE(homeWins.homeDraws, 0) as homeDraws,
-        COALESCE(awayWins.awayWins, 0) as awayWins,
-        COALESCE(awayWins.awayLosses, 0) as awayLosses,
-        COALESCE(awayWins.awayDraws, 0) as awayDraws
-      FROM
-        User p
-      LEFT JOIN (
-        SELECT
-          homePlayerId AS id,
-          COUNT(CASE WHEN homeScore > awayScore THEN 1 END) AS homeWins,
-          COUNT(CASE WHEN homeScore < awayScore THEN 1 END) AS homeLosses,
-          COUNT(CASE WHEN homeScore = awayScore THEN 1 END) AS homeDraws
-        FROM
-          Match
-        GROUP BY
-          homePlayerId
-      ) homeWins ON homeWins.id = p.id
-      LEFT JOIN (
-        SELECT
-          awayPlayerId AS id,
-          COUNT(CASE WHEN homeScore < awayScore THEN 1 END) AS awayWins,
-          COUNT(CASE WHEN homeScore > awayScore THEN 1 END) AS awayLosses,
-          COUNT(CASE WHEN homeScore = awayScore THEN 1 END) AS awayDraws
-        FROM
-          Match
-        GROUP BY
-          awayPlayerId
-      ) awayWins ON awayWins.id = p.id
-      WHERE
-        p.isPlayer = true
-      ORDER BY
-        p.elo DESC
-    `,
-  ]);
-
-  return {
-    props: {
-      session: JSON.parse(JSON.stringify(session)),
-      matches: JSON.parse(JSON.stringify(matches)),
-      players: JSON.parse(JSON.stringify(players)),
-    },
-  };
 }

@@ -1,14 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { z } from 'zod';
 import dbConnect from '../../../lib/mongodb';
 import { createUser } from '../../../models/User';
-import { bcryptHash } from '../../../lib/crypto';
-
-const schema = z.object({
-  username: z.string().min(3),
-  email: z.string().email({ message: 'Invalid email address' }),
-  password: z.string().min(8),
-});
+import { hashPassword } from '../../../lib/crypto';
+import { signUpSchema } from '../../../schemas/auth';
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
   // TODO: rate limit
@@ -19,12 +13,12 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
 
   let parsed;
   try {
-    parsed = schema.parse(req.body);
+    parsed = signUpSchema.parse(req.body);
   } catch (error) {
     return res.status(400).json(error);
   }
 
-  parsed.password = await bcryptHash(parsed.password);
+  parsed.password = await hashPassword(parsed.password);
 
   await dbConnect();
 

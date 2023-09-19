@@ -1,10 +1,10 @@
 import { sign, verify } from 'jsonwebtoken';
 import config from './config';
 
-export function createToken(email: string, action: string) {
+export function createToken(userId: string, action: string) {
   const token = sign(
     {
-      email,
+      userId,
       action,
     },
     config.security.secretKey,
@@ -18,7 +18,11 @@ export function createToken(email: string, action: string) {
 
 export function decodeToken(token: string) {
   try {
-    return verify(token, config.security.secretKey);
+    const payload = verify(token, config.security.secretKey);
+    if (typeof payload === 'string') {
+      return null;
+    }
+    return payload;
   } catch (err) {
     return null;
   }

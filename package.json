@@ -24,9 +24,7 @@
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.3.1",
     "@prisma/client": "^5.2.0",
-    "bcrypt": "^5.1.1",
     "chakra-react-select": "^4.7.0",
-    "dotenv": "^16.3.1",
     "framer-motion": "^10.16.1",
     "jsonwebtoken": "^9.0.2",
     "moment": "^2.29.4",
@@ -44,7 +42,6 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^18.16.2",
     "@types/react": "^18.2.0",

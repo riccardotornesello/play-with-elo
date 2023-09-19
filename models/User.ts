@@ -27,3 +27,17 @@ export async function authenticateUser(user: IUserAuthenticate) {
     $or: [{ username: user.username }, { email: user.username }],
   });
 }
+
+export async function setPassword(
+  userId: mongoose.Types.ObjectId,
+  password: string,
+) {
+  return User.updateOne(
+    { _id: userId },
+    {
+      $set: {
+        password,
+      },
+    },
+  );
+}

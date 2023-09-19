@@ -1,14 +1,48 @@
-import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 
 const config = {
-  saltRounds: 10,
+  iterations: 10000,
+  keylen: 64,
+  digest: 'sha512',
 };
 
-export async function bcryptHash(input: string) {
-  const salt = await bcrypt.genSalt(config.saltRounds);
-  return await bcrypt.hash(input, salt);
+export async function hashPassword(password: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const salt = crypto.randomBytes(16).toString('hex');
+
+    crypto.pbkdf2(
+      password,
+      salt,
+      config.iterations,
+      config.keylen,
+      config.digest,
+      (err, derivedKey) => {
+        if (err) reject(err);
+
+        resolve(salt + ':' + derivedKey.toString('hex'));
+      },
+    );
+  });
 }
 
-export async function bcryptCompare(input: string, hash: string) {
-  return await bcrypt.compare(input, hash);
+export async function verifyPassword(
+  storedHash: string,
+  inputPassword: string,
+): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    const [storedSalt, storedHashedPassword] = storedHash.split(':');
+
+    crypto.pbkdf2(
+      inputPassword,
+      storedSalt,
+      config.iterations,
+      config.keylen,
+      config.digest,
+      (err, derivedKey) => {
+        if (err) reject(err);
+
+        resolve(storedHashedPassword === derivedKey.toString('hex'));
+      },
+    );
+  });
 }

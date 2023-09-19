@@ -2,7 +2,7 @@ import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import dbConnect from '../../../lib/mongodb';
 import { authenticateUser } from '../../../models/User';
-import { bcryptCompare } from '../../../lib/crypto';
+import { verifyPassword } from '../../../lib/crypto';
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -27,7 +27,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const isValid = await bcryptCompare(
+        const isValid = await verifyPassword(
           credentials.password,
           user.password,
         );

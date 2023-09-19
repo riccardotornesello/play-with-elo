@@ -1,14 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
-import { z } from 'zod';
 import { authOptions } from '../auth/[...nextauth]';
 import dbConnect from '../../../lib/mongodb';
 import { createLeague } from '../../../models/League';
-
-const schema = z.object({
-  name: z.string().min(3),
-  description: z.string().min(8),
-});
+import { leagueCreateSchema } from '../../../schemas/leagues';
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions);
@@ -19,7 +14,7 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
 
   let parsed;
   try {
-    parsed = schema.parse(req.body);
+    parsed = leagueCreateSchema.parse(req.body);
   } catch (error) {
     return res.status(400).json(error);
   }

@@ -24,7 +24,7 @@ import {
 } from '@chakra-ui/react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signInSchema, SignInSchema } from '../../schemas/api';
+import { signInSchema, SignInSchema } from '../../schemas/auth';
 import PasswordField from '../../components/password-field/password-field';
 
 const avatars = [
@@ -183,6 +183,8 @@ export default function SignInPage() {
 }
 
 function SignInForm() {
+  const searchParams = useSearchParams();
+
   const {
     register,
     handleSubmit,
@@ -192,7 +194,10 @@ function SignInForm() {
   });
 
   const onSubmit: SubmitHandler<SignInSchema> = async (data) => {
-    signIn('credentials', data);
+    signIn('credentials', {
+      ...data,
+      callbackUrl: searchParams.get('callbackUrl') || '/dashboard',
+    });
   };
 
   return (

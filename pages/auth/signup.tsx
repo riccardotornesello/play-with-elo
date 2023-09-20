@@ -1,5 +1,6 @@
 'use client';
 
+import { signIn } from 'next-auth/react';
 import {
   Box,
   Flex,
@@ -15,7 +16,14 @@ import {
   useBreakpointValue,
   IconProps,
   Icon,
+  FormControl,
+  FormErrorMessage,
 } from '@chakra-ui/react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signUpSchema, SignUpSchema } from '../../schemas/auth';
+import PasswordField from '../../components/password-field/password-field';
+import { ApiStatus, useMutation } from '../../hooks/api';
 
 const avatars = [
   {
@@ -159,7 +167,7 @@ export default function LoginPage() {
               lineHeight={1.1}
               fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
             >
-              Join our team
+              Join us
               <Text
                 as={'span'}
                 bgGradient='linear(to-r, red.400,pink.400)'
@@ -169,58 +177,22 @@ export default function LoginPage() {
               </Text>
             </Heading>
             <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-              We’re looking for amazing engineers just like you! Become a part
-              of our rockstar engineering team and skyrocket your career!
+              Create a new account or click{' '}
+              <Text
+                as={'a'}
+                color={'blue.400'}
+                href={'/auth/signin'}
+                _hover={{
+                  color: 'blue.600',
+                  textDecoration: 'underline',
+                }}
+              >
+                here to log in
+              </Text>{' '}
+              if you already have one
             </Text>
           </Stack>
-          <Box as={'form'} mt={10}>
-            <Stack spacing={4}>
-              <Input
-                placeholder='Firstname'
-                bg={'gray.100'}
-                border={0}
-                color={'gray.500'}
-                _placeholder={{
-                  color: 'gray.500',
-                }}
-              />
-              <Input
-                placeholder='firstname@lastname.io'
-                bg={'gray.100'}
-                border={0}
-                color={'gray.500'}
-                _placeholder={{
-                  color: 'gray.500',
-                }}
-              />
-              <Input
-                placeholder='+1 (___) __-___-___'
-                bg={'gray.100'}
-                border={0}
-                color={'gray.500'}
-                _placeholder={{
-                  color: 'gray.500',
-                }}
-              />
-              <Button fontFamily={'heading'} bg={'gray.200'} color={'gray.800'}>
-                Upload CV
-              </Button>
-            </Stack>
-            <Button
-              fontFamily={'heading'}
-              mt={8}
-              w={'full'}
-              bgGradient='linear(to-r, red.400,pink.400)'
-              color={'white'}
-              _hover={{
-                bgGradient: 'linear(to-r, red.400,pink.400)',
-                boxShadow: 'xl',
-              }}
-            >
-              Submit
-            </Button>
-          </Box>
-          form
+          <SignUpForm />
         </Stack>
       </Container>
       <Blur
@@ -230,6 +202,96 @@ export default function LoginPage() {
         left={-10}
         style={{ filter: 'blur(70px)' }}
       />
+    </Box>
+  );
+}
+
+function SignUpForm() {
+  // TODO: manage error (like duplicate username or email)
+
+  const { mutate, apiStatus } = useMutation('/api/auth/signup', {
+    onSuccess: (data, input) => {
+      console.log(input);
+      signIn('credentials', {
+        username: input.username,
+        password: input.password,
+        callbackUrl: '/dashboard',
+      });
+    },
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpSchema>({
+    resolver: zodResolver(signUpSchema),
+  });
+
+  const onSubmit: SubmitHandler<SignUpSchema> = async (data) => {
+    mutate(data);
+  };
+
+  return (
+    <Box as={'form'} onSubmit={handleSubmit(onSubmit)}>
+      <Stack spacing={4}>
+        <FormControl isInvalid={errors.username !== undefined}>
+          <Input
+            placeholder='Username'
+            bg={'gray.100'}
+            border={0}
+            color={'gray.500'}
+            _placeholder={{
+              color: 'gray.500',
+            }}
+            {...register('username')}
+          />
+          <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
+        </FormControl>
+        <FormControl isInvalid={errors.email !== undefined}>
+          <Input
+            placeholder='Email'
+            bg={'gray.100'}
+            border={0}
+            color={'gray.500'}
+            _placeholder={{
+              color: 'gray.500',
+            }}
+            {...register('email')}
+          />
+          <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+        </FormControl>
+        <FormControl isInvalid={errors.password !== undefined}>
+          <PasswordField
+            placeholder='Password'
+            bg={'gray.100'}
+            border={0}
+            color={'gray.500'}
+            _placeholder={{
+              color: 'gray.500',
+            }}
+            {...register('password')}
+          />
+          <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+        </FormControl>
+      </Stack>
+      <Button
+        fontFamily={'heading'}
+        mt={8}
+        w={'full'}
+        bgGradient='linear(to-r, red.400,pink.400)'
+        color={'white'}
+        _hover={{
+          bgGradient: 'linear(to-r, red.400,pink.400)',
+          boxShadow: 'xl',
+        }}
+        type='submit'
+        isLoading={
+          apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success
+        }
+      >
+        Submit
+      </Button>
     </Box>
   );
 }

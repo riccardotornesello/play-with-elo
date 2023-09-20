@@ -3,11 +3,11 @@
 import {
   Stack,
   Flex,
-  Button,
   Text,
   VStack,
   useBreakpointValue,
 } from '@chakra-ui/react';
+import ButtonLink from '../components/basic/button-link';
 
 export default function WithBackgroundImage() {
   return (
@@ -41,14 +41,15 @@ export default function WithBackgroundImage() {
             Website under construction
           </Text>
           <Stack direction={'row'}>
-            <Button
-              bg={'blue.400'}
-              rounded={'full'}
-              color={'white'}
-              _hover={{ bg: 'blue.500' }}
-            >
-              Let's get started
-            </Button>
+            <ButtonLink href='/dashboard' colorScheme='facebook'>
+              dashboard
+            </ButtonLink>
+            <ButtonLink href='/auth/signup' colorScheme='facebook'>
+              signup
+            </ButtonLink>
+            <ButtonLink href='/auth/signin' colorScheme='facebook'>
+              signin
+            </ButtonLink>
           </Stack>
         </Stack>
       </VStack>

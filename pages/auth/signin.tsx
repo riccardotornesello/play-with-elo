@@ -151,7 +151,7 @@ export default function SignInPage() {
               <Text
                 as={'a'}
                 color={'blue.400'}
-                href={'/auth/register'}
+                href={'/auth/signup'}
                 _hover={{
                   color: 'blue.600',
                   textDecoration: 'underline',

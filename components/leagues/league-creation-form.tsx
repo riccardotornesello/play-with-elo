@@ -1,7 +1,7 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormControl, FormLabel, Input, Stack, Button } from '@chakra-ui/react';
-import { ApiStatus, useMutation } from '../../lib/api';
+import { ApiStatus, useMutation } from '../../hooks/api';
 import {
   leagueCreateSchema,
   LeagueCreateSchema,

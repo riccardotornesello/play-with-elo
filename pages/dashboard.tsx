@@ -31,7 +31,6 @@ export default function HomePage({
       >
         Sign out
       </a>
-      <a href='/admin'>Admin</a>
 
       <LeagueCreationForm />
       <LeaguesListTable leagues={leagues} />

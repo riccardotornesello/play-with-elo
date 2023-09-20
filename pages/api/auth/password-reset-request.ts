@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { sendEmail } from '../../../lib/email';
-import prisma from '../../../lib/prisma';
 import { createToken } from '../../../lib/jwt';
 import config from '../../../lib/config';
 import { forgotPasswordRequestSchema } from '../../../schemas/password-reset';
@@ -19,9 +18,10 @@ export default async function handler(
       return res.status(400).json(error);
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: parsed.email },
-    });
+    // TODO const user = await prisma.user.findUnique({
+    //   where: { email: parsed.email },
+    // });
+    const user = { id: '1', email: parsed.email };
     if (!user) {
       return res.status(200).json({ message: 'Email sent' });
     }

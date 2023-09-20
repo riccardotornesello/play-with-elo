@@ -10,7 +10,7 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <ChakraProvider>
-        <Component {...pageProps} />
+        <Component session={session} {...pageProps} />
       </ChakraProvider>
     </SessionProvider>
   );

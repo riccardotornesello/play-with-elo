@@ -14,14 +14,14 @@ import MatchesList from '../components/matches-list/matches-list';
 import LeagueCreationForm from '../components/leagues/league-creation-form';
 
 export default function HomePage({
+  session,
   matches,
   players,
 }: {
+  session: any;
   matches: any[];
   players: any[];
 }) {
-  const { data: session } = useSession();
-
   return (
     <div>
       {session ? (
@@ -30,7 +30,9 @@ export default function HomePage({
             href={`/api/auth/signout`}
             onClick={(e) => {
               e.preventDefault();
-              signOut();
+              signOut({
+                callbackUrl: '/',
+              });
             }}
           >
             Sign out

@@ -1,11 +1,15 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormControl, FormLabel, Input, Stack, Button } from '@chakra-ui/react';
-import { ApiStatus, useMutation } from '../../hooks/api';
 import {
-  leagueCreateSchema,
-  LeagueCreateSchema,
-} from '../../schemas/leagues';
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Input,
+  Stack,
+  Button,
+} from '@chakra-ui/react';
+import { ApiStatus, useMutation } from '../../hooks/api';
+import { leagueCreateSchema, LeagueCreateSchema } from '../../schemas/leagues';
 
 export default function LeagueCreationForm() {
   const { mutate, apiStatus, error, data } = useMutation('/api/leagues');
@@ -19,17 +23,19 @@ export default function LeagueCreationForm() {
   });
 
   const onSubmit: SubmitHandler<LeagueCreateSchema> = async (data) => {
-    console.log(data);
+    mutate(data);
   };
 
   return (
     <>
       <Stack spacing='6'>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl>
+          <FormControl isInvalid={errors.name !== undefined}>
             <FormLabel>Name</FormLabel>
             <Input {...register('name')} />
+            <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
           </FormControl>
+
           <Button
             isLoading={apiStatus === ApiStatus.Loading}
             type='submit'
@@ -39,8 +45,8 @@ export default function LeagueCreationForm() {
           </Button>
         </form>
       </Stack>
-      {apiStatus === ApiStatus.Error && <p>Error: {error}</p>}
-      {apiStatus === ApiStatus.Success && <p>Success: {data}</p>}
+      {apiStatus === ApiStatus.Error && <p>Error</p>}
+      {apiStatus === ApiStatus.Success && <p>Success</p>}
     </>
   );
 }

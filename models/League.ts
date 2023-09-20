@@ -23,3 +23,7 @@ export const League =
 export async function createLeague(league: ILeagueCreate) {
   return League.create(league);
 }
+
+export async function getUserLeagues(owner: string) {
+  return League.find({ owner });
+}

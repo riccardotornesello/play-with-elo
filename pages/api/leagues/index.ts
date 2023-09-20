@@ -19,7 +19,7 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json(error);
   }
 
-  const owner = (session.user as any)._id;
+  const owner = (session.user as any).id;
 
   await dbConnect();
 

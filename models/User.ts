@@ -75,3 +75,7 @@ export async function addUserLeague(
     { session },
   );
 }
+
+export async function findUser(username: string) {
+  return User.findOne({ username });
+}

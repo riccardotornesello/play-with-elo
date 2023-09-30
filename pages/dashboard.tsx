@@ -6,7 +6,7 @@ import type {
 } from 'next';
 // Auth
 import { getServerSession } from 'next-auth/next';
-import { signOut, signIn } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { authOptions } from './api/auth/[...nextauth]';
 // Db
 import dbConnect from '../lib/mongodb';
@@ -54,6 +54,7 @@ export default function HomePage({
   leagues,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const onCreationSuccess = () => {
     window.location.reload();
   };

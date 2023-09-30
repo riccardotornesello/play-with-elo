@@ -77,7 +77,7 @@ export function PodiumPlayerCard({ player, position }: PodiumPlayerCardProps) {
           >
             <Avatar
               size='xl'
-              name={player.username}
+              name={player.teamName}
               src={player.avatar}
               my={{ base: 1, sm: avatarMargins[position - 1] }}
             >
@@ -92,7 +92,7 @@ export function PodiumPlayerCard({ player, position }: PodiumPlayerCardProps) {
             </Avatar>
           </Box>
           <Box minW='50%' px='2' my='auto'>
-            <Heading size='md'>{player.username}</Heading>
+            <Heading size='md'>{player.teamName}</Heading>
             <Badge
               colorScheme='green'
               fontSize='0.8em'
@@ -158,7 +158,7 @@ export function LeagueRankingTable({ players }: LeagueRankingProps) {
           {players.map((player, index) => (
             <Tr key={index}>
               <Td>{index + 4}</Td>
-              <Td>{player.username}</Td>
+              <Td>{player.teamName}</Td>
               <Td isNumeric>{player.points}</Td>
               <Td isNumeric>
                 {player.gameWins + player.gameLosses + player.gameDraws}

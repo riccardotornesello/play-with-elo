@@ -2,8 +2,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../auth/[...nextauth]';
 import dbConnect from '../../../../lib/mongodb';
-import { createInvitation } from '../../../../models/Invitation';
+import { createLeagueInvitation } from '../../../../models/League';
 import { leagueInvitationSchema } from '../../../../schemas/leagues';
+import { findUser } from '../../../../models/User';
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
@@ -27,14 +28,26 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
 
   await dbConnect();
 
-  // TODO: find user id by username
-  // TODO: avoid duplicates
+  const user = await findUser(parsed.username);
+  if (!user) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
 
-  return createInvitation({ userId: 'asd', leagueId: id })
-    .then((invitation) => {
-      res.status(200).json(invitation);
-    })
-    .catch((error) => {
-      res.status(400).json(error);
-    });
+  // TODO: Check if user is already in league
+
+  await createLeagueInvitation(id, user._id);
+
+  res.status(200).json({});
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
+  if (req.method === 'POST') {
+    return post(req, res);
+  } else {
+    res.status(405).json({ message: 'Method not allowed' });
+  }
 }

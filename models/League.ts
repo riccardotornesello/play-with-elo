@@ -22,6 +22,7 @@ export type ILeague = {
   description: string;
   createdAt: Date;
   players: IPlayer[];
+  invitations?: mongoose.Types.ObjectId[];
   //   games: string[];
 };
 
@@ -48,6 +49,7 @@ export const leagueSchema = new mongoose.Schema<ILeague>({
   description: { type: String, required: true },
   createdAt: { type: Date, required: true, default: Date.now },
   players: { type: [playerSchema], required: true },
+  invitations: { type: [mongoose.Schema.Types.ObjectId], required: false },
   //   games: { type: Array, required: false },
 });
 
@@ -89,4 +91,15 @@ export async function getLeagueById(leagueId: string) {
     throw new Error('League not found');
   }
   return league;
+}
+
+export async function createLeagueInvitation(leagueId: string, userId: string) {
+  return League.updateOne(
+    { _id: leagueId },
+    {
+      $addToSet: {
+        invitations: userId,
+      },
+    },
+  );
 }

@@ -8,81 +8,37 @@ import type {
 import { Container, Stack } from '@chakra-ui/react';
 import LeagueDescription from '../../components/leagues/league-description';
 import LeagueRanking from '../../components/leagues/league-ranking';
+import dbConnect from '../../lib/mongodb';
+import { ILeague, getLeagueById } from '../../models/League';
 
 export type LeagueDetailPageProps = {
-  // TODO: league type
-  league: any;
-  // TODO: player type
-  players: any[];
+  league: ILeague;
 };
 
 export const getServerSideProps: GetServerSideProps<
   LeagueDetailPageProps
 > = async (context: GetServerSidePropsContext) => {
-  // TODO: use real query
+  // TODO: handle 404 and 403
+  await dbConnect();
 
-  const league = {
-    id: '1',
-    name: 'League 1',
-    description: 'League 1 description',
-  };
-
-  const players = [
-    {
-      username: 'RxThornasda',
-      avatar: 'https://bit.ly/code-beast',
-      points: 120,
-      matches: 10,
-      victories: 5,
-    },
-    {
-      username: 'RxThornasd',
-      avatar: 'https://bit.ly/code-beast',
-      points: 120,
-      matches: 10,
-      victories: 5,
-    },
-    {
-      username: 'RxThornasd',
-      avatar: 'https://bit.ly/code-beast',
-      points: 120,
-      matches: 10,
-      victories: 5,
-    },
-    {
-      username: 'RxThornasd',
-      avatar: 'https://bit.ly/code-beast',
-      points: 120,
-      matches: 10,
-      victories: 5,
-    },
-    {
-      username: 'RxThornasd',
-      avatar: 'https://bit.ly/code-beast',
-      points: 120,
-      matches: 10,
-      victories: 5,
-    },
-  ];
+  const league = await getLeagueById(context.params?.id as string);
 
   return {
     props: {
-      league,
-      players,
+      league: JSON.parse(JSON.stringify(league)),
     },
   };
 };
 
 export default function LeagueDetailPage({
   league,
-  players,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <div>
       <Container maxW='container.lg'>
         <Stack>
           <LeagueDescription league={league} />
-          <LeagueRanking players={players} />
+          <LeagueRanking players={league.players} />
         </Stack>
       </Container>
     </div>

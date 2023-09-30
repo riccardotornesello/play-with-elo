@@ -22,15 +22,14 @@ import {
 } from '@chakra-ui/react';
 import { GiPunch } from 'react-icons/gi';
 import { FaArrowUp } from 'react-icons/fa';
+import { IPlayer } from '../../models/League';
 
 export type LeagueRankingProps = {
-  // TODO: player type
-  players: any[];
+  players: IPlayer[];
 };
 
 export type PodiumPlayerCardProps = {
-  // TODO: player type
-  player: any;
+  player: IPlayer;
   position: number;
 };
 
@@ -78,7 +77,7 @@ export function PodiumPlayerCard({ player, position }: PodiumPlayerCardProps) {
           >
             <Avatar
               size='xl'
-              name='Christian Nwamba'
+              name={player.username}
               src={player.avatar}
               my={{ base: 1, sm: avatarMargins[position - 1] }}
             >
@@ -118,7 +117,7 @@ export function PodiumPlayerCard({ player, position }: PodiumPlayerCardProps) {
             <Center h='100%'>Matches</Center>
             <Center>
               <Icon mr='5px' as={GiPunch} />
-              {player.matches}
+              {player.gameWins + player.gameLosses + player.gameDraws}
             </Center>
           </Box>
 
@@ -133,7 +132,7 @@ export function PodiumPlayerCard({ player, position }: PodiumPlayerCardProps) {
             <Center h='100%'>Victories</Center>
             <Center>
               <Icon mr='5px' as={FaArrowUp} />
-              {player.victories}
+              {player.gameWins}
             </Center>
           </Box>
         </SimpleGrid>
@@ -161,8 +160,10 @@ export function LeagueRankingTable({ players }: LeagueRankingProps) {
               <Td>{index + 4}</Td>
               <Td>{player.username}</Td>
               <Td isNumeric>{player.points}</Td>
-              <Td isNumeric>{player.matches}</Td>
-              <Td isNumeric>{player.victories}</Td>
+              <Td isNumeric>
+                {player.gameWins + player.gameLosses + player.gameDraws}
+              </Td>
+              <Td isNumeric>{player.gameWins}</Td>
             </Tr>
           ))}
         </Tbody>

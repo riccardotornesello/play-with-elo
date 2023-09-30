@@ -1,8 +1,8 @@
-import { Card, CardHeader, CardBody, Text, Heading } from '@chakra-ui/react';
+import { Card, CardBody, Text, Heading } from '@chakra-ui/react';
+import { ILeague } from '../../models/League';
 
 export type LeagueDescriptionProps = {
-  // TODO: Add league type
-  league: any;
+  league: ILeague;
 };
 
 export default function LeagueDescription({ league }: LeagueDescriptionProps) {

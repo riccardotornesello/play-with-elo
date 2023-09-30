@@ -12,33 +12,81 @@ import {
   Flex,
   AvatarBadge,
   Text,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Stack,
 } from '@chakra-ui/react';
 import { GiPunch } from 'react-icons/gi';
 import { FaArrowUp } from 'react-icons/fa';
 
+export type LeagueRankingProps = {
+  // TODO: player type
+  players: any[];
+};
+
 export type PodiumPlayerCardProps = {
   // TODO: player type
   player: any;
+  position: number;
 };
 
-export function PodiumPlayerCard({ player }: PodiumPlayerCardProps) {
+export default function LeagueRanking({ players }: LeagueRankingProps) {
+  return (
+    <Stack spacing={10}>
+      <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={10}>
+        <Box mt='auto'>
+          <PodiumPlayerCard player={players[1]} position={2} />
+        </Box>
+        <Box mt='auto'>
+          <PodiumPlayerCard player={players[0]} position={1} />
+        </Box>
+        <Box mt='auto'>
+          <PodiumPlayerCard player={players[2]} position={3} />
+        </Box>
+      </SimpleGrid>
+      {players.length > 3 && <LeagueRankingTable players={players.slice(3)} />}
+    </Stack>
+  );
+}
+
+export function PodiumPlayerCard({ player, position }: PodiumPlayerCardProps) {
   const podiumColors = ['yellow.500', 'gray.500', 'orange.500'];
   const podiumTextSuffix = ['st', 'nd', 'rd'];
+  const avatarMargins = ['40px', '20px', '10px'];
+
+  if (player === undefined || player === null) {
+    return <Box></Box>;
+  }
 
   return (
-    <Card maxW='xs'>
+    <Card>
       <CardBody>
-        <Flex>
-          <Box ml='auto' px='2' my='auto'>
-            <Avatar size='xl' name='Christian Nwamba' src={player.avatar}>
-              <AvatarBadge
-                boxSize='1.25em'
-                bg={podiumColors[player.position - 1]}
-              >
+        <Flex
+          direction={{ base: 'row', sm: 'column', lg: 'row' }}
+          w='100%'
+          h='100%'
+          align='center'
+        >
+          <Box
+            px='2'
+            ml={{ base: 'auto', sm: '0', lg: 'auto' }}
+            mb={{ base: '0', sm: '2', lg: '0' }}
+          >
+            <Avatar
+              size='xl'
+              name='Christian Nwamba'
+              src={player.avatar}
+              my={{ base: 1, sm: avatarMargins[position - 1] }}
+            >
+              <AvatarBadge boxSize='1.25em' bg={podiumColors[position - 1]}>
                 <Text fontSize='0.5em'>
-                  {player.position}
+                  {position}
                   <Text as={'span'} fontSize='0.5em'>
-                    {podiumTextSuffix[player.position - 1]}
+                    {podiumTextSuffix[position - 1]}
                   </Text>
                 </Text>
               </AvatarBadge>
@@ -46,7 +94,12 @@ export function PodiumPlayerCard({ player }: PodiumPlayerCardProps) {
           </Box>
           <Box minW='50%' px='2' my='auto'>
             <Heading size='md'>{player.username}</Heading>
-            <Badge colorScheme='green' fontSize='0.8em'>
+            <Badge
+              colorScheme='green'
+              fontSize='0.8em'
+              display='table'
+              mx={{ base: '0', sm: 'auto', lg: '0' }}
+            >
               {player.points} points
             </Badge>
           </Box>
@@ -60,14 +113,13 @@ export function PodiumPlayerCard({ player }: PodiumPlayerCardProps) {
             style={{
               height: 'fit-content',
               borderTop: '1px solid grey',
-              borderLeft: '1px solid grey',
             }}
           >
-            <Center h='100%'>
+            <Center h='100%'>Matches</Center>
+            <Center>
               <Icon mr='5px' as={GiPunch} />
-              Matches
+              {player.matches}
             </Center>
-            <Center>{player.matches}</Center>
           </Box>
 
           <Box
@@ -78,14 +130,43 @@ export function PodiumPlayerCard({ player }: PodiumPlayerCardProps) {
               borderLeft: '1px solid grey',
             }}
           >
-            <Center h='100%'>
+            <Center h='100%'>Victories</Center>
+            <Center>
               <Icon mr='5px' as={FaArrowUp} />
-              Victories
+              {player.victories}
             </Center>
-            <Center>{player.victories}</Center>
           </Box>
         </SimpleGrid>
       </CardFooter>
     </Card>
+  );
+}
+
+export function LeagueRankingTable({ players }: LeagueRankingProps) {
+  return (
+    <Box overflowX='auto'>
+      <Table variant='simple'>
+        <Thead>
+          <Tr>
+            <Th>Position</Th>
+            <Th>Player</Th>
+            <Th isNumeric>Points</Th>
+            <Th isNumeric>Matches</Th>
+            <Th isNumeric>Victories</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {players.map((player, index) => (
+            <Tr key={index}>
+              <Td>{index + 4}</Td>
+              <Td>{player.username}</Td>
+              <Td isNumeric>{player.points}</Td>
+              <Td isNumeric>{player.matches}</Td>
+              <Td isNumeric>{player.victories}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </Box>
   );
 }

@@ -103,3 +103,10 @@ export async function createLeagueInvitation(leagueId: string, userId: string) {
     },
   );
 }
+
+export async function getUserInvitations(userId: string) {
+  const invitations = await League.find({ invitations: userId }).select(
+    '_id name',
+  );
+  return invitations || [];
+}

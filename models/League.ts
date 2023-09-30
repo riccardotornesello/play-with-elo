@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 export type IPlayer = {
   _id: mongoose.Types.ObjectId;
   user: mongoose.Types.ObjectId;
-  username: string;
+  teamName: string;
+  isAdmin?: boolean;
   avatar?: string;
   points: number;
   // games: string[];
@@ -19,16 +20,18 @@ export type ILeague = {
   _id: mongoose.Types.ObjectId;
   name: string;
   description: string;
-  owner: string;
+  createdAt: Date;
   players: IPlayer[];
   //   games: string[];
 };
 
-export type ILeagueCreate = Pick<ILeague, 'name' | 'owner'>;
+export type ILeagueCreate = Pick<ILeague, 'name' | 'description'>;
+export type IPlayerCreate = Pick<IPlayer, 'user' | 'teamName'>;
 
 export const playerSchema = new mongoose.Schema<IPlayer>({
   user: { type: mongoose.Schema.Types.ObjectId, required: true },
-  username: { type: String, required: true },
+  teamName: { type: String, required: true },
+  isAdmin: { type: Boolean, required: false },
   avatar: { type: String, required: false },
   points: { type: Number, required: true },
   //   games: { type: Array, required: false },
@@ -43,7 +46,7 @@ export const playerSchema = new mongoose.Schema<IPlayer>({
 export const leagueSchema = new mongoose.Schema<ILeague>({
   name: { type: String, required: true, unique: true },
   description: { type: String, required: true },
-  owner: { type: String, required: true },
+  createdAt: { type: Date, required: true, default: Date.now },
   players: { type: [playerSchema], required: true },
   //   games: { type: Array, required: false },
 });
@@ -51,12 +54,33 @@ export const leagueSchema = new mongoose.Schema<ILeague>({
 export const League =
   mongoose.models.League || mongoose.model('League', leagueSchema);
 
-export async function createLeague(league: ILeagueCreate) {
-  return League.create(league);
+export function generatePlayerData(player: IPlayerCreate, isAdmin = false) {
+  return {
+    ...player,
+    isAdmin,
+    points: 1500,
+    // games: [],
+    gameWins: 0,
+    gameLosses: 0,
+    gameDraws: 0,
+    pointWins: 0,
+    pointLosses: 0,
+    pointDraws: 0,
+  };
 }
 
-export async function getUserLeagues(owner: string) {
-  return League.find({ owner });
+export async function createLeague(
+  session: mongoose.ClientSession,
+  league: ILeagueCreate,
+  player: IPlayerCreate,
+): Promise<ILeague> {
+  const newLeague = new League({
+    ...league,
+    createdAt: new Date(),
+    players: [generatePlayerData(player, true)],
+  });
+  await newLeague.save({ session });
+  return newLeague;
 }
 
 export async function getLeagueById(leagueId: string) {

@@ -24,12 +24,20 @@ export default function LeaguesListTable({ leagues }: LeaguesListTableProps) {
         <Thead>
           <Tr>
             <Th>Name</Th>
+            <Th>Creation date</Th>
+            <Th>Players</Th>
+            <Th></Th>
           </Tr>
         </Thead>
         <Tbody>
           {leagues.map((league) => (
             <Tr key={league._id}>
               <Td>{league.name}</Td>
+              <Td>{league.createdAt}</Td>
+              <Td>{league.playersCount}</Td>
+              <Td>
+                <a href={`/leagues/${league._id}`}>View</a>
+              </Td>
             </Tr>
           ))}
         </Tbody>

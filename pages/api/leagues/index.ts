@@ -1,9 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import mongoose from 'mongoose';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import dbConnect from '../../../lib/mongodb';
 import { createLeague } from '../../../models/League';
 import { leagueCreateSchema } from '../../../schemas/leagues';
+import { addUserLeague } from '../../../models/User';
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions);
@@ -12,6 +14,8 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
+  // TODO: validate unique league name
+
   let parsed;
   try {
     parsed = leagueCreateSchema.parse(req.body);
@@ -19,17 +23,24 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json(error);
   }
 
-  const owner = (session.user as any).id;
+  const userId = (session.user as any).id;
 
   await dbConnect();
+  const dbSession = await mongoose.startSession();
 
-  return createLeague({ ...parsed, owner })
-    .then((league) => {
-      res.status(200).json(league);
-    })
-    .catch((error) => {
-      res.status(400).json(error);
-    });
+  const league = await dbSession.withTransaction(async () => {
+    const league = await createLeague(
+      dbSession,
+      { name: parsed.name, description: parsed.description },
+      { user: userId, teamName: parsed.teamName },
+    );
+    await addUserLeague(dbSession, userId, league._id);
+
+    return league;
+  });
+  dbSession.endSession();
+
+  return res.status(200).json(league);
 }
 
 export default async function handler(

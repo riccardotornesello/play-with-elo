@@ -11,8 +11,16 @@ import {
 import { ApiStatus, useMutation } from '../../hooks/api';
 import { leagueCreateSchema, LeagueCreateSchema } from '../../schemas/leagues';
 
-export default function LeagueCreationForm() {
-  const { mutate, apiStatus, error, data } = useMutation('/api/leagues');
+export type LeagueCreationFormProps = {
+  onSuccess: () => void;
+};
+
+export default function LeagueCreationForm({
+  onSuccess,
+}: LeagueCreationFormProps) {
+  const { mutate, apiStatus } = useMutation('/api/leagues', {
+    onSuccess,
+  });
 
   const {
     register,
@@ -36,17 +44,31 @@ export default function LeagueCreationForm() {
             <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
           </FormControl>
 
+          <FormControl isInvalid={errors.description !== undefined}>
+            <FormLabel>Description</FormLabel>
+            <Input {...register('description')} />
+            <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
+          </FormControl>
+
+          <FormControl isInvalid={errors.teamName !== undefined}>
+            <FormLabel>Team name</FormLabel>
+            <Input {...register('teamName')} />
+            <FormErrorMessage>{errors.teamName?.message}</FormErrorMessage>
+          </FormControl>
+
           <Button
-            isLoading={apiStatus === ApiStatus.Loading}
+            isLoading={
+              apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success
+            }
             type='submit'
             loadingText='Submitting'
+            mt='6'
           >
             Create a new league
           </Button>
         </form>
       </Stack>
       {apiStatus === ApiStatus.Error && <p>Error</p>}
-      {apiStatus === ApiStatus.Success && <p>Success</p>}
     </>
   );
 }

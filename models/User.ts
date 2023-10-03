@@ -79,3 +79,7 @@ export async function addUserLeague(
 export async function findUser(username: string) {
   return User.findOne({ username });
 }
+
+export async function findUserByEmail(email: string) {
+  return User.findOne({ email });
+}

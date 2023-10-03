@@ -209,27 +209,37 @@ export default function LoginPage() {
 function SignUpForm() {
   // TODO: manage error (like duplicate username or email)
 
-  const { mutate, apiStatus } = useMutation('/api/auth/signup', {
-    onSuccess: (data, input) => {
-      console.log(input);
-      signIn('credentials', {
-        username: input.username,
-        password: input.password,
-        callbackUrl: '/dashboard',
-      });
-    },
-  });
+  const { mutate, apiStatus } = useMutation('/api/auth/signup');
 
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<SignUpSchema>({
     resolver: zodResolver(signUpSchema),
   });
 
   const onSubmit: SubmitHandler<SignUpSchema> = async (data) => {
-    mutate(data);
+    mutate(data, {
+      onSuccess: (data, input) => {
+        signIn('credentials', {
+          username: input.username,
+          password: input.password,
+          callbackUrl: '/dashboard',
+        });
+      },
+      onError: (errorBody, statusCode) => {
+        if (statusCode == 400) {
+          errorBody.issues.forEach((issue: any) => {
+            setError(issue.path.join('.'), {
+              type: 'manual',
+              message: issue.message,
+            });
+          });
+        }
+      },
+    });
   };
 
   return (

@@ -10,15 +10,19 @@ export enum ApiStatus {
 export type MutationOptions = {
   method?: string;
   onSuccess?: (data: any, input: any) => void;
+  onError?: (error: any, status: number, input: any) => void;
 };
 
-export function useMutation(url: string, options: MutationOptions = {}) {
+export function useMutation(url: string, globalOptions: MutationOptions = {}) {
   const [apiStatus, setApiStatus] = useState(ApiStatus.Idle);
   const [error, setError] = useState<any>(null);
   const [data, setData] = useState<any>(null);
 
-  const mutate = async (data: any) => {
+  const mutate = async (data: any, subOptions: MutationOptions = {}) => {
+    const options = { ...globalOptions, ...subOptions };
+
     setApiStatus(ApiStatus.Loading);
+
     try {
       const response = await fetch(url, {
         method: options.method || 'POST',
@@ -28,12 +32,15 @@ export function useMutation(url: string, options: MutationOptions = {}) {
         body: JSON.stringify(data),
       });
       const json = await response.json();
+
       if (!response.ok) {
+        options.onError && options.onError(json, response.status, data);
         throw new Error(json.message);
+      } else {
+        setData(json);
+        setApiStatus(ApiStatus.Success);
+        options.onSuccess && options.onSuccess(json, data);
       }
-      setData(json);
-      setApiStatus(ApiStatus.Success);
-      options.onSuccess && options.onSuccess(json, data);
     } catch (error) {
       setError(error);
       setApiStatus(ApiStatus.Error);

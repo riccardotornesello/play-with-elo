@@ -68,6 +68,9 @@ export default function HomePage({
       <ButtonLink href='/api/auth/signout' colorScheme='green' px='50px'>
         Sign out
       </ButtonLink>
+      <ButtonLink href='/profile' colorScheme='green' px='50px'>
+        Profile
+      </ButtonLink>
 
       <Button onClick={onOpen}>Create new league</Button>
       <Modal isOpen={isOpen} onClose={onClose}>

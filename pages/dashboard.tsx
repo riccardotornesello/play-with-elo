@@ -28,7 +28,6 @@ import InvitationsList from '../components/invitations/invitations-list';
 
 export type HomePageProps = {
   // TODO: types
-  session: any;
   leagues: any[];
   invitations: any[];
 };
@@ -48,7 +47,6 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> = async (
 
   return {
     props: {
-      session: JSON.parse(JSON.stringify(session)),
       leagues: JSON.parse(JSON.stringify(leagues)),
       invitations: JSON.parse(JSON.stringify(invitations)),
     },
@@ -56,7 +54,6 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> = async (
 };
 
 export default function HomePage({
-  session,
   leagues,
   invitations,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {

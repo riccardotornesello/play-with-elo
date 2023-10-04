@@ -21,6 +21,7 @@ import {
   Button,
   useDisclosure,
 } from '@chakra-ui/react';
+import ButtonLink from '../components/basic/button-link';
 import LeagueCreationForm from '../components/leagues/league-creation-form';
 import LeaguesListTable from '../components/leagues/leagues-list-table';
 import InvitationsList from '../components/invitations/invitations-list';
@@ -67,17 +68,9 @@ export default function HomePage({
 
   return (
     <div>
-      <a
-        href={`/api/auth/signout`}
-        onClick={(e) => {
-          e.preventDefault();
-          signOut({
-            callbackUrl: '/',
-          });
-        }}
-      >
+      <ButtonLink href='/api/auth/signout' colorScheme='green' px='50px'>
         Sign out
-      </a>
+      </ButtonLink>
 
       <Button onClick={onOpen}>Create new league</Button>
       <Modal isOpen={isOpen} onClose={onClose}>

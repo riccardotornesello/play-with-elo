@@ -93,6 +93,10 @@ export async function getLeagueById(leagueId: string) {
   return league;
 }
 
+export async function getLeagueByName(name: string) {
+  return League.findOne({ name });
+}
+
 export async function createLeagueInvitation(leagueId: string, userId: string) {
   return League.updateOne(
     { _id: leagueId },

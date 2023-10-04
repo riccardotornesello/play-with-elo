@@ -24,6 +24,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signUpSchema, SignUpSchema } from '../../schemas/auth';
 import PasswordField from '../../components/password-field/password-field';
 import { ApiStatus, useMutation } from '../../hooks/api';
+import { pushFormErrors } from '../../lib/form';
 
 const avatars = [
   {
@@ -207,8 +208,6 @@ export default function LoginPage() {
 }
 
 function SignUpForm() {
-  // TODO: manage error (like duplicate username or email)
-
   const { mutate, apiStatus } = useMutation('/api/auth/signup');
 
   const {
@@ -221,6 +220,8 @@ function SignUpForm() {
   });
 
   const onSubmit: SubmitHandler<SignUpSchema> = async (data) => {
+    // TODO: authenticate with api
+
     mutate(data, {
       onSuccess: (data, input) => {
         signIn('credentials', {
@@ -231,12 +232,7 @@ function SignUpForm() {
       },
       onError: (errorBody, statusCode) => {
         if (statusCode == 400) {
-          errorBody.issues.forEach((issue: any) => {
-            setError(issue.path.join('.'), {
-              type: 'manual',
-              message: issue.message,
-            });
-          });
+          pushFormErrors(errorBody, setError);
         }
       },
     });

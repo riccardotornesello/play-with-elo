@@ -2,13 +2,12 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
 } from '@chakra-ui/react';
+import ButtonLink from '../basic/button-link';
 
 export type LeaguesListTableProps = {
   leagues: any[];
@@ -36,7 +35,9 @@ export default function LeaguesListTable({ leagues }: LeaguesListTableProps) {
               <Td>{league.createdAt}</Td>
               <Td>{league.playersCount}</Td>
               <Td>
-                <a href={`/leagues/${league._id}`}>View</a>
+                <ButtonLink href={`/leagues/${league._id}/edit`}>
+                  Edit
+                </ButtonLink>
               </Td>
             </Tr>
           ))}

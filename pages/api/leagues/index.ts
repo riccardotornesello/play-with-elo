@@ -1,11 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import mongoose from 'mongoose';
+import { z } from 'zod';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import dbConnect from '../../../lib/mongodb';
-import { createLeague } from '../../../models/League';
+import { createLeague, getLeagueByName } from '../../../models/League';
 import { leagueCreateSchema } from '../../../schemas/leagues';
 import { addUserLeague } from '../../../models/User';
+
+const uniqueLeagueSchema = z.object({
+  name: z.string().refine(async (val) => {
+    const league = await getLeagueByName(val);
+    return league === null;
+  }, 'Name already in use'),
+});
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions);
@@ -14,8 +22,6 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
-  // TODO: validate unique league name
-
   let parsed;
   try {
     parsed = leagueCreateSchema.parse(req.body);
@@ -23,9 +29,16 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json(error);
   }
 
+  await dbConnect();
+
+  try {
+    await uniqueLeagueSchema.parseAsync(parsed);
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+
   const userId = (session.user as any).id;
 
-  await dbConnect();
   const dbSession = await mongoose.startSession();
 
   const league = await dbSession.withTransaction(async () => {

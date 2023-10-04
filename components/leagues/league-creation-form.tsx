@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { ApiStatus, useMutation } from '../../hooks/api';
 import { leagueCreateSchema, LeagueCreateSchema } from '../../schemas/leagues';
+import { pushFormErrors } from '../../lib/form';
 
 export type LeagueCreationFormProps = {
   onSuccess: () => void;
@@ -25,13 +26,20 @@ export default function LeagueCreationForm({
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<LeagueCreateSchema>({
     resolver: zodResolver(leagueCreateSchema),
   });
 
   const onSubmit: SubmitHandler<LeagueCreateSchema> = async (data) => {
-    mutate(data);
+    mutate(data, {
+      onError: (errorBody, statusCode) => {
+        if (statusCode == 400) {
+          pushFormErrors(errorBody, setError);
+        }
+      },
+    });
   };
 
   return (
@@ -68,7 +76,6 @@ export default function LeagueCreationForm({
           </Button>
         </form>
       </Stack>
-      {apiStatus === ApiStatus.Error && <p>Error</p>}
     </>
   );
 }

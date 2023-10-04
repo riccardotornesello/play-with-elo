@@ -160,6 +160,18 @@ export default function SignInPage() {
                 click here to register.
               </Text>
             </Text>
+            <Text
+              as={'a'}
+              fontSize={{ base: 'sm', sm: 'md' }}
+              color={'blue.400'}
+              href={'/auth/reset-password'}
+              _hover={{
+                color: 'blue.600',
+                textDecoration: 'underline',
+              }}
+            >
+              Click here if you forgot your credentials.
+            </Text>
           </Stack>
           {error && (
             <Alert status='error'>
@@ -194,6 +206,8 @@ function SignInForm() {
   });
 
   const onSubmit: SubmitHandler<SignInSchema> = async (data) => {
+    // TODO: show loading
+
     signIn('credentials', {
       ...data,
       callbackUrl: searchParams.get('callbackUrl') || '/dashboard',

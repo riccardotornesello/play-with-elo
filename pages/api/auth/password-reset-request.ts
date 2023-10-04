@@ -3,6 +3,7 @@ import { sendEmail } from '../../../lib/email';
 import { createToken } from '../../../lib/jwt';
 import config from '../../../lib/config';
 import { forgotPasswordRequestSchema } from '../../../schemas/password-reset';
+import { findUserByEmail } from '../../../models/User';
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,10 +19,7 @@ export default async function handler(
       return res.status(400).json(error);
     }
 
-    // TODO const user = await prisma.user.findUnique({
-    //   where: { email: parsed.email },
-    // });
-    const user = { id: '1', email: parsed.email };
+    const user = await findUserByEmail(parsed.email);
     if (!user) {
       return res.status(200).json({ message: 'Email sent' });
     }

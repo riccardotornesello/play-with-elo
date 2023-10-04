@@ -35,7 +35,7 @@ export default function LeaguesListTable({ leagues }: LeaguesListTableProps) {
               <Td>{league.createdAt}</Td>
               <Td>{league.playersCount}</Td>
               <Td>
-                <ButtonLink href={`/leagues/${league._id}/edit`}>
+                <ButtonLink href={`/leagues/${league._id}`}>
                   Edit
                 </ButtonLink>
               </Td>

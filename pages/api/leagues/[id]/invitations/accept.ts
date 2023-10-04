@@ -1,10 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../../auth/[...nextauth]';
-import dbConnect from '../../../../lib/mongodb';
-import { createLeagueInvitation } from '../../../../models/League';
-import { leagueInvitationSchema } from '../../../../schemas/leagues';
-import { findUser } from '../../../../models/User';
+import { authOptions } from '../../../auth/[...nextauth]';
+import dbConnect from '../../../../../lib/mongodb';
+import { registerPlayer, removeInvitation } from '../../../../../models/League';
+import { leagueInvitationAcceptSchema } from '../../../../../schemas/leagues';
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
@@ -21,24 +20,23 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
 
   let parsed;
   try {
-    parsed = leagueInvitationSchema.parse(req.body);
+    parsed = leagueInvitationAcceptSchema.parse(req.body);
   } catch (error) {
     return res.status(400).json(error);
   }
 
+  // TODO: prevent double entry in players array
+
   await dbConnect();
 
-  const user = await findUser(parsed.username);
-  if (!user) {
-    res.status(404).json({ message: 'User not found' });
-    return;
-  }
+  await registerPlayer(id, {
+    user: (session.user as any).id,
+    teamName: parsed.teamName,
+  });
 
-  // TODO: Check if user is already in league
+  await removeInvitation(id, (session.user as any).id);
 
-  await createLeagueInvitation(id, user._id);
-
-  res.status(200).json({});
+  res.status(200).json({ message: 'Success' });
 }
 
 export default async function handler(

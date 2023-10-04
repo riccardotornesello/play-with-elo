@@ -7,13 +7,13 @@ export type IPlayer = {
   isAdmin?: boolean;
   avatar?: string;
   points: number;
-  // games: string[];
   gameWins: number;
   gameLosses: number;
   gameDraws: number;
   pointWins: number;
   pointLosses: number;
   pointDraws: number;
+  // TODO: add join date
 };
 
 export type ILeague = {
@@ -23,7 +23,6 @@ export type ILeague = {
   createdAt: Date;
   players: IPlayer[];
   invitations?: mongoose.Types.ObjectId[];
-  //   games: string[];
 };
 
 export type ILeagueCreate = Pick<ILeague, 'name' | 'description'>;
@@ -35,7 +34,6 @@ export const playerSchema = new mongoose.Schema<IPlayer>({
   isAdmin: { type: Boolean, required: false },
   avatar: { type: String, required: false },
   points: { type: Number, required: true },
-  //   games: { type: Array, required: false },
   gameWins: { type: Number, required: true },
   gameLosses: { type: Number, required: true },
   gameDraws: { type: Number, required: true },
@@ -50,7 +48,6 @@ export const leagueSchema = new mongoose.Schema<ILeague>({
   createdAt: { type: Date, required: true, default: Date.now },
   players: { type: [playerSchema], required: true },
   invitations: { type: [mongoose.Schema.Types.ObjectId], required: false },
-  //   games: { type: Array, required: false },
 });
 
 export const League =
@@ -61,7 +58,6 @@ export function generatePlayerData(player: IPlayerCreate, isAdmin = false) {
     ...player,
     isAdmin,
     points: 1500,
-    // games: [],
     gameWins: 0,
     gameLosses: 0,
     gameDraws: 0,
@@ -71,8 +67,15 @@ export function generatePlayerData(player: IPlayerCreate, isAdmin = false) {
   };
 }
 
+export const basicLeagueInfo = {
+  _id: 1,
+  name: 1,
+  description: 1,
+  createdAt: 1,
+  playersCount: { $size: '$players' },
+};
+
 export async function createLeague(
-  session: mongoose.ClientSession,
   league: ILeagueCreate,
   player: IPlayerCreate,
 ): Promise<ILeague> {
@@ -81,7 +84,7 @@ export async function createLeague(
     createdAt: new Date(),
     players: [generatePlayerData(player, true)],
   });
-  await newLeague.save({ session });
+  await newLeague.save();
   return newLeague;
 }
 
@@ -110,7 +113,36 @@ export async function createLeagueInvitation(leagueId: string, userId: string) {
 
 export async function getUserInvitations(userId: string) {
   const invitations = await League.find({ invitations: userId }).select(
-    '_id name',
+    basicLeagueInfo,
   );
   return invitations || [];
+}
+
+export async function getUserLeagues(userId: string) {
+  const leagues = await League.find({ 'players.user': userId }).select(
+    basicLeagueInfo,
+  );
+  return leagues || [];
+}
+
+export async function registerPlayer(leagueId: string, player: IPlayerCreate) {
+  return League.updateOne(
+    { _id: leagueId },
+    {
+      $addToSet: {
+        players: generatePlayerData(player),
+      },
+    },
+  );
+}
+
+export async function removeInvitation(leagueId: string, userId: string) {
+  return League.updateOne(
+    { _id: leagueId },
+    {
+      $pull: {
+        invitations: userId,
+      },
+    },
+  );
 }

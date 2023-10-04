@@ -11,8 +11,8 @@ import {
 } from '@chakra-ui/react';
 import { ApiStatus, useMutation } from '../../hooks/api';
 import {
-  leagueInvitationSchema,
-  LeagueInvitationSchema,
+  leagueInvitationCreateSchema,
+  LeagueInvitationCreateSchema,
 } from '../../schemas/leagues';
 
 export type LeagueInvitationFormProps = {
@@ -33,11 +33,11 @@ export default function LeagueInvitationForm({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LeagueInvitationSchema>({
-    resolver: zodResolver(leagueInvitationSchema),
+  } = useForm<LeagueInvitationCreateSchema>({
+    resolver: zodResolver(leagueInvitationCreateSchema),
   });
 
-  const onSubmit: SubmitHandler<LeagueInvitationSchema> = async (data) => {
+  const onSubmit: SubmitHandler<LeagueInvitationCreateSchema> = async (data) => {
     mutate(data);
   };
 

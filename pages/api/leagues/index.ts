@@ -1,12 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import mongoose from 'mongoose';
 import { z } from 'zod';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import dbConnect from '../../../lib/mongodb';
 import { createLeague, getLeagueByName } from '../../../models/League';
 import { leagueCreateSchema } from '../../../schemas/leagues';
-import { addUserLeague } from '../../../models/User';
 
 const uniqueLeagueSchema = z.object({
   name: z.string().refine(async (val) => {
@@ -39,19 +37,10 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
 
   const userId = (session.user as any).id;
 
-  const dbSession = await mongoose.startSession();
-
-  const league = await dbSession.withTransaction(async () => {
-    const league = await createLeague(
-      dbSession,
-      { name: parsed.name, description: parsed.description },
-      { user: userId, teamName: parsed.teamName },
-    );
-    await addUserLeague(dbSession, userId, league._id);
-
-    return league;
-  });
-  dbSession.endSession();
+  const league = await createLeague(
+    { name: parsed.name, description: parsed.description },
+    { user: userId, teamName: parsed.teamName },
+  );
 
   return res.status(200).json(league);
 }

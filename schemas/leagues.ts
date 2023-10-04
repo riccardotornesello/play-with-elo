@@ -6,9 +6,18 @@ export const leagueCreateSchema = z.object({
   teamName: z.string().min(3),
 });
 
-export const leagueInvitationSchema = z.object({
+export const leagueInvitationCreateSchema = z.object({
   username: z.string().min(3),
 });
 
+export const leagueInvitationAcceptSchema = z.object({
+  teamName: z.string().min(3),
+});
+
 export type LeagueCreateSchema = z.infer<typeof leagueCreateSchema>;
-export type LeagueInvitationSchema = z.infer<typeof leagueInvitationSchema>;
+export type LeagueInvitationCreateSchema = z.infer<
+  typeof leagueInvitationCreateSchema
+>;
+export type LeagueInvitationAcceptSchema = z.infer<
+  typeof leagueInvitationAcceptSchema
+>;

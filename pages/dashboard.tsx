@@ -6,12 +6,10 @@ import type {
 } from 'next';
 // Auth
 import { getServerSession } from 'next-auth/next';
-import { signOut } from 'next-auth/react';
 import { authOptions } from './api/auth/[...nextauth]';
 // Db
 import dbConnect from '../lib/mongodb';
-import { getUserLeagues } from '../models/User';
-import { getUserInvitations } from '../models/League';
+import { getUserInvitations, getUserLeagues } from '../models/League';
 // Components
 import {
   Modal,

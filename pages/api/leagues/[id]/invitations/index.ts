@@ -4,7 +4,7 @@ import { authOptions } from '../../../auth/[...nextauth]';
 import dbConnect from '../../../../../lib/mongodb';
 import { createLeagueInvitation } from '../../../../../models/League';
 import { leagueInvitationCreateSchema } from '../../../../../schemas/leagues';
-import { findUser } from '../../../../../models/User';
+import { findUserByUsername } from '../../../../../controllers/User';
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
@@ -31,7 +31,7 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
 
   await dbConnect();
 
-  const user = await findUser(parsed.username);
+  const user = await findUserByUsername(parsed.username);
   if (!user) {
     res.status(404).json({ message: 'User not found' });
     return;

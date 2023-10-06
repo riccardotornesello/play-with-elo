@@ -3,7 +3,7 @@ import { sendEmail } from '../../../lib/email';
 import { createToken } from '../../../lib/jwt';
 import config from '../../../lib/config';
 import { forgotPasswordRequestSchema } from '../../../schemas/password-reset';
-import { findUserByEmail } from '../../../models/User';
+import { findUserByEmail } from '../../../controllers/User';
 
 export default async function handler(
   req: NextApiRequest,

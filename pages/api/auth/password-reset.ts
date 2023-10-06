@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { newPasswordSchema } from '../../../schemas/password-reset';
 import { decodeToken } from '../../../lib/jwt';
 import { hashPassword } from '../../../lib/crypto';
-import { setPassword } from '../../../models/User';
+import { setUserPassword } from '../../../controllers/User';
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
   // TODO: invalidate token
@@ -21,7 +21,7 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const hashedPassword = await hashPassword(parsed.password);
-  await setPassword(token.userId, hashedPassword);
+  await setUserPassword(token.userId, hashedPassword);
 
   res.status(200).json({ message: 'Email sent' });
 }

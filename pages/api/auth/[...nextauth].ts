@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import dbConnect from '../../../lib/mongodb';
-import { authenticateUser } from '../../../models/User';
+import { findUserByCredentials } from '../../../controllers/User';
 import { verifyPassword } from '../../../lib/crypto';
 
 export const authOptions: NextAuthOptions = {
@@ -22,7 +22,7 @@ export const authOptions: NextAuthOptions = {
 
         await dbConnect();
 
-        const user = await authenticateUser({ username: credentials.username });
+        const user = await findUserByCredentials(credentials.username);
         if (!user) {
           return null;
         }
@@ -47,7 +47,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     session: async ({ session, token }) => {
       if (session?.user) {
-        session.user.id = token.id;
+        (session.user as any).id = token.id;
       }
       return session;
     },

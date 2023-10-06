@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { z } from 'zod';
 import dbConnect from '../../../lib/mongodb';
-import { createUser, findUser, findUserByEmail } from '../../../models/User';
+import { createUser, findUserByUsername, findUserByEmail } from '../../../controllers/User';
 import { hashPassword } from '../../../lib/crypto';
 import { signUpSchema } from '../../../schemas/auth';
 
 const uniqueCredentialsSchema = z.object({
   username: z.string().refine(async (val) => {
-    const user = await findUser(val);
+    const user = await findUserByUsername(val);
     return user === null;
   }, 'Username already in use'),
   email: z.string().refine(async (val) => {

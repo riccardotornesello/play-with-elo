@@ -6,7 +6,7 @@ export type IPlayer = {
   teamName: string;
   isAdmin?: boolean;
   avatar?: string;
-  points: number;
+  rating: number;
   gameWins: number;
   gameLosses: number;
   gameDraws: number;
@@ -16,6 +16,18 @@ export type IPlayer = {
   // TODO: add join date
 };
 
+export type IMatchPlayer = {
+  playerId: mongoose.Types.ObjectId;
+  points: number;
+  ratingEarned: number;
+};
+
+export type IMatch = {
+  _id: mongoose.Types.ObjectId;
+  players: IMatchPlayer[];
+  playedAt: Date;
+};
+
 export type ILeague = {
   _id: mongoose.Types.ObjectId;
   name: string;
@@ -23,17 +35,19 @@ export type ILeague = {
   createdAt: Date;
   players: IPlayer[];
   invitations?: mongoose.Types.ObjectId[];
+  matches?: IMatch[];
 };
 
 export type ILeagueCreate = Pick<ILeague, 'name' | 'description'>;
 export type IPlayerCreate = Pick<IPlayer, 'user' | 'teamName'>;
+export type IMatchCreate = Pick<IMatch, 'players' | 'playedAt'>;
 
 export const playerSchema = new mongoose.Schema<IPlayer>({
   user: { type: mongoose.Schema.Types.ObjectId, required: true },
   teamName: { type: String, required: true },
   isAdmin: { type: Boolean, required: false },
   avatar: { type: String, required: false },
-  points: { type: Number, required: true },
+  rating: { type: Number, required: true },
   gameWins: { type: Number, required: true },
   gameLosses: { type: Number, required: true },
   gameDraws: { type: Number, required: true },
@@ -57,7 +71,7 @@ export function generatePlayerData(player: IPlayerCreate, isAdmin = false) {
   return {
     ...player,
     isAdmin,
-    points: 1500,
+    rating: 1500,
     gameWins: 0,
     gameLosses: 0,
     gameDraws: 0,
@@ -145,4 +159,40 @@ export async function removeInvitation(leagueId: string, userId: string) {
       },
     },
   );
+}
+
+export async function getLeaguePlayers(
+  leagueId: string,
+  playerIds: string[],
+): Promise<IPlayer[]> {
+  const league = await League.findOne(
+    { _id: leagueId },
+    { players: { $elemMatch: { _id: { $in: playerIds } } } },
+  );
+  if (!league) {
+    throw new Error('League not found');
+  }
+
+  return league.players;
+}
+
+export async function saveMatch(leagueId: string, match: IMatchCreate) {
+  return League.updateOne(
+    { _id: leagueId },
+    {
+      $addToSet: {
+        matches: match,
+      },
+    },
+  );
+}
+
+export async function updatePlayers(leagueId: string, players: IPlayer[]) {
+  const bulk = League.collection.initializeUnorderedBulkOp();
+  players.forEach((player) => {
+    bulk
+      .find({ _id: leagueId, 'players.user': player.user })
+      .updateOne({ $set: { 'players.$': player } });
+  });
+  return bulk.execute();
 }

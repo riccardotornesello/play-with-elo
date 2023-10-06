@@ -1,6 +1,6 @@
 export const config = {
   matchWeight: 50,
-  goalWeight: {
+  pointsWeight: {
     0: 1,
     1: 1,
     2: 1.5,
@@ -15,36 +15,62 @@ export const config = {
   },
 } as {
   matchWeight: number;
-  goalWeight: { [key: number]: number };
+  pointsWeight: { [key: number]: number };
 };
 
-export function calculateElo(
-  homeRating: number,
-  awayRating: number,
-  homeScore: number,
-  awayScore: number,
-) {
-  const goalDifference = Math.abs(homeScore - awayScore);
-  const goalDifferenceWeight =
-    config.goalWeight[goalDifference] || config.goalWeight[10];
+type EloPlayer = {
+  playerId: string;
+  points: number;
+  rating: number;
+};
 
-  const homeExpectedResult = 1 / (1 + 10 ** ((awayRating - homeRating) / 400));
-  const awayExpectedResult = 1 / (1 + 10 ** ((homeRating - awayRating) / 400));
+export type CalculateElo = {
+  players: EloPlayer[];
+};
 
-  const homeActualResult =
-    homeScore > awayScore ? 1 : homeScore === awayScore ? 0.5 : 0;
-  const awayActualResult = 1 - homeActualResult;
+// TODO: add support for more than 2 players
+// TODO: variable configuration
 
-  const homeNewRating =
-    homeRating +
-    config.matchWeight *
-      goalDifferenceWeight *
-      (homeActualResult - homeExpectedResult);
-  const awayNewRating =
-    awayRating +
-    config.matchWeight *
-      goalDifferenceWeight *
-      (awayActualResult - awayExpectedResult);
+export function calculateElo({ players }: CalculateElo): Map<string, number> {
+  const pointsDifference = Math.abs(players[0].points - players[1].points);
+  const pointsDifferenceWeight =
+    config.pointsWeight[pointsDifference] || config.pointsWeight[10];
 
-  return [homeNewRating, awayNewRating];
+  const expectedResults = players.map((player, index) => {
+    let opponent;
+    if (index === 0) {
+      opponent = players[1];
+    } else {
+      opponent = players[0];
+    }
+
+    return 1 / (1 + 10 ** ((opponent.rating - player.rating) / 400));
+  });
+
+  const actualResults = players.map((player, index) => {
+    if (player.points > players[index === 0 ? 1 : 0].points) {
+      return 1;
+    } else if (player.points < players[index === 0 ? 1 : 0].points) {
+      return 0;
+    } else {
+      return 0.5;
+    }
+  });
+
+  const newRatings = players.map((player, index) => {
+    return Math.round(
+      player.rating +
+        config.matchWeight *
+          pointsDifferenceWeight *
+          (actualResults[index] - expectedResults[index]),
+    );
+  });
+
+  return newRatings.reduce(
+    (acc, rating, index) => ({
+      ...acc,
+      [players[index].playerId]: rating,
+    }),
+    new Map(),
+  );
 }

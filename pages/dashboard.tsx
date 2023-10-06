@@ -23,6 +23,8 @@ import ButtonLink from '../components/basic/button-link';
 import LeagueCreationForm from '../components/leagues/league-creation-form';
 import LeaguesListTable from '../components/leagues/leagues-list-table';
 import InvitationsList from '../components/invitations/invitations-list';
+// Hooks
+import { ApiStatus, useMutation } from '../hooks/api';
 
 export type HomePageProps = {
   // TODO: types
@@ -83,6 +85,35 @@ export default function HomePage({
       <InvitationsList invitations={invitations} />
 
       <LeaguesListTable leagues={leagues} />
+
+      <TestButton />
     </div>
+  );
+}
+
+function TestButton() {
+  const { mutate, apiStatus } = useMutation(
+    `/api/leagues/651d943c3f42b21523709d37/matches`,
+  );
+
+  return (
+    <Button
+      onClick={() =>
+        mutate({
+          players: [
+            {
+              playerId: '651d943c3f42b21523709d38',
+              points: 0,
+            },
+            {
+              playerId: '651dadf73f42b21523709da6',
+              points: 0,
+            },
+          ],
+        })
+      }
+    >
+      Test
+    </Button>
   );
 }

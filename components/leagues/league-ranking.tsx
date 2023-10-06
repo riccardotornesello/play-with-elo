@@ -99,7 +99,7 @@ export function PodiumPlayerCard({ player, position }: PodiumPlayerCardProps) {
               display='table'
               mx={{ base: '0', sm: 'auto', lg: '0' }}
             >
-              {player.points} points
+              {player.rating} points
             </Badge>
           </Box>
         </Flex>
@@ -159,7 +159,7 @@ export function LeagueRankingTable({ players }: LeagueRankingProps) {
             <Tr key={index}>
               <Td>{index + 4}</Td>
               <Td>{player.teamName}</Td>
-              <Td isNumeric>{player.points}</Td>
+              <Td isNumeric>{player.rating}</Td>
               <Td isNumeric>
                 {player.gameWins + player.gameLosses + player.gameDraws}
               </Td>

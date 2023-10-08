@@ -33,3 +33,36 @@ export function decodeAccessToken(token: string | null): string | null {
     return null;
   }
 }
+
+export function createActionToken(userId: string, action: string) {
+  const token = sign(
+    {
+      actionUserId: userId,
+      action,
+    },
+    config.jwt.secretKey,
+    {
+      expiresIn: '1h',
+    },
+  );
+
+  return token;
+}
+
+export function decodeActionToken(
+  token: string,
+  action: string,
+): string | null {
+  try {
+    const payload = verify(token, config.jwt.secretKey);
+    if (typeof payload === 'string') {
+      return null;
+    } else if (payload.action !== action) {
+      return null;
+    }
+
+    return payload.actionUserId;
+  } catch (err) {
+    return null;
+  }
+}

@@ -1,5 +1,4 @@
 // Db
-import mongoose from 'mongoose';
 import { UserModel } from '../models/user';
 import { User } from '../types/user';
 
@@ -29,10 +28,7 @@ export async function getUser(userId: string) {
   return UserModel.findById(userId);
 }
 
-export async function setUserPassword(
-  userId: mongoose.Types.ObjectId,
-  password: string,
-) {
+export async function setUserPassword(userId: string, password: string) {
   return UserModel.updateOne(
     { _id: userId },
     {

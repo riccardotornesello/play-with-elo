@@ -1,3 +1,4 @@
+// Components
 import {
   Box,
   Stack,
@@ -9,47 +10,17 @@ import {
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react';
+// Form
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   forgotPasswordRequestSchema,
   ForgotPasswordRequestSchema,
-} from '../../schemas/password-reset';
+} from '../../features/auth/schemas/password-reset';
+// Api
 import { ApiStatus, useMutation } from '../../hooks/api';
 
 export default function ResetPasswordPage() {
-  // const [apiStatus, setApiStatus] = useState<
-  //   'idle' | 'success' | 'loading' | 'error'
-  // >('idle');
-
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm<Inputs>();
-
-  // const onSubmit: SubmitHandler<Inputs> = async (data) => {
-  //   setApiStatus('loading');
-
-  //   try {
-  //     const res = await fetch('/api/auth/password-reset-request', {
-  //       method: 'POST',
-  //       body: JSON.stringify(data),
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     if (!res.ok) {
-  //       throw new Error('Something went wrong');
-  //     }
-
-  //     setApiStatus('success');
-  //   } catch (error) {
-  //     setApiStatus('error');
-  //   }
-  // };
-
   return (
     <Container
       maxW='lg'
@@ -111,18 +82,18 @@ function ResetPasswordForm() {
   return (
     <Box as={'form'} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={4}>
-        <FormControl isInvalid={errors.email !== undefined}>
+        <FormControl isInvalid={errors.username !== undefined}>
           <Input
-            placeholder='Your email'
+            placeholder='Your email or username'
             bg={'gray.100'}
             border={0}
             color={'gray.500'}
             _placeholder={{
               color: 'gray.500',
             }}
-            {...register('email')}
+            {...register('username')}
           />
-          <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+          <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
         </FormControl>
       </Stack>
       <Button
@@ -136,58 +107,10 @@ function ResetPasswordForm() {
           boxShadow: 'xl',
         }}
         type='submit'
+        isLoading={apiStatus === ApiStatus.Loading}
       >
         Submit
       </Button>
     </Box>
   );
 }
-
-// <Stack spacing='8'>
-// <Stack spacing='6'>
-//   {/* <Logo /> */}
-//   <Stack spacing={{ base: '2', md: '3' }} textAlign='center'>
-//     <Heading size={{ base: 'xs', md: 'sm' }}>
-//       Log in to your account
-//     </Heading>
-//     <Text color='fg.muted'>
-//       Don't have an account? <Link href='#'>Sign up</Link>
-//     </Text>
-//   </Stack>
-// </Stack>
-// <Box
-//   py={{ base: '0', sm: '8' }}
-//   px={{ base: '4', sm: '10' }}
-//   bg={{ base: 'transparent', sm: 'bg.surface' }}
-//   boxShadow={{ base: 'none', sm: 'md' }}
-//   borderRadius={{ base: 'none', sm: 'xl' }}
-// >
-//   <Stack spacing='6'>
-//     <form onSubmit={handleSubmit(onSubmit)}>
-//       <Stack spacing='5'>
-//         <FormControl>
-//           <FormLabel htmlFor='email'>Email</FormLabel>
-//           <Input
-//             {...register('email', {
-//               required: 'Email Address is required',
-//             })}
-//             type='email'
-//           />
-//           {errors.email && <p role='alert'>{errors.email.message}</p>}
-//         </FormControl>
-//       </Stack>
-//       <Stack spacing='6'>
-//         <Button
-//           isLoading={apiStatus === 'loading'}
-//           type='submit'
-//           loadingText='Submitting'
-//         >
-//           Reset password
-//         </Button>
-//       </Stack>
-//     </form>
-//   </Stack>
-//   {apiStatus === 'success' && <p>Success!</p>}
-//   {apiStatus === 'error' && <p>Something went wrong</p>}
-// </Box>
-// </Stack>

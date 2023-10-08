@@ -6,8 +6,10 @@ export const newPasswordSchema = z.object({
 });
 
 export const forgotPasswordRequestSchema = z.object({
-  email: z.string().email({ message: 'Invalid email address' }),
+  username: z.string().min(1, { message: 'Username or email is required' }),
 });
 
 export type NewPasswordSchema = z.infer<typeof newPasswordSchema>;
-export type ForgotPasswordRequestSchema = z.infer<typeof forgotPasswordRequestSchema>;
+export type ForgotPasswordRequestSchema = z.infer<
+  typeof forgotPasswordRequestSchema
+>;

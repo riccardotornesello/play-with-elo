@@ -32,6 +32,10 @@ import { useMutation, ApiStatus } from '../../hooks/api';
 
 type Props = {
   tokenValid: boolean;
+  token: string | null;
+};
+
+type NewPasswordFormProps = {
   token: string;
 };
 
@@ -44,13 +48,14 @@ export async function getServerSideProps<Props>(
   if (Array.isArray(token)) {
     token = token[0];
   }
+  const tokenString = token || null;
 
   // Validate the token
   let tokenValid = true;
   if (!token) {
     tokenValid = false;
   } else {
-    const decodedToken = decodeActionToken(token, 'password-reset');
+    const decodedToken = decodeActionToken(tokenString, 'password-reset');
     if (!decodedToken) {
       tokenValid = false;
     }
@@ -59,7 +64,7 @@ export async function getServerSideProps<Props>(
   return {
     props: {
       tokenValid,
-      token,
+      token: tokenString,
     },
   };
 }
@@ -106,13 +111,13 @@ export default function NewPasswordPage({
             Click here to go back.
           </Text>
         </Stack>
-        <NewPasswordForm token={token} />
+        <NewPasswordForm token={token || ''} />
       </Stack>
     </Container>
   );
 }
 
-function NewPasswordForm({ token }: Props) {
+function NewPasswordForm({ token }: NewPasswordFormProps) {
   const {
     register,
     handleSubmit,

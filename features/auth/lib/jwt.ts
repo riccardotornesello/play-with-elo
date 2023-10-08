@@ -50,9 +50,13 @@ export function createActionToken(userId: string, action: string) {
 }
 
 export function decodeActionToken(
-  token: string,
+  token: string | null,
   action: string,
 ): string | null {
+  if (!token) {
+    return null;
+  }
+
   try {
     const payload = verify(token, config.jwt.secretKey);
     if (typeof payload === 'string') {

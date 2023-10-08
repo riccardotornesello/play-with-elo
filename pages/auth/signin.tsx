@@ -1,9 +1,14 @@
 'use client';
 
+// Next
 import { useSearchParams } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/router';
+// React
+import { useState } from 'react';
+// Components
 import {
   Alert,
+  AlertIcon,
   AlertDescription,
   Box,
   Flex,
@@ -22,10 +27,13 @@ import {
   FormErrorMessage,
   FormControl,
 } from '@chakra-ui/react';
+import PasswordField from '../../components/password-field/password-field';
+// Form
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signInSchema, SignInSchema } from '../../schemas/auth';
-import PasswordField from '../../components/password-field/password-field';
+import { signInSchema, SignInSchema } from '../../features/auth/schemas/signin';
+// Api
+import { ApiStatus, useMutation } from '../../hooks/api';
 
 const avatars = [
   {
@@ -51,9 +59,6 @@ const avatars = [
 ];
 
 export default function SignInPage() {
-  const searchParams = useSearchParams();
-  const error = searchParams.get('error');
-
   return (
     <Box position='relative' minH='100vh'>
       <Container
@@ -173,13 +178,6 @@ export default function SignInPage() {
               Click here if you forgot your credentials.
             </Text>
           </Stack>
-          {error && (
-            <Alert status='error'>
-              <AlertDescription>
-                Wrong credentials, please retry.
-              </AlertDescription>
-            </Alert>
-          )}
           <SignInForm />
         </Stack>
       </Container>
@@ -196,6 +194,22 @@ export default function SignInPage() {
 
 function SignInForm() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const { mutate, apiStatus } = useMutation('/api/auth/signin', {
+    onSuccess: (data) => {
+      router.push(searchParams.get('redirect') || '/dashboard');
+    },
+    onError: (errorBody, statusCode) => {
+      if (statusCode == 401) {
+        setErrorMessage('Invalid credentials. Try again');
+      } else {
+        setErrorMessage('Something went wrong. Try again later');
+      }
+    },
+  });
 
   const {
     register,
@@ -206,12 +220,8 @@ function SignInForm() {
   });
 
   const onSubmit: SubmitHandler<SignInSchema> = async (data) => {
-    // TODO: show loading
-
-    signIn('credentials', {
-      ...data,
-      callbackUrl: searchParams.get('callbackUrl') || '/dashboard',
-    });
+    setErrorMessage(null);
+    mutate(data);
   };
 
   return (
@@ -243,7 +253,15 @@ function SignInForm() {
           />
           <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
         </FormControl>
+
+        {errorMessage && (
+          <Alert status='error'>
+            <AlertIcon />
+            <AlertDescription>{errorMessage}</AlertDescription>
+          </Alert>
+        )}
       </Stack>
+
       <Button
         fontFamily={'heading'}
         mt={8}
@@ -255,6 +273,9 @@ function SignInForm() {
           boxShadow: 'xl',
         }}
         type='submit'
+        isLoading={
+          apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success
+        }
       >
         Submit
       </Button>

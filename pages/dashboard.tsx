@@ -4,9 +4,9 @@ import type {
   GetServerSideProps,
   InferGetServerSidePropsType,
 } from 'next';
+import { useRouter } from 'next/router';
 // Auth
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from './api/auth/[...nextauth]';
+import { getUser } from '../features/auth/utils/user';
 // Db
 import dbConnect from '../lib/mongodb';
 import { getUserInvitations, getUserLeagues } from '../controllers/League';
@@ -35,14 +35,26 @@ export type HomePageProps = {
 export const getServerSideProps: GetServerSideProps<HomePageProps> = async (
   context: GetServerSidePropsContext,
 ) => {
+  const user = await getUser(context);
+  if (!user) {
+    context.res.setHeader(
+      'Set-Cookie',
+      'accessToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
+    );
+
+    return {
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
+      },
+    };
+  }
+
   await dbConnect();
 
-  const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session) throw new Error('No session found');
-
   const [leagues, invitations] = await Promise.all([
-    getUserLeagues((session.user as any).id),
-    getUserInvitations((session.user as any).id),
+    getUserLeagues(user._id.toString()),
+    getUserInvitations(user._id.toString()),
   ]);
 
   return {
@@ -58,6 +70,13 @@ export default function HomePage({
   invitations,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+
+  const { mutate, apiStatus } = useMutation(`/api/auth/signout`, {
+    onSuccess: () => {
+      router.push('/');
+    },
+  });
 
   const onCreationSuccess = () => {
     window.location.reload();
@@ -65,12 +84,14 @@ export default function HomePage({
 
   return (
     <div>
-      <ButtonLink href='/api/auth/signout' colorScheme='green' px='50px'>
+      <Button
+        onClick={() => mutate({})}
+        isLoading={
+          apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success
+        }
+      >
         Sign out
-      </ButtonLink>
-      <ButtonLink href='/profile' colorScheme='green' px='50px'>
-        Profile
-      </ButtonLink>
+      </Button>
 
       <Button onClick={onOpen}>Create new league</Button>
       <Modal isOpen={isOpen} onClose={onClose}>

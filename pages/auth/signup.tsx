@@ -1,6 +1,8 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
+// Next
+import { useRouter } from 'next/router';
+// Components
 import {
   Box,
   Flex,
@@ -19,12 +21,14 @@ import {
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react';
+import PasswordField from '../../components/password-field/password-field';
+// Form
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signUpSchema, SignUpSchema } from '../../schemas/auth';
-import PasswordField from '../../components/password-field/password-field';
-import { ApiStatus, useMutation } from '../../hooks/api';
+import { signUpSchema, SignUpSchema } from '../../features/auth/schemas/signup';
 import { pushFormErrors } from '../../lib/form';
+// Api
+import { ApiStatus, useMutation } from '../../hooks/api';
 
 const avatars = [
   {
@@ -208,6 +212,8 @@ export default function LoginPage() {
 }
 
 function SignUpForm() {
+  const router = useRouter();
+
   const { mutate, apiStatus } = useMutation('/api/auth/signup');
 
   const {
@@ -220,19 +226,15 @@ function SignUpForm() {
   });
 
   const onSubmit: SubmitHandler<SignUpSchema> = async (data) => {
-    // TODO: authenticate with api
-
     mutate(data, {
       onSuccess: (data, input) => {
-        signIn('credentials', {
-          username: input.username,
-          password: input.password,
-          callbackUrl: '/dashboard',
-        });
+        router.push('/dashboard');
       },
       onError: (errorBody, statusCode) => {
         if (statusCode == 400) {
           pushFormErrors(errorBody, setError);
+        } else {
+          // TODO: manage generic error
         }
       },
     });

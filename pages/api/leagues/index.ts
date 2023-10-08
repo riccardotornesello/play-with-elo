@@ -1,18 +1,24 @@
+// Next
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { z } from 'zod';
+// Auth
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
+// Input validation
+import { leagueCreateSchema } from '../../../schemas/leagues';
+// Db
+import mongoose from 'mongoose';
 import dbConnect from '../../../lib/mongodb';
 import { createLeague } from '../../../controllers/League';
-import { leagueCreateSchema } from '../../../schemas/leagues';
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
+  // Check authentication
   const session = await getServerSession(req, res, authOptions);
   if (!session || !session.user) {
     res.status(401).json({ message: 'Unauthorized' });
     return;
   }
 
+  // Validate the input
   let parsed;
   try {
     parsed = leagueCreateSchema.parse(req.body);
@@ -20,13 +26,16 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json(error);
   }
 
+  // Initialize database connection
   await dbConnect();
 
-  const userId = (session.user as any).id;
-
+  // Create league
   const league = await createLeague(
     { name: parsed.name, description: parsed.description },
-    { user: userId, teamName: parsed.teamName },
+    {
+      user: new mongoose.Types.ObjectId(session.user.id),
+      teamName: parsed.teamName,
+    },
   );
 
   return res.status(200).json(league);

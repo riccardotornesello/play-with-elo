@@ -1,10 +1,7 @@
+// Crypto library
 import crypto from 'crypto';
-
-const config = {
-  iterations: 10000,
-  keylen: 64,
-  digest: 'sha512',
-};
+// Configuration
+import config from '../config';
 
 export async function hashPassword(password: string): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -13,9 +10,9 @@ export async function hashPassword(password: string): Promise<string> {
     crypto.pbkdf2(
       password,
       salt,
-      config.iterations,
-      config.keylen,
-      config.digest,
+      config.hash.iterations,
+      config.hash.keylen,
+      config.hash.digest,
       (err, derivedKey) => {
         if (err) reject(err);
 
@@ -35,9 +32,9 @@ export async function verifyPassword(
     crypto.pbkdf2(
       inputPassword,
       storedSalt,
-      config.iterations,
-      config.keylen,
-      config.digest,
+      config.hash.iterations,
+      config.hash.keylen,
+      config.hash.digest,
       (err, derivedKey) => {
         if (err) reject(err);
 

@@ -9,7 +9,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from './api/auth/[...nextauth]';
 // Db
 import dbConnect from '../lib/mongodb';
-import { getUserInvitations, getUserLeagues } from '../models/League';
+import { getUserInvitations, getUserLeagues } from '../controllers/League';
 // Components
 import {
   Modal,

@@ -2,7 +2,10 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../../auth/[...nextauth]';
 import dbConnect from '../../../../../lib/mongodb';
-import { registerPlayer, removeInvitation } from '../../../../../models/League';
+import {
+  registerLeaguePlayer,
+  removeInvitation,
+} from '../../../../../controllers/League';
 import { leagueInvitationAcceptSchema } from '../../../../../schemas/leagues';
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
@@ -29,7 +32,7 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
 
   await dbConnect();
 
-  await registerPlayer(id, {
+  await registerLeaguePlayer(id, {
     user: (session.user as any).id,
     teamName: parsed.teamName,
   });

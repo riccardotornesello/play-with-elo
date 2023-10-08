@@ -2,7 +2,10 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../../auth/[...nextauth]';
 import dbConnect from '../../../../../lib/mongodb';
-import { registerPlayer, removeInvitation } from '../../../../../models/League';
+import {
+  registerPlayer,
+  removeInvitation,
+} from '../../../../../controllers/League';
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;

@@ -18,7 +18,8 @@ import {
 import LeagueDescription from '../../components/leagues/league-description';
 import LeagueRanking from '../../components/leagues/league-ranking';
 import dbConnect from '../../lib/mongodb';
-import { ILeague, getLeagueById } from '../../models/League';
+import { ILeague } from '../../models/League';
+import { getLeagueById } from '../../controllers/League';
 import LeagueInvitationForm from '../../components/leagues/league-invitation-form';
 
 export type LeagueDetailPageProps = {

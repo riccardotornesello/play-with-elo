@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../../auth/[...nextauth]';
 import dbConnect from '../../../../../lib/mongodb';
-import { createLeagueInvitation } from '../../../../../models/League';
+import { createLeagueInvitation } from '../../../../../controllers/League';
 import { leagueInvitationCreateSchema } from '../../../../../schemas/leagues';
 import { findUserByUsername } from '../../../../../controllers/User';
 

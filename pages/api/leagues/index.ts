@@ -3,15 +3,8 @@ import { z } from 'zod';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import dbConnect from '../../../lib/mongodb';
-import { createLeague, getLeagueByName } from '../../../models/League';
+import { createLeague } from '../../../controllers/League';
 import { leagueCreateSchema } from '../../../schemas/leagues';
-
-const uniqueLeagueSchema = z.object({
-  name: z.string().refine(async (val) => {
-    const league = await getLeagueByName(val);
-    return league === null;
-  }, 'Name already in use'),
-});
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions);
@@ -28,12 +21,6 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
   }
 
   await dbConnect();
-
-  try {
-    await uniqueLeagueSchema.parseAsync(parsed);
-  } catch (error) {
-    return res.status(400).json(error);
-  }
 
   const userId = (session.user as any).id;
 

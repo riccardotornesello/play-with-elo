@@ -12,7 +12,7 @@ import {
   getLeaguePlayers,
   saveMatch,
   updatePlayers,
-} from '../../../../../models/League';
+} from '../../../../../controllers/League';
 // Schema
 import { matchCreateSchema } from '../../../../../schemas/matches';
 // Elo

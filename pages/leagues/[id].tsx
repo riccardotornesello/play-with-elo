@@ -18,12 +18,12 @@ import {
 import LeagueDescription from '../../components/leagues/league-description';
 import LeagueRanking from '../../components/leagues/league-ranking';
 import dbConnect from '../../lib/mongodb';
-import { ILeague } from '../../models/League';
-import { getLeagueById } from '../../controllers/League';
+import { League } from '../../features/leagues/models/league';
+import { getLeague } from '../../features/leagues/controllers/league';
 import LeagueInvitationForm from '../../components/leagues/league-invitation-form';
 
 export type LeagueDetailPageProps = {
-  league: ILeague;
+  league: League;
 };
 
 export const getServerSideProps: GetServerSideProps<
@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps<
   // TODO: handle 404 and 403
   await dbConnect();
 
-  const league = await getLeagueById(context.params?.id as string);
+  const league = await getLeague(context.params?.id as string);
 
   return {
     props: {

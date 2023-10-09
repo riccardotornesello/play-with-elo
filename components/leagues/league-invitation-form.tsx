@@ -13,7 +13,7 @@ import { ApiStatus, useMutation } from '../../hooks/api';
 import {
   leagueInvitationCreateSchema,
   LeagueInvitationCreateSchema,
-} from '../../schemas/leagues';
+} from '../../features/leagues/schemas/invitation';
 
 export type LeagueInvitationFormProps = {
   onSuccess: () => void;

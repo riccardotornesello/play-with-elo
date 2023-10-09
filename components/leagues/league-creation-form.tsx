@@ -9,7 +9,7 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { ApiStatus, useMutation } from '../../hooks/api';
-import { leagueCreateSchema, LeagueCreateSchema } from '../../schemas/leagues';
+import { leagueCreateSchema, LeagueCreateSchema } from '../../features/leagues/schemas/leagues';
 import { pushFormErrors } from '../../lib/form';
 
 export type LeagueCreationFormProps = {

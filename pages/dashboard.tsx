@@ -9,7 +9,10 @@ import { useRouter } from 'next/router';
 import { getUser } from '../features/auth/utils/user';
 // Db
 import dbConnect from '../lib/mongodb';
-import { getUserInvitations, getUserLeagues } from '../controllers/League';
+import {
+  // getUserInvitations,
+  getUserLeagues,
+} from '../features/leagues/controllers/league';
 // Components
 import {
   Modal,
@@ -19,7 +22,6 @@ import {
   Button,
   useDisclosure,
 } from '@chakra-ui/react';
-import ButtonLink from '../components/basic/button-link';
 import LeagueCreationForm from '../components/leagues/league-creation-form';
 import LeaguesListTable from '../components/leagues/leagues-list-table';
 import InvitationsList from '../components/invitations/invitations-list';
@@ -52,15 +54,16 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> = async (
 
   await dbConnect();
 
-  const [leagues, invitations] = await Promise.all([
+  const [leagues] = await Promise.all([
     getUserLeagues(user._id.toString()),
-    getUserInvitations(user._id.toString()),
+    // TODO: getUserInvitations(user._id.toString()),
   ]);
 
   return {
     props: {
       leagues: JSON.parse(JSON.stringify(leagues)),
-      invitations: JSON.parse(JSON.stringify(invitations)),
+      // TODO: invitations: JSON.parse(JSON.stringify(invitations)),
+      invitations: [],
     },
   };
 };

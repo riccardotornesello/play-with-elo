@@ -1,46 +1,56 @@
 import mongoose from 'mongoose';
 
-export type IPlayer = {
+export type Player = {
   _id: mongoose.Types.ObjectId;
+
   user: mongoose.Types.ObjectId;
+
   teamName: string;
   isAdmin?: boolean;
   avatar?: string;
   rating: number;
+
   gameWins: number;
   gameLosses: number;
   gameDraws: number;
+
   pointWins: number;
   pointLosses: number;
   pointDraws: number;
+
   createdAt: Date;
   updatedAt: Date;
 };
 
-export type IMatchPlayer = {
+export type MatchPlayer = {
   playerId: mongoose.Types.ObjectId;
   points: number;
   ratingEarned: number;
 };
 
-export type IMatch = {
+export type Match = {
   _id: mongoose.Types.ObjectId;
-  players: IMatchPlayer[];
+
+  players: MatchPlayer[];
+
   playedAt: Date;
 };
 
-export type ILeague = {
+export type League = {
   _id: mongoose.Types.ObjectId;
+
   name: string;
   description: string;
+
   createdAt: Date;
   updatedAt: Date;
-  players: IPlayer[];
+
+  players: Player[];
   invitations?: mongoose.Types.ObjectId[];
-  matches?: IMatch[];
+  matches?: Match[];
 };
 
-export const playerSchema = new mongoose.Schema<IPlayer>(
+export const playerSchema = new mongoose.Schema<Player>(
   {
     user: { type: mongoose.Schema.Types.ObjectId, required: true },
     teamName: { type: String, required: true },
@@ -59,17 +69,40 @@ export const playerSchema = new mongoose.Schema<IPlayer>(
   },
 );
 
-export const leagueSchema = new mongoose.Schema<ILeague>(
+export const matchPlayerSchema = new mongoose.Schema<MatchPlayer>(
   {
-    name: { type: String, required: true },
-    description: { type: String, required: true },
-    players: { type: [playerSchema], required: true },
-    invitations: { type: [mongoose.Schema.Types.ObjectId], required: false },
+    playerId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    points: { type: Number, required: true },
+    ratingEarned: { type: Number, required: true },
+  },
+  {
+    timestamps: false,
+  },
+);
+
+export const matchSchema = new mongoose.Schema<Match>(
+  {
+    players: { type: [matchPlayerSchema], required: true },
+    playedAt: { type: Date, required: true },
   },
   {
     timestamps: true,
   },
 );
 
-export const League =
+export const leagueSchema = new mongoose.Schema<League>(
+  {
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    players: { type: [playerSchema], required: true },
+    invitations: { type: [mongoose.Schema.Types.ObjectId], required: false },
+    matches: { type: [matchSchema], required: false },
+  },
+  {
+    timestamps: true,
+    optimisticConcurrency: true,
+  },
+);
+
+export const LeagueModel =
   mongoose.models.League || mongoose.model('League', leagueSchema);

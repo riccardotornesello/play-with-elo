@@ -91,7 +91,12 @@ export function PodiumPlayerCard({ player, position }: PodiumPlayerCardProps) {
               </AvatarBadge>
             </Avatar>
           </Box>
-          <Box minW='50%' px='2' my='auto'>
+          <Box
+            minW='50%'
+            px='2'
+            my='auto'
+            textAlign={{ base: 'left', sm: 'center', lg: 'left' }}
+          >
             <Heading size='md'>{player.teamName}</Heading>
             <Badge
               colorScheme='green'

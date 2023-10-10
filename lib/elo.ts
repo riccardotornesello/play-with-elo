@@ -66,11 +66,10 @@ export function calculateElo({ players }: CalculateElo): Map<string, number> {
     );
   });
 
-  return newRatings.reduce(
-    (acc, rating, index) => ({
-      ...acc,
-      [players[index].playerId]: rating,
-    }),
-    new Map(),
-  );
+  const ratingMap = new Map();
+  newRatings.forEach((rating, index) => {
+    ratingMap.set(players[index].playerId, rating);
+  });
+
+  return ratingMap;
 }

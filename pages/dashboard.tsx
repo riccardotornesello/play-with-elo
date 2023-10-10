@@ -117,7 +117,7 @@ export default function HomePage({
 
 function TestButton() {
   const { mutate, apiStatus } = useMutation(
-    `/api/leagues/651d943c3f42b21523709d37/matches`,
+    `/api/leagues/652300f6c0e914d1adddfb32/matches`,
   );
 
   return (
@@ -126,11 +126,11 @@ function TestButton() {
         mutate({
           players: [
             {
-              playerId: '651d943c3f42b21523709d38',
-              points: 0,
+              playerId: '652300f6c0e914d1adddfb33',
+              points: 2,
             },
             {
-              playerId: '651dadf73f42b21523709da6',
+              playerId: '65251ac8b2f35ae9e56b7c4e',
               points: 0,
             },
           ],

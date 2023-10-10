@@ -14,16 +14,16 @@ export type Player = {
   gameLosses: number;
   gameDraws: number;
 
-  pointWins: number;
-  pointLosses: number;
-  pointDraws: number;
+  ratingWins: number;
+  ratingLosses: number;
+  ratingDraws: number;
 
   createdAt: Date;
   updatedAt: Date;
 };
 
 export type MatchPlayer = {
-  playerId: mongoose.Types.ObjectId;
+  player: mongoose.Types.ObjectId;
   points: number;
   ratingEarned: number;
 };
@@ -38,6 +38,7 @@ export type Match = {
 
 export type League = {
   _id: mongoose.Types.ObjectId;
+  __v: number;
 
   name: string;
   description: string;
@@ -57,12 +58,12 @@ export const playerSchema = new mongoose.Schema<Player>(
     isAdmin: { type: Boolean, required: false },
     avatar: { type: String, required: false },
     rating: { type: Number, required: true },
-    gameWins: { type: Number, required: true },
-    gameLosses: { type: Number, required: true },
-    gameDraws: { type: Number, required: true },
-    pointWins: { type: Number, required: true },
-    pointLosses: { type: Number, required: true },
-    pointDraws: { type: Number, required: true },
+    gameWins: { type: Number, required: true, default: 0 },
+    gameLosses: { type: Number, required: true, default: 0 },
+    gameDraws: { type: Number, required: true, default: 0 },
+    ratingWins: { type: Number, required: true, default: 0 },
+    ratingLosses: { type: Number, required: true, default: 0 },
+    ratingDraws: { type: Number, required: true, default: 0 },
   },
   {
     timestamps: true,
@@ -71,7 +72,7 @@ export const playerSchema = new mongoose.Schema<Player>(
 
 export const matchPlayerSchema = new mongoose.Schema<MatchPlayer>(
   {
-    playerId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    player: { type: mongoose.Schema.Types.ObjectId, required: true },
     points: { type: Number, required: true },
     ratingEarned: { type: Number, required: true },
   },

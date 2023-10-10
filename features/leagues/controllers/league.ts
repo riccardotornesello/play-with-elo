@@ -24,8 +24,16 @@ export async function createLeague(
   return newLeague;
 }
 
-export async function getLeague(leagueId: string): Promise<League> {
-  const league = await LeagueModel.findById(leagueId);
+export async function getLeague(
+  leagueId: string,
+  fields: any | null = null,
+): Promise<League | null> {
+  const league = fields
+    ? await LeagueModel.findById(leagueId, {
+        __v: 1,
+        ...fields,
+      })
+    : await LeagueModel.findById(leagueId);
   return league;
 }
 

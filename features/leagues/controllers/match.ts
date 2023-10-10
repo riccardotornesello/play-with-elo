@@ -1,5 +1,6 @@
 // Db
-import { LeagueModel } from '../models/league';
+import mongoose from 'mongoose';
+import { Player, LeagueModel } from '../models/league';
 // Common
 import { IMatchCreate } from './common';
 
@@ -7,13 +8,23 @@ import { IMatchCreate } from './common';
  * Matches
  ***************************/
 
-export async function saveMatch(leagueId: string, match: IMatchCreate) {
-  return LeagueModel.updateOne(
-    { _id: leagueId },
+export async function saveMatchAndPlayers(
+  leagueId: mongoose.Types.ObjectId,
+  version: number,
+  match: IMatchCreate,
+  players: Player[],
+) {
+  const updateRes = await LeagueModel.updateOne(
+    { _id: leagueId, __v: version },
     {
-      $addToSet: {
-        matches: match,
+      $push: { matches: match },
+      $set: {
+        players: players,
+        __v: version + 1,
+        updatedAt: new Date(),
       },
     },
   );
+
+  return updateRes.modifiedCount > 0;
 }

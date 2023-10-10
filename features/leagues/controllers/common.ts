@@ -18,12 +18,6 @@ export function generatePlayerData(player: IPlayerCreate, isAdmin = false) {
     ...player,
     isAdmin,
     rating: 1500,
-    gameWins: 0,
-    gameLosses: 0,
-    gameDraws: 0,
-    pointWins: 0,
-    pointLosses: 0,
-    pointDraws: 0,
   };
 }
 

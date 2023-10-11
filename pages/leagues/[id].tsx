@@ -21,6 +21,7 @@ import dbConnect from '../../lib/mongodb';
 import { League } from '../../features/leagues/models/league';
 import { getLeague } from '../../features/leagues/controllers/league';
 import LeagueInvitationForm from '../../components/leagues/league-invitation-form';
+import MatchCreationForm from '../../features/leagues/components/match-creation-form';
 
 export type LeagueDetailPageProps = {
   league: League;
@@ -67,6 +68,8 @@ export default function LeagueDetailPage({
           </Modal>
 
           <LeagueRanking players={league.players} />
+
+          <MatchCreationForm league={league} />
         </Stack>
       </Container>
     </div>

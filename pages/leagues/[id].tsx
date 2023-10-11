@@ -22,6 +22,7 @@ import { League } from '../../features/leagues/models/league';
 import { getLeague } from '../../features/leagues/controllers/league';
 import LeagueInvitationForm from '../../components/leagues/league-invitation-form';
 import MatchCreationForm from '../../features/leagues/components/match-creation-form';
+import MatchesList from '../../features/leagues/components/matches-list';
 
 export type LeagueDetailPageProps = {
   league: League;
@@ -33,7 +34,14 @@ export const getServerSideProps: GetServerSideProps<
   // TODO: handle 404 and 403
   await dbConnect();
 
-  const league = await getLeague(context.params?.id as string);
+  const leagueId = context.params?.id as string;
+
+  const league = await getLeague(leagueId, {
+    name: 1,
+    description: 1,
+    players: 1,
+    matches: { $slice: -5 },
+  });
 
   return {
     props: {
@@ -68,6 +76,8 @@ export default function LeagueDetailPage({
           </Modal>
 
           <LeagueRanking players={league.players} />
+
+          <MatchesList league={league} />
 
           <MatchCreationForm league={league} />
         </Stack>

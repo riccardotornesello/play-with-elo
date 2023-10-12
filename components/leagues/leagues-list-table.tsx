@@ -1,3 +1,4 @@
+// Components
 import {
   Table,
   Thead,
@@ -8,6 +9,8 @@ import {
   TableContainer,
 } from '@chakra-ui/react';
 import ButtonLink from '../basic/button-link';
+// Dates
+import moment from 'moment';
 
 export type LeaguesListTableProps = {
   leagues: any[];
@@ -32,11 +35,14 @@ export default function LeaguesListTable({ leagues }: LeaguesListTableProps) {
           {leagues.map((league) => (
             <Tr key={league._id}>
               <Td>{league.name}</Td>
-              <Td>{league.createdAt}</Td>
+              <Td>{moment(league.createdAt).format('MMMM Do YYYY')}</Td>
               <Td>{league.playersCount}</Td>
               <Td>
-                <ButtonLink href={`/leagues/${league._id}`}>
-                  Edit
+                <ButtonLink
+                  href={`/dashboard/leagues/${league._id}`}
+                  colorScheme='teal'
+                >
+                  Open
                 </ButtonLink>
               </Td>
             </Tr>

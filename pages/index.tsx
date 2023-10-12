@@ -1,35 +1,58 @@
 'use client';
 
-import { Stack, Text, Center, Box, Heading } from '@chakra-ui/react';
+// Components
+import {
+  Stack,
+  Flex,
+  Text,
+  VStack,
+  useBreakpointValue,
+  Heading,
+} from '@chakra-ui/react';
 import ButtonLink from '../components/basic/button-link';
+// Pictures
+import Pitch from '../assets/pictures/pitch.jpg';
 
 export default function HomePage() {
   return (
-    <Box h='100vh' w='full' color='white' bg='gray.900'>
-      <Center h='100%' w='100%'>
-        <Stack spacing={10} mx={'auto'} maxW={'container.xl'} py={12} px={6}>
+    <Flex
+      w={'full'}
+      h={'100vh'}
+      backgroundImage={`url(${Pitch.src})`}
+      backgroundSize={'cover'}
+      backgroundPosition={'center center'}
+    >
+      <VStack
+        w={'full'}
+        justify={'center'}
+        px={useBreakpointValue({ base: 4, md: 8 })}
+        bgGradient={'linear(to-r, blackAlpha.700, blackAlpha.400)'}
+      >
+        <Stack maxW={'2xl'} align={'flex-start'} spacing={6}>
           <Heading
-            lineHeight={1.5}
-            fontSize={{ base: '3xl', sm: '4xl', md: '5xl' }}
+            as='h2'
+            color={'green.300'}
+            fontWeight={700}
+            lineHeight={1.2}
+            size={useBreakpointValue({ base: 'xl', md: '2xl' })}
           >
-            <Text bgGradient='linear(to-r, red.500,yellow.500)' bgClip='text'>
-              Create your league.
-            </Text>
-            <Text bgGradient='linear(to-r, blue.500,green.500)' bgClip='text'>
-              Compete.
-            </Text>{' '}
-            <Text bgGradient='linear(to-r, green.500,yellow.500)' bgClip='text'>
-              Be the best.
-            </Text>
+            Create your league.
+            <br />
+            Compete.
+            <br />
+            Be the best.
+            <br />
           </Heading>
 
-          <Box>
-            <ButtonLink href='/dashboard' colorScheme='green' px='50px'>
-              Get started
-            </ButtonLink>
-          </Box>
+          <ButtonLink href='/dashboard' colorScheme='teal' px='50px'>
+            Get started
+          </ButtonLink>
+
+          <Text color='white' mt={5}>
+            The interface is a 💩, I'm a backend developer
+          </Text>
         </Stack>
-      </Center>
-    </Box>
+      </VStack>
+    </Flex>
   );
 }

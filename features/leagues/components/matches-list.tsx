@@ -23,13 +23,15 @@ export default function MatchesList({ league }: MatchesListProps) {
   if (!league.matches) {
     return null;
   }
-  return league.matches.reverse().map((match) => (
-    <MatchCard
-      key={match._id.toString()}
-      match={match}
-      players={league.players}
-    />
-  ));
+  return league.matches
+    .reverse()
+    .map((match) => (
+      <MatchCard
+        key={match._id.toString()}
+        match={match}
+        players={league.players}
+      />
+    ));
 }
 
 function MatchCard({ match, players }: MatchCardProps) {

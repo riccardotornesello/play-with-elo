@@ -4,15 +4,16 @@ import type {
   GetServerSideProps,
   InferGetServerSidePropsType,
 } from 'next';
-import { useRouter } from 'next/router';
 // Auth
-import { getUser } from '../features/auth/utils/user';
+import { getUser } from '../../features/auth/utils/user';
 // Db
-import dbConnect from '../lib/mongodb';
+import dbConnect from '../../lib/mongodb';
 import {
   // getUserInvitations,
   getUserLeagues,
-} from '../features/leagues/controllers/league';
+} from '../../features/leagues/controllers/league';
+// Layouts
+import DashboardLayout from '../../layouts/dashboard';
 // Components
 import {
   Modal,
@@ -21,16 +22,18 @@ import {
   Box,
   Button,
   useDisclosure,
+  Heading,
+  Flex,
 } from '@chakra-ui/react';
-import LeagueCreationForm from '../components/leagues/league-creation-form';
-import LeaguesListTable from '../components/leagues/leagues-list-table';
-import InvitationsList from '../components/invitations/invitations-list';
-// Hooks
-import { ApiStatus, useMutation } from '../hooks/api';
+import LeagueCreationForm from '../../components/leagues/league-creation-form';
+import LeaguesListTable from '../../components/leagues/leagues-list-table';
+import InvitationsList from '../../components/invitations/invitations-list';
+// Db
+import { League } from '../../features/leagues/models/league';
 
 export type HomePageProps = {
   // TODO: types
-  leagues: any[];
+  leagues: League[];
   invitations: any[];
 };
 
@@ -73,30 +76,22 @@ export default function HomePage({
   invitations,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
-
-  const { mutate, apiStatus } = useMutation(`/api/auth/signout`, {
-    onSuccess: () => {
-      router.push('/');
-    },
-  });
 
   const onCreationSuccess = () => {
     window.location.reload();
   };
 
   return (
-    <div>
-      <Button
-        onClick={() => mutate({})}
-        isLoading={
-          apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success
-        }
-      >
-        Sign out
-      </Button>
+    <DashboardLayout>
+      <Flex justifyContent='space-between' alignItems='center' mb={4}>
+        <Heading as='h2' size='lg' mr={4}>
+          Your leagues
+        </Heading>
+        <Button onClick={onOpen} colorScheme='teal'>
+          Create new league
+        </Button>
+      </Flex>
 
-      <Button onClick={onOpen}>Create new league</Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -106,38 +101,9 @@ export default function HomePage({
         </ModalContent>
       </Modal>
 
-      <InvitationsList invitations={invitations} />
+      {/* <InvitationsList invitations={invitations} /> */}
 
       <LeaguesListTable leagues={leagues} />
-
-      <TestButton />
-    </div>
-  );
-}
-
-function TestButton() {
-  const { mutate, apiStatus } = useMutation(
-    `/api/leagues/652300f6c0e914d1adddfb32/matches`,
-  );
-
-  return (
-    <Button
-      onClick={() =>
-        mutate({
-          players: [
-            {
-              playerId: '652300f6c0e914d1adddfb33',
-              points: 2,
-            },
-            {
-              playerId: '65251ac8b2f35ae9e56b7c4e',
-              points: 0,
-            },
-          ],
-        })
-      }
-    >
-      Test
-    </Button>
+    </DashboardLayout>
   );
 }

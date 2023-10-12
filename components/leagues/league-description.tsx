@@ -1,16 +1,38 @@
-import { Card, CardBody, Text, Heading } from '@chakra-ui/react';
-import { ILeague } from '../../models/League';
+import { ReactNode } from 'react';
+import {
+  Card,
+  CardBody,
+  Text,
+  Heading,
+  Flex,
+  Box,
+  VStack,
+} from '@chakra-ui/react';
+import { League } from '../../features/leagues/models/league';
 
 export type LeagueDescriptionProps = {
-  league: ILeague;
+  league: League;
+  children?: ReactNode;
 };
 
-export default function LeagueDescription({ league }: LeagueDescriptionProps) {
+export default function LeagueDescription({
+  league,
+  children,
+}: LeagueDescriptionProps) {
   return (
-    <Card maxW='container.xl'>
+    <Card>
       <CardBody>
-        <Heading>{league.name}</Heading>
-        <Text>{league.description}</Text>
+        <Flex>
+          <Flex flex='1' direction='column' justify='center'>
+            <Heading>{league.name}</Heading>
+            <Text>{league.description}</Text>
+          </Flex>
+          {children && (
+            <VStack w='200px' mx={3} spacing={2}>
+              {children}
+            </VStack>
+          )}
+        </Flex>
       </CardBody>
     </Card>
   );

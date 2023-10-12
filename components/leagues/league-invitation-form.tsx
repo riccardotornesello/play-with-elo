@@ -15,18 +15,16 @@ import {
   LeagueInvitationCreateSchema,
 } from '../../features/leagues/schemas/invitation';
 
-export type LeagueInvitationFormProps = {
-  onSuccess: () => void;
-};
+export type LeagueInvitationFormProps = {};
 
-export default function LeagueInvitationForm({
-  onSuccess,
-}: LeagueInvitationFormProps) {
+export default function LeagueInvitationForm({}: LeagueInvitationFormProps) {
   const router = useRouter();
   const { id } = router.query;
 
   const { mutate, apiStatus } = useMutation(`/api/leagues/${id}/invitations`, {
-    onSuccess,
+    onSuccess: () => {
+      window.location.reload();
+    },
   });
 
   const {
@@ -37,7 +35,9 @@ export default function LeagueInvitationForm({
     resolver: zodResolver(leagueInvitationCreateSchema),
   });
 
-  const onSubmit: SubmitHandler<LeagueInvitationCreateSchema> = async (data) => {
+  const onSubmit: SubmitHandler<LeagueInvitationCreateSchema> = async (
+    data,
+  ) => {
     mutate(data);
   };
 

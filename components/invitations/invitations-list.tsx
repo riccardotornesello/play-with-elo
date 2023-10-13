@@ -26,7 +26,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   leagueInvitationAcceptSchema,
   LeagueInvitationAcceptSchema,
-} from '../../features/leagues/schemas/leagues';
+} from '../../features/leagues/schemas/invitation';
 
 type Invitation = {
   _id: string;

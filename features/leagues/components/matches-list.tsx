@@ -1,3 +1,5 @@
+// Dates
+import moment from 'moment';
 // Components
 import {
   Card,
@@ -49,6 +51,8 @@ function MatchCard({ match, players }: MatchCardProps) {
     (player) => player._id.toString() === worstPlayer?.player.toString(),
   );
 
+  const dateString = moment(match.playedAt).format('MMMM Do YYYY, h:mm a');
+
   return (
     <Card>
       <CardBody>
@@ -70,7 +74,7 @@ function MatchCard({ match, players }: MatchCardProps) {
           </SimpleGrid>
         </Center>
         <Center>
-          <Box>{match.playedAt}</Box>
+          <Box>{dateString}</Box>
         </Center>
       </CardBody>
     </Card>

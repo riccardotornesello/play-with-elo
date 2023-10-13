@@ -27,7 +27,7 @@ import {
 } from '@chakra-ui/react';
 import LeagueCreationForm from '../../components/leagues/league-creation-form';
 import LeaguesListTable from '../../components/leagues/leagues-list-table';
-import InvitationsList from '../../components/invitations/invitations-list';
+// import InvitationsList from '../../components/invitations/invitations-list';
 // Db
 import { League } from '../../features/leagues/models/league';
 

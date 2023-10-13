@@ -22,14 +22,14 @@ import {
 } from '@chakra-ui/react';
 import { GiPunch } from 'react-icons/gi';
 import { FaArrowUp } from 'react-icons/fa';
-import { IPlayer } from '../../models/League';
+import { Player } from '../../features/leagues/models/league';
 
 export type LeagueRankingProps = {
-  players: IPlayer[];
+  players: Player[];
 };
 
 export type PodiumPlayerCardProps = {
-  player: IPlayer;
+  player: Player;
   position: number;
 };
 

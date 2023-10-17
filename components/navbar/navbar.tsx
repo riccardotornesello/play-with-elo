@@ -1,5 +1,7 @@
 'use client';
 
+// Components
+import NextLink from 'next/link';
 import {
   Box,
   Flex,
@@ -23,23 +25,27 @@ interface Props {
   url: string;
 }
 
-const Links = { Leagues: '/dashboard', Invitations: '/dashboard#invitations' };
+const Links = [
+  { name: 'Dashboard', path: '/dashboard' },
+  { name: 'Invitations', path: '/dashboard#invitations' },
+];
 
 const NavLink = ({ children, url }: Props) => {
   return (
-    <Box
-      as='a'
-      px={2}
-      py={1}
-      rounded={'md'}
-      _hover={{
-        textDecoration: 'none',
-        bg: useColorModeValue('gray.200', 'gray.700'),
-      }}
-      href={url}
-    >
-      {children}
-    </Box>
+    <NextLink href={url} passHref legacyBehavior={true}>
+      <Box
+        as='a'
+        px={2}
+        py={1}
+        rounded={'md'}
+        _hover={{
+          textDecoration: 'none',
+          bg: useColorModeValue('gray.200', 'gray.700'),
+        }}
+      >
+        {children}
+      </Box>
+    </NextLink>
   );
 };
 
@@ -64,9 +70,9 @@ export default function Navbar() {
               spacing={4}
               display={{ base: 'none', md: 'flex' }}
             >
-              {Object.entries(Links).map((link) => (
-                <NavLink key={link[0]} url={link[1]}>
-                  {link[0]}
+              {Links.map((link, i) => (
+                <NavLink key={i} url={link.path}>
+                  {link.name}
                 </NavLink>
               ))}
             </HStack>
@@ -112,9 +118,9 @@ export default function Navbar() {
         {isOpen ? (
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
-              {Object.entries(Links).map((link) => (
-                <NavLink key={link[0]} url={link[1]}>
-                  {link[0]}
+              {Links.map((link, i) => (
+                <NavLink key={i} url={link.path}>
+                  {link.name}
                 </NavLink>
               ))}
             </Stack>

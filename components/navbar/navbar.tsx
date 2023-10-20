@@ -27,7 +27,6 @@ interface Props {
 
 const Links = [
   { name: 'Dashboard', path: '/dashboard' },
-  { name: 'Invitations', path: '/dashboard#invitations' },
 ];
 
 const NavLink = ({ children, url }: Props) => {

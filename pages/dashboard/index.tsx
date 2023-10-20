@@ -8,10 +8,8 @@ import type {
 import { getUser } from '../../features/auth/utils/user';
 // Db
 import dbConnect from '../../lib/mongodb';
-import {
-  // getUserInvitations,
-  getUserLeagues,
-} from '../../features/leagues/controllers/league';
+import { getUserLeagues } from '../../features/leagues/controllers/league';
+import { getUserInvitations } from '../../features/leagues/controllers/invitation';
 // Layouts
 import DashboardLayout from '../../layouts/dashboard';
 // Components
@@ -24,10 +22,11 @@ import {
   useDisclosure,
   Heading,
   Flex,
+  Badge,
 } from '@chakra-ui/react';
 import LeagueCreationForm from '../../components/leagues/league-creation-form';
 import LeaguesListTable from '../../components/leagues/leagues-list-table';
-// import InvitationsList from '../../components/invitations/invitations-list';
+import InvitationsList from '../../components/invitations/invitations-list';
 // Db
 import { League } from '../../features/leagues/models/league';
 
@@ -57,16 +56,15 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> = async (
 
   await dbConnect();
 
-  const [leagues] = await Promise.all([
+  const [leagues, invitations] = await Promise.all([
     getUserLeagues(user._id.toString()),
-    // TODO: getUserInvitations(user._id.toString()),
+    getUserInvitations(user._id.toString()),
   ]);
 
   return {
     props: {
       leagues: JSON.parse(JSON.stringify(leagues)),
-      // TODO: invitations: JSON.parse(JSON.stringify(invitations)),
-      invitations: [],
+      invitations: JSON.parse(JSON.stringify(invitations)),
     },
   };
 };
@@ -75,7 +73,8 @@ export default function HomePage({
   leagues,
   invitations,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const leagueDisclosure = useDisclosure();
+  const invitationsDisclosure = useDisclosure();
 
   const onCreationSuccess = () => {
     window.location.reload();
@@ -87,12 +86,28 @@ export default function HomePage({
         <Heading as='h2' size='lg' mr={4}>
           Your leagues
         </Heading>
-        <Button onClick={onOpen} colorScheme='teal'>
-          Create new league
-        </Button>
+
+        <Box>
+          <Button
+            onClick={invitationsDisclosure.onOpen}
+            colorScheme='teal'
+            mr={3}
+          >
+            Invitations
+            <Badge ml='1' colorScheme='green'>
+              {invitations.length}
+            </Badge>
+          </Button>
+          <Button onClick={leagueDisclosure.onOpen} colorScheme='teal'>
+            Create new league
+          </Button>
+        </Box>
       </Flex>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isOpen={leagueDisclosure.isOpen}
+        onClose={leagueDisclosure.onClose}
+      >
         <ModalOverlay />
         <ModalContent>
           <Box p='6'>
@@ -101,7 +116,17 @@ export default function HomePage({
         </ModalContent>
       </Modal>
 
-      {/* <InvitationsList invitations={invitations} /> */}
+      <Modal
+        isOpen={invitationsDisclosure.isOpen}
+        onClose={invitationsDisclosure.onClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <Box p='6'>
+            <InvitationsList invitations={invitations} />
+          </Box>
+        </ModalContent>
+      </Modal>
 
       <LeaguesListTable leagues={leagues} />
     </DashboardLayout>

@@ -1,36 +1,37 @@
 'use client';
 
 // Next
+// Components
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  Avatar,
+  AvatarGroup,
+  Box,
+  Button,
+  Container,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  Heading,
+  Icon,
+  IconProps,
+  Input,
+  SimpleGrid,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 // React
 import { useState } from 'react';
-// Components
-import {
-  Alert,
-  AlertIcon,
-  AlertDescription,
-  Box,
-  Flex,
-  Stack,
-  Heading,
-  Text,
-  Container,
-  Input,
-  Button,
-  SimpleGrid,
-  Avatar,
-  AvatarGroup,
-  IconProps,
-  Icon,
-  FormErrorMessage,
-  FormControl,
-} from '@chakra-ui/react';
-import PasswordField from '../../components/password-field/password-field';
 // Form
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { signInSchema, SignInSchema } from '../../features/auth/schemas/signin';
+import { SubmitHandler,useForm } from 'react-hook-form';
+
+import PasswordField from '../../components/password-field/password-field';
+import { SignInSchema,signInSchema } from '../../features/auth/schemas/signin';
 // Api
 import { ApiStatus, useMutation } from '../../hooks/api';
 

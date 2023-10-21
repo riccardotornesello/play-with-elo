@@ -1,5 +1,6 @@
 // Next
 import type { NextApiRequest, NextApiResponse } from 'next';
+
 // Handlers
 import { passwordResetRequestCreateHandler } from '../../../features/auth/handlers/password-reset';
 

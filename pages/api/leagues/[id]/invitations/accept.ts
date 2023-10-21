@@ -1,5 +1,6 @@
 // Next
 import type { NextApiRequest, NextApiResponse } from 'next';
+
 // Handlers
 import { leagueInvitationAcceptHandler } from '../../../../../features/leagues/handlers/invitations';
 

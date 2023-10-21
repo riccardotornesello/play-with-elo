@@ -1,33 +1,34 @@
 'use client';
 
 // Next
-import { useRouter } from 'next/router';
 // Components
 import {
-  Box,
-  Flex,
-  Stack,
-  Heading,
-  Text,
-  Container,
-  Input,
-  Button,
-  SimpleGrid,
   Avatar,
   AvatarGroup,
-  IconProps,
-  Icon,
+  Box,
+  Button,
+  Container,
+  Flex,
   FormControl,
   FormErrorMessage,
+  Heading,
+  Icon,
+  IconProps,
+  Input,
+  SimpleGrid,
+  Stack,
+  Text,
 } from '@chakra-ui/react';
-import PasswordField from '../../components/password-field/password-field';
-// Form
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signUpSchema, SignUpSchema } from '../../features/auth/schemas/signup';
-import { pushFormErrors } from '../../lib/form';
+import { useRouter } from 'next/router';
+// Form
+import { SubmitHandler,useForm } from 'react-hook-form';
+
+import PasswordField from '../../components/password-field/password-field';
+import { SignUpSchema,signUpSchema } from '../../features/auth/schemas/signup';
 // Api
 import { ApiStatus, useMutation } from '../../hooks/api';
+import { pushFormErrors } from '../../lib/form';
 
 const avatars = [
   {

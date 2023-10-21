@@ -1,32 +1,33 @@
 // Components
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer,
-  Button,
   Box,
-  Stack,
-  Input,
+  Button,
   FormControl,
   FormErrorMessage,
+  Input,
   Modal,
-  ModalOverlay,
   ModalContent,
+  ModalOverlay,
+  Stack,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
   useDisclosure,
 } from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
+// Form
+import { SubmitHandler,useForm } from 'react-hook-form';
+
+import {
+  LeagueInvitationAcceptSchema,
+  leagueInvitationAcceptSchema,
+} from '../../features/leagues/schemas/invitation';
 // Hooks
 import { ApiStatus, useMutation } from '../../hooks/api';
-// Form
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  leagueInvitationAcceptSchema,
-  LeagueInvitationAcceptSchema,
-} from '../../features/leagues/schemas/invitation';
 
 type Invitation = {
   _id: string;

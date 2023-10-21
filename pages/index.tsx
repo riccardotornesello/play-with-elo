@@ -2,14 +2,15 @@
 
 // Components
 import {
+  Box,
+  Center,
+  Heading,
+  HStack,
   Stack,
   Text,
-  Heading,
-  Box,
-  HStack,
-  Center,
   useColorModeValue,
 } from '@chakra-ui/react';
+
 import ButtonLink from '../components/button-link';
 
 export default function HomePage() {

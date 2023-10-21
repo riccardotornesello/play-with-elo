@@ -1,7 +1,7 @@
 // Next
 import type {
-  GetServerSidePropsContext,
   GetServerSideProps,
+  GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from 'next';
 

@@ -1,33 +1,34 @@
 // Next
-import type {
-  GetServerSidePropsContext,
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-} from 'next';
 // Components
 import {
-  Stack,
+  Box,
   Button,
   Modal,
-  ModalOverlay,
   ModalContent,
-  Box,
+  ModalOverlay,
+  Stack,
   useDisclosure,
 } from '@chakra-ui/react';
+import type {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from 'next';
+
 import LeagueDescription from '../../../components/leagues/league-description';
-import LeagueRanking from '../../../components/leagues/league-ranking';
 import LeagueInvitationForm from '../../../components/leagues/league-invitation-form';
+import LeagueRanking from '../../../components/leagues/league-ranking';
+import { User } from '../../../features/auth/types/user';
+// Auth
+import { getUser } from '../../../features/auth/utils/user';
 import MatchCreationForm from '../../../features/leagues/components/match-creation-form';
 import MatchesList from '../../../features/leagues/components/matches-list';
+import { getLeague } from '../../../features/leagues/controllers/league';
+import { League } from '../../../features/leagues/models/league';
 // Layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // Db
 import dbConnect from '../../../lib/mongodb';
-import { League } from '../../../features/leagues/models/league';
-import { getLeague } from '../../../features/leagues/controllers/league';
-// Auth
-import { getUser } from '../../../features/auth/utils/user';
-import { User } from '../../../features/auth/types/user';
 
 export type LeagueDetailPageProps = {
   league: League;

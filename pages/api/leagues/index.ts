@@ -1,5 +1,6 @@
 // Next
 import type { NextApiRequest, NextApiResponse } from 'next';
+
 // Handlers
 import { leagueCreateHandler } from '../../../features/leagues/handlers/league-create';
 

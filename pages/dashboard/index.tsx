@@ -1,34 +1,35 @@
 // Next
-import type {
-  GetServerSidePropsContext,
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-} from 'next';
-// Auth
-import { getUser } from '../../features/auth/utils/user';
-// Db
-import dbConnect from '../../lib/mongodb';
-import { getUserLeagues } from '../../features/leagues/controllers/league';
-import { getUserInvitations } from '../../features/leagues/controllers/invitation';
-// Layouts
-import DashboardLayout from '../../layouts/dashboard';
 // Components
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
+  Badge,
   Box,
   Button,
-  useDisclosure,
-  Heading,
   Flex,
-  Badge,
+  Heading,
+  Modal,
+  ModalContent,
+  ModalOverlay,
+  useDisclosure,
 } from '@chakra-ui/react';
+import type {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from 'next';
+
+import InvitationsList from '../../components/invitations/invitations-list';
 import LeagueCreationForm from '../../components/leagues/league-creation-form';
 import LeaguesListTable from '../../components/leagues/leagues-list-table';
-import InvitationsList from '../../components/invitations/invitations-list';
+// Auth
+import { getUser } from '../../features/auth/utils/user';
+import { getUserInvitations } from '../../features/leagues/controllers/invitation';
+import { getUserLeagues } from '../../features/leagues/controllers/league';
 // Db
 import { League } from '../../features/leagues/models/league';
+// Layouts
+import DashboardLayout from '../../layouts/dashboard';
+// Db
+import dbConnect from '../../lib/mongodb';
 
 export type HomePageProps = {
   // TODO: types

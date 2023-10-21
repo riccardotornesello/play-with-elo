@@ -1,5 +1,6 @@
 // Next
 import type { NextApiRequest, NextApiResponse } from 'next';
+
 // Handlers
 import signOutHandler from '../../../features/auth/handlers/signout';
 

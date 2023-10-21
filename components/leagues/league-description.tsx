@@ -1,12 +1,13 @@
-import { ReactNode } from 'react';
 import {
   Card,
   CardBody,
-  Text,
-  Heading,
   Flex,
+  Heading,
+  Text,
   VStack,
 } from '@chakra-ui/react';
+import { ReactNode } from 'react';
+
 import { League } from '../../features/leagues/models/league';
 
 export type LeagueDescriptionProps = {

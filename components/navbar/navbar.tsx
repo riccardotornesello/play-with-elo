@@ -1,24 +1,24 @@
 'use client';
 
 // Components
-import NextLink from 'next/link';
+import { CloseIcon,HamburgerIcon } from '@chakra-ui/icons';
 import {
-  Box,
-  Flex,
   Avatar,
+  Box,
+  Button,
+  Container,
+  Flex,
   HStack,
   IconButton,
-  Button,
   Menu,
   MenuButton,
-  MenuList,
   MenuItem,
-  useDisclosure,
-  useColorModeValue,
+  MenuList,
   Stack,
-  Container,
+  useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import NextLink from 'next/link';
 
 interface Props {
   children: React.ReactNode;

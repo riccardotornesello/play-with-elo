@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import Image, { ImageProps } from 'next/image';
+import { useState } from 'react';
 
 export type ImageWithPlaceholderProps = ImageProps & {
   errorPlaceholder: string;

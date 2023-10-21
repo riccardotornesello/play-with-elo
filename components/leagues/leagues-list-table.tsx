@@ -1,16 +1,17 @@
 // Components
 import {
   Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
   TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
 } from '@chakra-ui/react';
-import ButtonLink from '../button-link';
 // Dates
 import moment from 'moment';
+
+import ButtonLink from '../button-link';
 
 export type LeaguesListTableProps = {
   leagues: any[];

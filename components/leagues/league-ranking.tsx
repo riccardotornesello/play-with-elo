@@ -1,27 +1,28 @@
 import {
+  Avatar,
+  AvatarBadge,
+  Badge,
+  Box,
   Card,
   CardBody,
   CardFooter,
-  Heading,
-  SimpleGrid,
-  Icon,
   Center,
-  Badge,
-  Avatar,
-  Box,
   Flex,
-  AvatarBadge,
-  Text,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
+  Heading,
+  Icon,
+  SimpleGrid,
   Stack,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
 } from '@chakra-ui/react';
-import { GiPunch } from 'react-icons/gi';
 import { FaArrowUp } from 'react-icons/fa';
+import { GiPunch } from 'react-icons/gi';
+
 import { Player } from '../../features/leagues/models/league';
 
 export type LeagueRankingProps = {

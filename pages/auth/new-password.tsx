@@ -1,31 +1,32 @@
 // Next
-import type {
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-} from 'next';
 // Components
 import {
   Box,
   Button,
   Container,
   FormControl,
+  FormErrorMessage,
   Heading,
   Stack,
   Text,
-  FormErrorMessage,
 } from '@chakra-ui/react';
-import PasswordFied from '../../components/password-field/password-field';
-// Form
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  newPasswordSchema,
-  NewPasswordSchema,
-} from '../../features/auth/schemas/password-reset';
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from 'next';
+// Form
+import { SubmitHandler,useForm } from 'react-hook-form';
+
+import PasswordFied from '../../components/password-field/password-field';
 // Crypto lib
 import { decodeActionToken } from '../../features/auth/lib/jwt';
+import {
+  NewPasswordSchema,
+  newPasswordSchema,
+} from '../../features/auth/schemas/password-reset';
 // Api
-import { useMutation, ApiStatus } from '../../hooks/api';
+import { ApiStatus,useMutation } from '../../hooks/api';
 
 export type NewPasswordPageProps = {
   tokenValid: boolean;

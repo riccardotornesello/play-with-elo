@@ -6,7 +6,6 @@ import {
   FormErrorMessage,
   Heading,
   Stack,
-  Text,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type {
@@ -14,6 +13,8 @@ import type {
   InferGetServerSidePropsType,
 } from 'next';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
+import Link from '../../components/link';
 import PasswordFied from '../../components/password-field/password-field';
 import { decodeActionToken } from '../../features/auth/lib/jwt';
 import {
@@ -21,7 +22,6 @@ import {
   newPasswordSchema,
 } from '../../features/auth/schemas/password-reset';
 import { ApiStatus, useMutation } from '../../hooks/api';
-import Link from '../../components/link';
 
 export type NewPasswordPageProps = {
   tokenValid: boolean;

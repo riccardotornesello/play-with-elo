@@ -13,8 +13,9 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import Link from '../../components/link';
 import Head from 'next/head';
+
+import Link from '../../components/link';
 import SignUpForm from '../../features/auth/compoments/sign-up-form';
 
 const avatars = [

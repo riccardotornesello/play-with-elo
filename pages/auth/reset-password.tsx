@@ -9,16 +9,16 @@ import {
   Heading,
   Input,
   Stack,
-  Text,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler,useForm } from 'react-hook-form';
+
+import Link from '../../components/link';
 import {
   ForgotPasswordRequestSchema,
   forgotPasswordRequestSchema,
 } from '../../features/auth/schemas/password-reset';
 import { ApiStatus, useMutation } from '../../hooks/api';
-import Link from '../../components/link';
 
 export default function ResetPasswordPage() {
   return (

@@ -1,12 +1,14 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI!;
+const MONGODB_USERNAME = process.env.MONGODB_USERNAME || '';
+const MONGODB_PASSWORD = process.env.MONGODB_PASSWORD || '';
+const MONGODB_DATABASE = process.env.MONGODB_DATABASE || '';
+const MONGODB_HOST = process.env.MONGODB_HOST || '';
+const MONGODB_PORT = process.env.MONGODB_PORT || 27017;
 
-if (!MONGODB_URI) {
-  throw new Error(
-    'Please define the MONGODB_URI environment variable inside .env.local',
-  );
-}
+const MONGODB_URI =
+  process.env.MONGODB_PORT ||
+  `mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DATABASE}`;
 
 // @ts-ignore
 let cached = global.mongoose;

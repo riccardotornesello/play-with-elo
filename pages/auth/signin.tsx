@@ -14,8 +14,9 @@ import {
   Text,
 } from '@chakra-ui/react';
 import Head from 'next/head';
-import SignInForm from '../../features/auth/compoments/sign-in-form';
+
 import Link from '../../components/link';
+import SignInForm from '../../features/auth/compoments/sign-in-form';
 
 const avatars = [
   {

@@ -1,17 +1,18 @@
 'use client';
 
 import {
+  Badge,
   Box,
   Center,
+  Container,
   Heading,
   HStack,
   Stack,
   Text,
   useColorModeValue,
-  Badge,
-  Container,
 } from '@chakra-ui/react';
 import Image from 'next/image';
+
 import Logo from '../assets/pictures/logo.png';
 import ButtonLink from '../components/button-link';
 

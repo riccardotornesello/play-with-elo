@@ -1,5 +1,14 @@
+Dockerfile
+docker-compose*
+.dockerignore
+README.md
+.next
+.git
+.gitignore
+
 *.db
 data/
+.env
 
 .DS_Store
 

@@ -1,4 +1,4 @@
-export default {
+const config = {
   security: {
     secretKey: process.env.SECRET_KEY,
   },
@@ -14,3 +14,5 @@ export default {
     apiSecret: process.env.MJ_APIKEY_PRIVATE,
   },
 };
+
+export default config;

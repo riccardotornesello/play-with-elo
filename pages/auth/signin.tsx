@@ -21,7 +21,6 @@ import {
   SimpleGrid,
   Avatar,
   AvatarGroup,
-  useBreakpointValue,
   IconProps,
   Icon,
   FormErrorMessage,
@@ -85,8 +84,7 @@ export default function SignInPage() {
                   key={avatar.name}
                   name={avatar.name}
                   src={avatar.url}
-                  // eslint-disable-next-line react-hooks/rules-of-hooks
-                  size={useBreakpointValue({ base: 'md', md: 'lg' })}
+                  size={{ base: 'md', md: 'lg' }}
                   position={'relative'}
                   zIndex={2}
                   _before={{
@@ -115,8 +113,8 @@ export default function SignInPage() {
               bg={'gray.800'}
               color={'white'}
               rounded={'full'}
-              minWidth={useBreakpointValue({ base: '44px', md: '60px' })}
-              minHeight={useBreakpointValue({ base: '44px', md: '60px' })}
+              minWidth={{ base: '44px', md: '60px' }}
+              minHeight={{ base: '44px', md: '60px' }}
               position={'relative'}
               _before={{
                 content: '""',
@@ -152,7 +150,7 @@ export default function SignInPage() {
               Sign in
             </Heading>
             <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-              If you don't have an account yet,{' '}
+              If you don&apos;t have an account yet,{' '}
               <Text
                 as={'a'}
                 color={'blue.400'}
@@ -199,10 +197,10 @@ function SignInForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const { mutate, apiStatus } = useMutation('/api/auth/signin', {
-    onSuccess: (data) => {
+    onSuccess: () => {
       router.push(searchParams.get('redirect') || '/dashboard');
     },
-    onError: (errorBody, statusCode) => {
+    onError: (_errorBody, statusCode) => {
       if (statusCode == 401) {
         setErrorMessage('Invalid credentials. Try again');
       } else {
@@ -286,8 +284,8 @@ function SignInForm() {
 const Blur = (props: IconProps) => {
   return (
     <Icon
-      width={useBreakpointValue({ base: '100%', md: '40vw', lg: '30vw' })}
-      zIndex={useBreakpointValue({ base: -1, md: -1, lg: 0 })}
+      width={{ base: '100%', md: '40vw', lg: '30vw' }}
+      zIndex={{ base: -1, md: -1, lg: 0 }}
       height='560px'
       viewBox='0 0 528 560'
       fill='none'

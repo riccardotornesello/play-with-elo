@@ -5,7 +5,6 @@ import {
   Text,
   Heading,
   Flex,
-  Box,
   VStack,
 } from '@chakra-ui/react';
 import { League } from '../../features/leagues/models/league';

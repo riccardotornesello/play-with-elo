@@ -10,7 +10,7 @@ import {
   Center,
   useColorModeValue,
 } from '@chakra-ui/react';
-import ButtonLink from '../components/basic/button-link';
+import ButtonLink from '../components/button-link';
 
 export default function HomePage() {
   return (
@@ -76,7 +76,7 @@ export default function HomePage() {
             Play with ELO is a project born overnight out of an idea: determine
             the best player in the office without precise scheduling of games.
             <br />
-            Here's the solution: the ELO algorithm!
+            Here&apos;s the solution: the ELO algorithm!
           </Text>
           <HStack spacing={{ base: 0, sm: 2 }} flexWrap='wrap'>
             <ButtonLink

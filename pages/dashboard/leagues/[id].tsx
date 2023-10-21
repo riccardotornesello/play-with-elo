@@ -6,7 +6,6 @@ import type {
 } from 'next';
 // Components
 import {
-  Container,
   Stack,
   Button,
   Modal,

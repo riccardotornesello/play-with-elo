@@ -174,20 +174,6 @@ function InvitationRejectForm({ invitation }: InvitationListRowProps) {
     },
   );
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LeagueInvitationAcceptSchema>({
-    resolver: zodResolver(leagueInvitationAcceptSchema),
-  });
-
-  const onSubmit: SubmitHandler<LeagueInvitationAcceptSchema> = async (
-    data,
-  ) => {
-    mutate(data);
-  };
-
   return (
     <Box>
       <Button

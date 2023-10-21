@@ -8,7 +8,7 @@ import {
   Td,
   TableContainer,
 } from '@chakra-ui/react';
-import ButtonLink from '../basic/button-link';
+import ButtonLink from '../button-link';
 // Dates
 import moment from 'moment';
 

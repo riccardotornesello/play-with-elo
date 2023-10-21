@@ -9,10 +9,7 @@ import {
   Button,
   Container,
   FormControl,
-  FormLabel,
   Heading,
-  Input,
-  Link,
   Stack,
   Text,
   FormErrorMessage,
@@ -30,7 +27,7 @@ import { decodeActionToken } from '../../features/auth/lib/jwt';
 // Api
 import { useMutation, ApiStatus } from '../../hooks/api';
 
-type Props = {
+export type NewPasswordPageProps = {
   tokenValid: boolean;
   token: string | null;
 };
@@ -39,7 +36,7 @@ type NewPasswordFormProps = {
   token: string;
 };
 
-export async function getServerSideProps<Props>(
+export async function getServerSideProps<NewPasswordPageProps>(
   context: GetServerSidePropsContext,
 ) {
   // TODO: actions constants

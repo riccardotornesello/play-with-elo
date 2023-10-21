@@ -1,7 +1,7 @@
 // Components
-import { Box, Center,Spinner } from '@chakra-ui/react';
+import { Box, Center, Spinner } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { ReactNode,useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 export type LoaderProps = {
   children: ReactNode;
@@ -33,11 +33,9 @@ export default function Loader({ children }: LoaderProps) {
     return children;
   } else {
     return (
-      <Box h='100%' w='100%'>
-        <Center h='100%'>
-          <Spinner size='xl' />
-        </Center>
-      </Box>
+      <Center h='100vh' w='100%'>
+        <Spinner size='xl' />
+      </Center>
     );
   }
 }

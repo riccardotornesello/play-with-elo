@@ -1,39 +1,21 @@
 'use client';
 
-// Next
-// Components
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
   Avatar,
   AvatarGroup,
   Box,
-  Button,
   Container,
   Flex,
-  FormControl,
-  FormErrorMessage,
   Heading,
   Icon,
   IconProps,
-  Input,
   SimpleGrid,
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
-// React
-import { useState } from 'react';
-// Form
-import { SubmitHandler,useForm } from 'react-hook-form';
-
-import PasswordField from '../../components/password-field/password-field';
-import { SignInSchema,signInSchema } from '../../features/auth/schemas/signin';
-// Api
-import { ApiStatus, useMutation } from '../../hooks/api';
+import Head from 'next/head';
+import SignInForm from '../../features/auth/compoments/sign-in-form';
+import Link from '../../components/link';
 
 const avatars = [
   {
@@ -60,225 +42,134 @@ const avatars = [
 
 export default function SignInPage() {
   return (
-    <Box position='relative' minH='100vh'>
-      <Container
-        as={SimpleGrid}
-        maxW={'7xl'}
-        columns={{ base: 1, md: 2 }}
-        spacing={{ base: 10, lg: 32 }}
-        py={{ base: 10, sm: 20 }}
-        minH='100vh'
-      >
-        <Stack spacing={{ base: 10, md: 20 }} my='auto'>
-          <Heading
-            lineHeight={1.1}
-            fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}
-          >
-            Welcome back 👋
-            <br />
-            We missed you!
-          </Heading>
-          <Stack direction={'row'} spacing={4} align={'center'}>
-            <AvatarGroup>
-              {avatars.map((avatar) => (
-                <Avatar
-                  key={avatar.name}
-                  name={avatar.name}
-                  src={avatar.url}
-                  size={{ base: 'md', md: 'lg' }}
-                  position={'relative'}
-                  zIndex={2}
-                  _before={{
-                    content: '""',
-                    width: 'full',
-                    height: 'full',
-                    rounded: 'full',
-                    transform: 'scale(1.125)',
-                    bgGradient: 'linear(to-bl, red.400,pink.400)',
-                    position: 'absolute',
-                    zIndex: -1,
-                    top: 0,
-                    left: 0,
-                  }}
-                />
-              ))}
-            </AvatarGroup>
-            <Text fontFamily={'heading'} fontSize={{ base: '4xl', md: '6xl' }}>
-              +
-            </Text>
-            <Flex
-              align={'center'}
-              justify={'center'}
-              fontFamily={'heading'}
-              fontSize={{ base: 'sm', md: 'lg' }}
-              bg={'gray.800'}
-              color={'white'}
-              rounded={'full'}
-              minWidth={{ base: '44px', md: '60px' }}
-              minHeight={{ base: '44px', md: '60px' }}
-              position={'relative'}
-              _before={{
-                content: '""',
-                width: 'full',
-                height: 'full',
-                rounded: 'full',
-                transform: 'scale(1.125)',
-                bgGradient: 'linear(to-bl, orange.400,yellow.400)',
-                position: 'absolute',
-                zIndex: -1,
-                top: 0,
-                left: 0,
-              }}
-            >
-              YOU
-            </Flex>
-          </Stack>
-        </Stack>
-        <Stack
-          bg={'gray.50'}
-          rounded={'xl'}
-          p={{ base: 4, sm: 6, md: 8 }}
-          spacing={{ base: 8 }}
-          maxW={{ lg: 'lg' }}
-          my='auto'
+    <>
+      <Head>
+        <title>Play with ELO | Sign in</title>
+        <meta
+          property='og:title'
+          content='Play with ELO | Sign in'
+          key='title'
+        />
+      </Head>
+      <Box position='relative' minH='100vh'>
+        <Container
+          as={SimpleGrid}
+          maxW={'7xl'}
+          columns={{ base: 1, md: 2 }}
+          spacing={{ base: 10, lg: 32 }}
+          py={{ base: 10, sm: 20 }}
+          minH='100vh'
         >
-          <Stack spacing={4}>
+          <Stack spacing={{ base: 10, md: 20 }} my='auto'>
             <Heading
-              color={'gray.800'}
               lineHeight={1.1}
-              fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
+              fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}
             >
-              Sign in
+              Welcome back 👋
+              <br />
+              We missed you!
             </Heading>
-            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-              If you don&apos;t have an account yet,{' '}
+            <Stack direction={'row'} spacing={4} align={'center'}>
+              <AvatarGroup>
+                {avatars.map((avatar) => (
+                  <Avatar
+                    key={avatar.name}
+                    name={avatar.name}
+                    src={avatar.url}
+                    size={{ base: 'md', md: 'lg' }}
+                    position={'relative'}
+                    zIndex={2}
+                    _before={{
+                      content: '""',
+                      width: 'full',
+                      height: 'full',
+                      rounded: 'full',
+                      transform: 'scale(1.125)',
+                      bgGradient: 'linear(to-bl, red.400,pink.400)',
+                      position: 'absolute',
+                      zIndex: -1,
+                      top: 0,
+                      left: 0,
+                    }}
+                  />
+                ))}
+              </AvatarGroup>
               <Text
-                as={'a'}
-                color={'blue.400'}
-                href={'/auth/signup'}
-                _hover={{
-                  color: 'blue.600',
-                  textDecoration: 'underline',
+                fontFamily={'heading'}
+                fontSize={{ base: '4xl', md: '6xl' }}
+              >
+                +
+              </Text>
+              <Flex
+                align={'center'}
+                justify={'center'}
+                fontFamily={'heading'}
+                fontSize={{ base: 'sm', md: 'lg' }}
+                bg={'gray.800'}
+                color={'white'}
+                rounded={'full'}
+                minWidth={{ base: '44px', md: '60px' }}
+                minHeight={{ base: '44px', md: '60px' }}
+                position={'relative'}
+                _before={{
+                  content: '""',
+                  width: 'full',
+                  height: 'full',
+                  rounded: 'full',
+                  transform: 'scale(1.125)',
+                  bgGradient: 'linear(to-bl, orange.400,yellow.400)',
+                  position: 'absolute',
+                  zIndex: -1,
+                  top: 0,
+                  left: 0,
                 }}
               >
-                click here to register.
-              </Text>
-            </Text>
-            <Text
-              as={'a'}
-              fontSize={{ base: 'sm', sm: 'md' }}
-              color={'blue.400'}
-              href={'/auth/reset-password'}
-              _hover={{
-                color: 'blue.600',
-                textDecoration: 'underline',
-              }}
-            >
-              Click here if you forgot your credentials.
-            </Text>
+                YOU
+              </Flex>
+            </Stack>
           </Stack>
-          <SignInForm />
-        </Stack>
-      </Container>
-      <Blur
-        position={'absolute'}
-        zIndex={-1}
-        top={-10}
-        left={-10}
-        style={{ filter: 'blur(70px)' }}
-      />
-    </Box>
-  );
-}
-
-function SignInForm() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const { mutate, apiStatus } = useMutation('/api/auth/signin', {
-    onSuccess: () => {
-      router.push(searchParams.get('redirect') || '/dashboard');
-    },
-    onError: (_errorBody, statusCode) => {
-      if (statusCode == 401) {
-        setErrorMessage('Invalid credentials. Try again');
-      } else {
-        setErrorMessage('Something went wrong. Try again later');
-      }
-    },
-  });
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignInSchema>({
-    resolver: zodResolver(signInSchema),
-  });
-
-  const onSubmit: SubmitHandler<SignInSchema> = async (data) => {
-    setErrorMessage(null);
-    mutate(data);
-  };
-
-  return (
-    <Box as={'form'} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={4}>
-        <FormControl isInvalid={errors.username !== undefined}>
-          <Input
-            placeholder='Username or Email'
-            bg={'gray.100'}
-            border={0}
-            color={'gray.500'}
-            _placeholder={{
-              color: 'gray.500',
-            }}
-            {...register('username')}
-          />
-          <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
-        </FormControl>
-        <FormControl isInvalid={errors.password !== undefined}>
-          <PasswordField
-            placeholder='Your password'
-            bg={'gray.100'}
-            border={0}
-            color={'gray.500'}
-            _placeholder={{
-              color: 'gray.500',
-            }}
-            {...register('password')}
-          />
-          <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
-        </FormControl>
-
-        {errorMessage && (
-          <Alert status='error'>
-            <AlertIcon />
-            <AlertDescription>{errorMessage}</AlertDescription>
-          </Alert>
-        )}
-      </Stack>
-
-      <Button
-        fontFamily={'heading'}
-        mt={8}
-        w={'full'}
-        bgGradient='linear(to-r, red.400,pink.400)'
-        color={'white'}
-        _hover={{
-          bgGradient: 'linear(to-r, red.400,pink.400)',
-          boxShadow: 'xl',
-        }}
-        type='submit'
-        isLoading={
-          apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success
-        }
-      >
-        Submit
-      </Button>
-    </Box>
+          <Stack
+            bg={'gray.50'}
+            rounded={'xl'}
+            p={{ base: 4, sm: 6, md: 8 }}
+            spacing={{ base: 8 }}
+            maxW={{ lg: 'lg' }}
+            my='auto'
+          >
+            <Stack spacing={4}>
+              <Heading
+                color={'gray.800'}
+                lineHeight={1.1}
+                fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
+              >
+                Sign in
+              </Heading>
+              <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+                If you don&apos;t have an account yet,{' '}
+                <Link color={'blue.400'} href={'/auth/signup'}>
+                  click here to register.
+                </Link>
+              </Text>
+              <Link
+                fontSize={{ base: 'sm', sm: 'md' }}
+                color={'blue.400'}
+                href={'/auth/reset-password'}
+              >
+                Click here if you forgot your credentials.
+              </Link>
+            </Stack>
+            <SignInForm />
+          </Stack>
+        </Container>
+        <Blur
+          position={'absolute'}
+          zIndex={-1}
+          top={-10}
+          left={-10}
+          style={{ filter: 'blur(70px)' }}
+        />
+      </Box>
+    </>
   );
 }
 

@@ -1,34 +1,21 @@
 'use client';
 
-// Next
-// Components
 import {
   Avatar,
   AvatarGroup,
   Box,
-  Button,
   Container,
   Flex,
-  FormControl,
-  FormErrorMessage,
   Heading,
   Icon,
   IconProps,
-  Input,
   SimpleGrid,
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/router';
-// Form
-import { SubmitHandler,useForm } from 'react-hook-form';
-
-import PasswordField from '../../components/password-field/password-field';
-import { SignUpSchema,signUpSchema } from '../../features/auth/schemas/signup';
-// Api
-import { ApiStatus, useMutation } from '../../hooks/api';
-import { pushFormErrors } from '../../lib/form';
+import Link from '../../components/link';
+import Head from 'next/head';
+import SignUpForm from '../../features/auth/compoments/sign-up-form';
 
 const avatars = [
   {
@@ -53,6 +40,146 @@ const avatars = [
   },
 ];
 
+export default function LoginPage() {
+  return (
+    <>
+      <Head>
+        <title>Play with ELO | Registration</title>
+        <meta
+          property='og:title'
+          content='Play with ELO | Registration'
+          key='title'
+        />
+      </Head>
+      <Box position='relative' minH='100vh'>
+        <Container
+          as={SimpleGrid}
+          maxW={'7xl'}
+          columns={{ base: 1, md: 2 }}
+          spacing={{ base: 10, lg: 32 }}
+          py={{ base: 10, sm: 20 }}
+          minH='100vh'
+        >
+          <Stack spacing={{ base: 10, md: 20 }} my='auto'>
+            <Heading
+              lineHeight={1.1}
+              fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}
+            >
+              Find out who is the strongest among your friends.
+              <br />
+              <Text
+                as={'span'}
+                bgGradient='linear(to-r, red.400,pink.400)'
+                bgClip='text'
+              >
+                Create your league.
+              </Text>
+            </Heading>
+            <Stack direction={'row'} spacing={4} align={'center'}>
+              <AvatarGroup>
+                {avatars.map((avatar) => (
+                  <Avatar
+                    key={avatar.name}
+                    name={avatar.name}
+                    src={avatar.url}
+                    size={{ base: 'md', md: 'lg' }}
+                    position={'relative'}
+                    zIndex={2}
+                    _before={{
+                      content: '""',
+                      width: 'full',
+                      height: 'full',
+                      rounded: 'full',
+                      transform: 'scale(1.125)',
+                      bgGradient: 'linear(to-bl, red.400,pink.400)',
+                      position: 'absolute',
+                      zIndex: -1,
+                      top: 0,
+                      left: 0,
+                    }}
+                  />
+                ))}
+              </AvatarGroup>
+              <Text
+                fontFamily={'heading'}
+                fontSize={{ base: '4xl', md: '6xl' }}
+              >
+                +
+              </Text>
+              <Flex
+                align={'center'}
+                justify={'center'}
+                fontFamily={'heading'}
+                fontSize={{ base: 'sm', md: 'lg' }}
+                bg={'gray.800'}
+                color={'white'}
+                rounded={'full'}
+                minWidth={{ base: '44px', md: '60px' }}
+                minHeight={{ base: '44px', md: '60px' }}
+                position={'relative'}
+                _before={{
+                  content: '""',
+                  width: 'full',
+                  height: 'full',
+                  rounded: 'full',
+                  transform: 'scale(1.125)',
+                  bgGradient: 'linear(to-bl, orange.400,yellow.400)',
+                  position: 'absolute',
+                  zIndex: -1,
+                  top: 0,
+                  left: 0,
+                }}
+              >
+                YOU
+              </Flex>
+            </Stack>
+          </Stack>
+          <Stack
+            bg={'gray.50'}
+            rounded={'xl'}
+            p={{ base: 4, sm: 6, md: 8 }}
+            spacing={{ base: 8 }}
+            maxW={{ lg: 'lg' }}
+            my='auto'
+          >
+            <Stack spacing={4}>
+              <Heading
+                color={'gray.800'}
+                lineHeight={1.1}
+                fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
+              >
+                Join us
+                <Text
+                  as={'span'}
+                  bgGradient='linear(to-r, red.400,pink.400)'
+                  bgClip='text'
+                >
+                  !
+                </Text>
+              </Heading>
+              <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+                Create a new account or click{' '}
+                <Link color={'blue.400'} href={'/auth/signin'}>
+                  here to log in
+                </Link>{' '}
+                if you already have one
+              </Text>
+            </Stack>
+            <SignUpForm />
+          </Stack>
+        </Container>
+        <Blur
+          position={'absolute'}
+          zIndex={-1}
+          top={-10}
+          left={-10}
+          style={{ filter: 'blur(70px)' }}
+        />
+      </Box>
+    </>
+  );
+}
+
 const Blur = (props: IconProps) => {
   return (
     <Icon
@@ -74,231 +201,3 @@ const Blur = (props: IconProps) => {
     </Icon>
   );
 };
-
-export default function LoginPage() {
-  return (
-    <Box position='relative' minH='100vh'>
-      <Container
-        as={SimpleGrid}
-        maxW={'7xl'}
-        columns={{ base: 1, md: 2 }}
-        spacing={{ base: 10, lg: 32 }}
-        py={{ base: 10, sm: 20 }}
-        minH='100vh'
-      >
-        <Stack spacing={{ base: 10, md: 20 }} my='auto'>
-          <Heading
-            lineHeight={1.1}
-            fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}
-          >
-            Find out who is the strongest among your friends.
-            <br />
-            <Text
-              as={'span'}
-              bgGradient='linear(to-r, red.400,pink.400)'
-              bgClip='text'
-            >
-              Create your league.
-            </Text>
-          </Heading>
-          <Stack direction={'row'} spacing={4} align={'center'}>
-            <AvatarGroup>
-              {avatars.map((avatar) => (
-                <Avatar
-                  key={avatar.name}
-                  name={avatar.name}
-                  src={avatar.url}
-                  size={{ base: 'md', md: 'lg' }}
-                  position={'relative'}
-                  zIndex={2}
-                  _before={{
-                    content: '""',
-                    width: 'full',
-                    height: 'full',
-                    rounded: 'full',
-                    transform: 'scale(1.125)',
-                    bgGradient: 'linear(to-bl, red.400,pink.400)',
-                    position: 'absolute',
-                    zIndex: -1,
-                    top: 0,
-                    left: 0,
-                  }}
-                />
-              ))}
-            </AvatarGroup>
-            <Text fontFamily={'heading'} fontSize={{ base: '4xl', md: '6xl' }}>
-              +
-            </Text>
-            <Flex
-              align={'center'}
-              justify={'center'}
-              fontFamily={'heading'}
-              fontSize={{ base: 'sm', md: 'lg' }}
-              bg={'gray.800'}
-              color={'white'}
-              rounded={'full'}
-              minWidth={{ base: '44px', md: '60px' }}
-              minHeight={{ base: '44px', md: '60px' }}
-              position={'relative'}
-              _before={{
-                content: '""',
-                width: 'full',
-                height: 'full',
-                rounded: 'full',
-                transform: 'scale(1.125)',
-                bgGradient: 'linear(to-bl, orange.400,yellow.400)',
-                position: 'absolute',
-                zIndex: -1,
-                top: 0,
-                left: 0,
-              }}
-            >
-              YOU
-            </Flex>
-          </Stack>
-        </Stack>
-        <Stack
-          bg={'gray.50'}
-          rounded={'xl'}
-          p={{ base: 4, sm: 6, md: 8 }}
-          spacing={{ base: 8 }}
-          maxW={{ lg: 'lg' }}
-          my='auto'
-        >
-          <Stack spacing={4}>
-            <Heading
-              color={'gray.800'}
-              lineHeight={1.1}
-              fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
-            >
-              Join us
-              <Text
-                as={'span'}
-                bgGradient='linear(to-r, red.400,pink.400)'
-                bgClip='text'
-              >
-                !
-              </Text>
-            </Heading>
-            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-              Create a new account or click{' '}
-              <Text
-                as={'a'}
-                color={'blue.400'}
-                href={'/auth/signin'}
-                _hover={{
-                  color: 'blue.600',
-                  textDecoration: 'underline',
-                }}
-              >
-                here to log in
-              </Text>{' '}
-              if you already have one
-            </Text>
-          </Stack>
-          <SignUpForm />
-        </Stack>
-      </Container>
-      <Blur
-        position={'absolute'}
-        zIndex={-1}
-        top={-10}
-        left={-10}
-        style={{ filter: 'blur(70px)' }}
-      />
-    </Box>
-  );
-}
-
-function SignUpForm() {
-  const router = useRouter();
-
-  const { mutate, apiStatus } = useMutation('/api/auth/signup');
-
-  const {
-    register,
-    handleSubmit,
-    setError,
-    formState: { errors },
-  } = useForm<SignUpSchema>({
-    resolver: zodResolver(signUpSchema),
-  });
-
-  const onSubmit: SubmitHandler<SignUpSchema> = async (data) => {
-    mutate(data, {
-      onSuccess: () => {
-        router.push('/dashboard');
-      },
-      onError: (errorBody, statusCode) => {
-        if (statusCode == 400) {
-          pushFormErrors(errorBody, setError);
-        } else {
-          // TODO: manage generic error
-        }
-      },
-    });
-  };
-
-  return (
-    <Box as={'form'} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={4}>
-        <FormControl isInvalid={errors.username !== undefined}>
-          <Input
-            placeholder='Username'
-            bg={'gray.100'}
-            border={0}
-            color={'gray.500'}
-            _placeholder={{
-              color: 'gray.500',
-            }}
-            {...register('username')}
-          />
-          <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
-        </FormControl>
-        <FormControl isInvalid={errors.email !== undefined}>
-          <Input
-            placeholder='Email'
-            bg={'gray.100'}
-            border={0}
-            color={'gray.500'}
-            _placeholder={{
-              color: 'gray.500',
-            }}
-            {...register('email')}
-          />
-          <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
-        </FormControl>
-        <FormControl isInvalid={errors.password !== undefined}>
-          <PasswordField
-            placeholder='Password'
-            bg={'gray.100'}
-            border={0}
-            color={'gray.500'}
-            _placeholder={{
-              color: 'gray.500',
-            }}
-            {...register('password')}
-          />
-          <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
-        </FormControl>
-      </Stack>
-      <Button
-        fontFamily={'heading'}
-        mt={8}
-        w={'full'}
-        bgGradient='linear(to-r, red.400,pink.400)'
-        color={'white'}
-        _hover={{
-          bgGradient: 'linear(to-r, red.400,pink.400)',
-          boxShadow: 'xl',
-        }}
-        type='submit'
-        isLoading={
-          apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success
-        }
-      >
-        Submit
-      </Button>
-    </Box>
-  );
-}

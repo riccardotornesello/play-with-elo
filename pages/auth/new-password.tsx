@@ -1,5 +1,3 @@
-// Next
-// Components
 import {
   Box,
   Button,
@@ -15,18 +13,15 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from 'next';
-// Form
-import { SubmitHandler,useForm } from 'react-hook-form';
-
+import { SubmitHandler, useForm } from 'react-hook-form';
 import PasswordFied from '../../components/password-field/password-field';
-// Crypto lib
 import { decodeActionToken } from '../../features/auth/lib/jwt';
 import {
   NewPasswordSchema,
   newPasswordSchema,
 } from '../../features/auth/schemas/password-reset';
-// Api
-import { ApiStatus,useMutation } from '../../hooks/api';
+import { ApiStatus, useMutation } from '../../hooks/api';
+import Link from '../../components/link';
 
 export type NewPasswordPageProps = {
   tokenValid: boolean;
@@ -96,18 +91,13 @@ export default function NewPasswordPage({
           >
             Choose a new password
           </Heading>
-          <Text
-            as={'a'}
+          <Link
             fontSize={{ base: 'sm', sm: 'md' }}
             color={'blue.400'}
             href={'/auth/signin'}
-            _hover={{
-              color: 'blue.600',
-              textDecoration: 'underline',
-            }}
           >
             Click here to go back.
-          </Text>
+          </Link>
         </Stack>
         <NewPasswordForm token={token || ''} />
       </Stack>

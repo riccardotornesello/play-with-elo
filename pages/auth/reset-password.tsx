@@ -1,4 +1,5 @@
-// Components
+"use client"
+
 import {
   Box,
   Button,
@@ -11,15 +12,13 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-// Form
 import { SubmitHandler,useForm } from 'react-hook-form';
-
 import {
   ForgotPasswordRequestSchema,
   forgotPasswordRequestSchema,
 } from '../../features/auth/schemas/password-reset';
-// Api
 import { ApiStatus, useMutation } from '../../hooks/api';
+import Link from '../../components/link';
 
 export default function ResetPasswordPage() {
   return (
@@ -44,18 +43,13 @@ export default function ResetPasswordPage() {
           >
             Reset your password
           </Heading>
-          <Text
-            as={'a'}
+          <Link
             fontSize={{ base: 'sm', sm: 'md' }}
             color={'blue.400'}
             href={'/auth/signin'}
-            _hover={{
-              color: 'blue.600',
-              textDecoration: 'underline',
-            }}
           >
             Click here to go back.
-          </Text>
+          </Link>
         </Stack>
         <ResetPasswordForm />
       </Stack>

@@ -22,6 +22,7 @@ import {
   signInSchema,
 } from '../../../features/auth/schemas/signin';
 import { ApiStatus, useMutation } from '../../../hooks/api';
+import { pushFormErrors } from '../../../lib/form';
 
 export default function SignInForm() {
   const searchParams = useSearchParams();
@@ -29,25 +30,31 @@ export default function SignInForm() {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<SignInSchema>({
+    resolver: zodResolver(signInSchema),
+  });
+
   const { mutate, apiStatus } = useMutation('/api/auth/signin', {
+    onRun: () => {
+      setErrorMessage(null);
+    },
     onSuccess: () => {
       router.push(searchParams.get('redirect') || '/dashboard');
     },
-    onError: (_errorBody, statusCode) => {
-      if (statusCode == 401) {
+    onError: (errorBody, statusCode) => {
+      if (statusCode == 400) {
+        pushFormErrors(errorBody, setError);
+      } else if (statusCode == 401) {
         setErrorMessage('Invalid credentials. Please try again');
       } else {
         setErrorMessage('Something went wrong. Please try again later');
       }
     },
-  });
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignInSchema>({
-    resolver: zodResolver(signInSchema),
   });
 
   const onSubmit: SubmitHandler<SignInSchema> = async (data) => {
@@ -88,7 +95,7 @@ export default function SignInForm() {
         {errorMessage && (
           <Alert status='error'>
             <AlertIcon />
-            <AlertDescription>{errorMessage}</AlertDescription>
+            <AlertDescription color='gray.500'>{errorMessage}</AlertDescription>
           </Alert>
         )}
       </Stack>
@@ -108,7 +115,7 @@ export default function SignInForm() {
           apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success
         }
       >
-        Submit
+        Sign in
       </Button>
     </Box>
   );

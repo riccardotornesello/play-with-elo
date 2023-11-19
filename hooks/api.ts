@@ -9,6 +9,7 @@ export enum ApiStatus {
 
 export type MutationOptions = {
   method?: string;
+  onRun?: (input: any) => void;
   onSuccess?: (data: any, input: any) => void;
   onError?: (error: any, status: number, input: any) => void;
 };
@@ -22,6 +23,8 @@ export function useMutation(url: string, globalOptions: MutationOptions = {}) {
     const options = { ...globalOptions, ...subOptions };
 
     setApiStatus(ApiStatus.Loading);
+
+    options.onRun && options.onRun(data);
 
     try {
       const response = await fetch(url, {

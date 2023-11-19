@@ -7,6 +7,9 @@ import {
   FormErrorMessage,
   Input,
   Stack,
+  Alert,
+  AlertIcon,
+  AlertDescription,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -18,9 +21,12 @@ import {
 } from '../../../features/auth/schemas/signup';
 import { ApiStatus, useMutation } from '../../../hooks/api';
 import { pushFormErrors } from '../../../lib/form';
+import { useState } from 'react';
 
 export default function SignUpForm() {
   const router = useRouter();
+
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const { mutate, apiStatus } = useMutation('/api/auth/signup');
 
@@ -35,6 +41,9 @@ export default function SignUpForm() {
 
   const onSubmit: SubmitHandler<SignUpSchema> = async (data) => {
     mutate(data, {
+      onRun: () => {
+        setErrorMessage(null);
+      },
       onSuccess: () => {
         router.push('/dashboard');
       },
@@ -42,7 +51,7 @@ export default function SignUpForm() {
         if (statusCode == 400) {
           pushFormErrors(errorBody, setError);
         } else {
-          // TODO: manage generic error
+          setErrorMessage('Something went wrong. Please try again later');
         }
       },
     });
@@ -118,6 +127,13 @@ export default function SignUpForm() {
           />
           <FormErrorMessage>{errors.confirmPassword?.message}</FormErrorMessage>
         </FormControl>
+
+        {errorMessage && (
+          <Alert status='error'>
+            <AlertIcon />
+            <AlertDescription color='gray.500'>{errorMessage}</AlertDescription>
+          </Alert>
+        )}
       </Stack>
 
       <Button
@@ -135,7 +151,7 @@ export default function SignUpForm() {
           apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success
         }
       >
-        Submit
+        Sign in
       </Button>
     </Box>
   );

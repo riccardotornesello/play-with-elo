@@ -9,29 +9,30 @@ import { signInSchema } from '../../../../features/auth/schemas/signin';
 import config from '../../../../features/auth/config';
 
 export async function POST(request: Request) {
-  const formData = await request.json()
+  const input = await request.json();
 
   // Validate the input
-  let body;
-  try {
-    body = signInSchema.parse(formData);
-  } catch (error) {
-    return Response.json(error, { status: 400 });
+  const body = signInSchema.safeParse(input);
+  if (body.success === false) {
+    return Response.json(body.error, { status: 400 });
   }
 
   // Initialize DB connection
   await dbConnect();
 
   // Find user by username or email
-  const user = body.username.includes('@')
-    ? await findUserByEmail(body.username)
-    : await findUserByUsername(body.username);
+  const user = body.data.username.includes('@')
+    ? await findUserByEmail(body.data.username)
+    : await findUserByUsername(body.data.username);
   if (!user) {
     return Response.json({ message: 'Invalid credentials' }, { status: 401 });
   }
 
   // Verify password
-  const passwordIsValid = await verifyPassword(body.password, user.password);
+  const passwordIsValid = await verifyPassword(
+    body.data.password,
+    user.password,
+  );
   if (!passwordIsValid) {
     return Response.json({ message: 'Invalid credentials' }, { status: 401 });
   }

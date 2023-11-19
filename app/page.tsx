@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Badge,
   Box,
@@ -8,12 +6,11 @@ import {
   Heading,
   Stack,
   Text,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import Image from 'next/image';
-
 import Logo from '../assets/pictures/logo.png';
 import ButtonLink from '../components/button-link';
+import Blur from '../components/blur';
 
 export default function HomePage() {
   return (
@@ -31,7 +28,7 @@ export default function HomePage() {
             Show Your Strength!
           </Heading>
 
-          <Text color={useColorModeValue('gray.500', 'gray.400')}>
+          <Text color='gray.400'>
             Play with ELO is a project born overnight to determine the best
             player in the office without scheduling of games.
             <br />
@@ -45,6 +42,14 @@ export default function HomePage() {
           </Box>
         </Stack>
       </Container>
+
+      <Blur
+        position={'absolute'}
+        zIndex={-1}
+        top={-10}
+        left={-10}
+        style={{ filter: 'blur(70px)' }}
+      />
     </Center>
   );
 }

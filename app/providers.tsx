@@ -1,9 +1,14 @@
 'use client';
 
 import { CacheProvider } from '@chakra-ui/next-js';
-import { ChakraProvider, extendTheme, ColorModeScript } from '@chakra-ui/react';
+import {
+  ChakraProvider,
+  extendTheme,
+  ColorModeScript,
+  withDefaultColorScheme,
+} from '@chakra-ui/react';
 
-const theme = extendTheme({
+const theme = extendTheme(withDefaultColorScheme({ colorScheme: 'orange' }), {
   config: {
     initialColorMode: 'dark',
   },

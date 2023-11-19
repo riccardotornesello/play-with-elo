@@ -6,7 +6,6 @@ import {
   Center,
   Container,
   Heading,
-  HStack,
   Stack,
   Text,
   useColorModeValue,
@@ -22,7 +21,7 @@ export default function HomePage() {
       <Container maxW='container.xl'>
         <Stack p={{ base: 5, md: 10 }} w='100%'>
           <Box maxW={{ base: 100, md: 150 }} textAlign='center'>
-            <Badge colorScheme='purple'>Beta</Badge>
+            <Badge>Beta</Badge>
             <Image src={Logo} alt='Play with ELO' />
           </Box>
 
@@ -40,17 +39,7 @@ export default function HomePage() {
           </Text>
 
           <Box>
-            <ButtonLink
-              href='/dashboard'
-              h={10}
-              px={6}
-              fontSize='md'
-              mb={{ base: 2, sm: 0 }}
-              zIndex={5}
-              lineHeight={1}
-              colorScheme='orange'
-              mt={5}
-            >
+            <ButtonLink href='/dashboard' px={6} mt={5}>
               Get started
             </ButtonLink>
           </Box>

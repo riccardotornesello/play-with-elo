@@ -30,7 +30,15 @@ export default function RootLayout({
           sizes='16x16'
           href='/favicon-16x16.png'
         />
+
         <link rel='manifest' href='/site.webmanifest' />
+
+        <link rel='preconnect' href='https://fonts.googleapis.com' />
+        <link rel='preconnect' href='https://fonts.gstatic.com' />
+        <link
+          href='https://fonts.googleapis.com/css2?family=Titillium+Web:wght@100;200;300;400;500;600;700;800;900&display=swap'
+          rel='stylesheet'
+        />
       </head>
 
       <body style={{ height: '100vh' }}>

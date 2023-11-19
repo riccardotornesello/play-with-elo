@@ -8,9 +8,8 @@ const theme = extendTheme({
     initialColorMode: 'dark',
   },
   fonts: {
-    body: 'system-ui, sans-serif',
+    body: 'Titillium Web, sans-serif',
     heading: 'Georgia, serif',
-    mono: 'Menlo, monospace',
   },
   styles: {
     global: {

@@ -1,6 +1,6 @@
 // Components
 import { Center, Spinner } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { ReactNode, useEffect, useState } from 'react';
 
 export type LoaderProps = {

@@ -11,10 +11,8 @@ export default function ButtonLink({
   [x: string]: any;
 }) {
   return (
-    <NextLink href={href} passHref legacyBehavior={true}>
-      <Button as='a' {...props}>
-        {children}
-      </Button>
-    </NextLink>
+    <Button as={NextLink} href={href} {...props}>
+      {children}
+    </Button>
   );
 }

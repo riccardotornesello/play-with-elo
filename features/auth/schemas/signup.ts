@@ -1,12 +1,36 @@
 import { z } from 'zod';
 
-// TODO: confirm password
-// TODO: restrict username to alphanumeric
+export const signUpSchema = z
+  .object({
+    username: z
+      .string()
+      .min(3)
+      .max(20)
+      .regex(/^[a-z0-9_]+$/, {
+        message:
+          'Username can only contain lowercase letters, numbers and underscores',
+      }),
+    email: z.string().email({ message: 'Invalid email address' }),
+    confirmEmail: z.string(),
+    password: z.string().min(8),
+    confirmPassword: z.string(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Password doesn't match",
+        path: ['confirmPassword'],
+      });
+    }
 
-export const signUpSchema = z.object({
-  username: z.string().min(3),
-  email: z.string().email({ message: 'Invalid email address' }),
-  password: z.string().min(8),
-});
+    if (data.email !== data.confirmEmail) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Email doesn't match",
+        path: ['confirmEmail'],
+      });
+    }
+  });
 
 export type SignUpSchema = z.infer<typeof signUpSchema>;

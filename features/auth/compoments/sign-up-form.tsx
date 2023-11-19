@@ -64,6 +64,7 @@ export default function SignUpForm() {
           />
           <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
         </FormControl>
+
         <FormControl isInvalid={errors.email !== undefined}>
           <Input
             placeholder='Email'
@@ -77,6 +78,20 @@ export default function SignUpForm() {
           />
           <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
         </FormControl>
+        <FormControl isInvalid={errors.confirmEmail !== undefined}>
+          <Input
+            placeholder='Repeat email'
+            bg={'gray.100'}
+            border={0}
+            color={'gray.500'}
+            _placeholder={{
+              color: 'gray.500',
+            }}
+            {...register('confirmEmail')}
+          />
+          <FormErrorMessage>{errors.confirmEmail?.message}</FormErrorMessage>
+        </FormControl>
+
         <FormControl isInvalid={errors.password !== undefined}>
           <PasswordField
             placeholder='Password'
@@ -90,7 +105,21 @@ export default function SignUpForm() {
           />
           <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
         </FormControl>
+        <FormControl isInvalid={errors.confirmPassword !== undefined}>
+          <PasswordField
+            placeholder='Repeat password'
+            bg={'gray.100'}
+            border={0}
+            color={'gray.500'}
+            _placeholder={{
+              color: 'gray.500',
+            }}
+            {...register('confirmPassword')}
+          />
+          <FormErrorMessage>{errors.confirmPassword?.message}</FormErrorMessage>
+        </FormControl>
       </Stack>
+
       <Button
         fontFamily={'heading'}
         mt={8}

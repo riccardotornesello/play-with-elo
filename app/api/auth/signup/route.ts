@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { z } from 'zod';
 import { signUpSchema } from '../../../../features/auth/schemas/signup';
 import dbConnect from '../../../../lib/mongodb';
@@ -23,14 +22,12 @@ const uniqueCredentialsSchema = z.object({
 });
 
 export async function POST(request: Request) {
-  const formData = await request.json();
+  const input = await request.json();
 
   // Validate the input
-  let body;
-  try {
-    body = signUpSchema.parse(formData);
-  } catch (error) {
-    return Response.json(error, { status: 400 });
+  const body = signUpSchema.safeParse(input);
+  if (body.success === false) {
+    return Response.json(body.error, { status: 400 });
   }
 
   // Initialize database connection
@@ -38,21 +35,22 @@ export async function POST(request: Request) {
 
   // Validate unique email and username
   try {
-    await uniqueCredentialsSchema.parseAsync(body);
+    await uniqueCredentialsSchema.parseAsync(input);
   } catch (error) {
     return Response.json(error, { status: 400 });
   }
 
-  // Hash password
-  body.password = await hashPassword(body.password);
-
   // Create user
-  const user = await createUser(body);
+  const user = await createUser({
+    username: body.data.username,
+    email: body.data.email,
+    password: await hashPassword(body.data.password),
+  });
 
   // Create access token
   const accessToken = createAccessToken(user._id);
 
-  // Set cookie
+  // Set access token cookie
   return Response.json(
     {},
     {

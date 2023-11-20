@@ -1,8 +1,6 @@
-// Next
-import { NextApiRequest, NextApiResponse } from 'next';
-
 export async function POST(request: Request) {
-  // Set cookie
+  // Just expire the access token cookie
+
   return Response.json(
     {},
     {

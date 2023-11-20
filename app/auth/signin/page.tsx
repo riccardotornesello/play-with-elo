@@ -6,7 +6,6 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import Head from 'next/head';
 import Link from '../../../components/link';
 import SignInForm from '../../../features/auth/compoments/sign-in-form';
 import Blur from '../../../components/blur';

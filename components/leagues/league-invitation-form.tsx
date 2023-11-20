@@ -7,8 +7,8 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
-import { SubmitHandler,useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useSearchParams } from 'next/navigation';
 
 import {
   LeagueInvitationCreateSchema,
@@ -19,8 +19,8 @@ import { ApiStatus, useMutation } from '../../hooks/api';
 export type LeagueInvitationFormProps = {};
 
 export default function LeagueInvitationForm({}: LeagueInvitationFormProps) {
-  const router = useRouter();
-  const { id } = router.query;
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
 
   const { mutate, apiStatus } = useMutation(`/api/leagues/${id}/invitations`, {
     onSuccess: () => {

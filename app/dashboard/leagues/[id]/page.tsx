@@ -22,6 +22,9 @@ export default async function LeagueDetailPage({
   params: { id: string };
 }) {
   // TODO: handle 404 and 403
+  const playerDisclosure = useDisclosure();
+  const matchDisclosure = useDisclosure();
+
   await dbConnect();
 
   const user = await getUser();
@@ -40,9 +43,6 @@ export default async function LeagueDetailPage({
   if (!league) {
     return <div>404</div>;
   }
-
-  const playerDisclosure = useDisclosure();
-  const matchDisclosure = useDisclosure();
 
   const userPlayer = league.players.find(
     (player) => player.user.toString() === user._id.toString(),

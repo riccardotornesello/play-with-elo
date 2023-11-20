@@ -1,8 +1,6 @@
 import { getUser } from '../../../../../../features/auth/utils/user';
-import { leagueInvitationAcceptSchema } from '../../../../../../features/leagues/schemas/invitation';
 import dbConnect from '../../../../../../lib/mongodb';
 import { removeInvitation } from '../../../../../../features/leagues/controllers/invitation';
-import { registerLeaguePlayer } from '../../../../../../features/leagues/controllers/player';
 
 export async function POST(
   request: Request,

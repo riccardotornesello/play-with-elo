@@ -1,29 +1,11 @@
-"use client"
-
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  FormErrorMessage,
-  Heading,
-  Input,
-  Stack,
-} from '@chakra-ui/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { SubmitHandler,useForm } from 'react-hook-form';
-
-import Link from '../../components/link';
-import {
-  ForgotPasswordRequestSchema,
-  forgotPasswordRequestSchema,
-} from '../../features/auth/schemas/password-reset';
-import { ApiStatus, useMutation } from '../../hooks/api';
+import { Heading, Stack, Center } from '@chakra-ui/react';
+import Link from '../../../components/link';
+import ResetPasswordForm from '../../../features/auth/compoments/reset-password-form';
 
 export default function ResetPasswordPage() {
   return (
-    <Container
-      maxW='lg'
+    <Center
+      minH='100vh'
       py={{ base: '12', md: '24' }}
       px={{ base: '0', sm: '8' }}
     >
@@ -53,59 +35,6 @@ export default function ResetPasswordPage() {
         </Stack>
         <ResetPasswordForm />
       </Stack>
-    </Container>
-  );
-}
-
-function ResetPasswordForm() {
-  // TODO: handle response
-
-  const { mutate, apiStatus } = useMutation('/api/auth/password-reset-request');
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ForgotPasswordRequestSchema>({
-    resolver: zodResolver(forgotPasswordRequestSchema),
-  });
-
-  const onSubmit: SubmitHandler<ForgotPasswordRequestSchema> = async (data) => {
-    mutate(data);
-  };
-
-  return (
-    <Box as={'form'} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={4}>
-        <FormControl isInvalid={errors.username !== undefined}>
-          <Input
-            placeholder='Your email or username'
-            bg={'gray.100'}
-            border={0}
-            color={'gray.500'}
-            _placeholder={{
-              color: 'gray.500',
-            }}
-            {...register('username')}
-          />
-          <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
-        </FormControl>
-      </Stack>
-      <Button
-        fontFamily={'heading'}
-        mt={8}
-        w={'full'}
-        bgGradient='linear(to-r, red.400,pink.400)'
-        color={'white'}
-        _hover={{
-          bgGradient: 'linear(to-r, red.400,pink.400)',
-          boxShadow: 'xl',
-        }}
-        type='submit'
-        isLoading={apiStatus === ApiStatus.Loading}
-      >
-        Submit
-      </Button>
-    </Box>
+    </Center>
   );
 }

@@ -1,6 +1,4 @@
-// Crypto library
 import { sign, verify } from 'jsonwebtoken';
-// Configuration
 import config from '../config';
 
 export function createAccessToken(userId: string) {

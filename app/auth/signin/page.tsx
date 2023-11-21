@@ -12,8 +12,8 @@ export default function SignInPage() {
     <SimpleGrid
       columns={{ base: 1, md: 2 }}
       spacing={{ base: 10, lg: 32 }}
-      minH={{ base: '80vh', md: '100vh' }}
-    >
+      minH={{ base: '80%', md: '100%' }}
+>
       <Heading
         lineHeight={1.1}
         fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}

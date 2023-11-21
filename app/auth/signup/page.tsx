@@ -12,7 +12,7 @@ export default function LoginPage() {
     <SimpleGrid
       columns={{ base: 1, md: 2 }}
       spacing={{ base: 10, lg: 32 }}
-      minH={{ base: '80vh', md: '100vh' }}
+      minH={{ base: '80%', md: '100%' }}
     >
       <Heading
         lineHeight={1.1}

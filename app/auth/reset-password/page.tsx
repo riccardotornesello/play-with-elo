@@ -5,7 +5,7 @@ import ResetPasswordForm from '../../../features/auth/compoments/reset-password-
 export default function ResetPasswordPage() {
   return (
     <Center
-      minH='100vh'
+      minH={{ base: '80%', md: '100%' }}
       py={{ base: '12', md: '24' }}
       px={{ base: '0', sm: '8' }}
     >

@@ -7,8 +7,8 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Box position='relative' minH='100vh'>
-      <Container maxW={'7xl'} minH='100vh' p={10}>
+    <Box position='relative' height='100vh'>
+      <Container maxW={'7xl'} height='100vh' p={10}>
         {children}
       </Container>
 

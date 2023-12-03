@@ -26,5 +26,5 @@ export const basicLeagueInfo = {
   name: 1,
   description: 1,
   createdAt: 1,
-  playersCount: { $size: '$players' },
+  players: 1,
 };

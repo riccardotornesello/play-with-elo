@@ -6,8 +6,6 @@ import { redirect } from 'next/navigation';
 import HomePageContent from './content';
 
 export default async function HomePage() {
-  // TODO: better components for this
-
   const user = await getUser();
   if (!user) {
     redirect('/auth/signin');

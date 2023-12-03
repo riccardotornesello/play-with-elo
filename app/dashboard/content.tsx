@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import InvitationsList from '../../components/invitations/invitations-list';
 import LeagueCreationForm from '../../components/leagues/league-creation-form';
-import LeaguesListTable from '../../components/leagues/leagues-list-table';
+import LeaguesList from '../../features/leagues/components/leagues-list';
 
 export default function HomePageContent({ leagues, invitations }: any) {
   const leagueDisclosure = useDisclosure();
@@ -71,7 +71,7 @@ export default function HomePageContent({ leagues, invitations }: any) {
         </ModalContent>
       </Modal>
 
-      <LeaguesListTable leagues={leagues} />
+      <LeaguesList leagues={leagues} />
     </>
   );
 }

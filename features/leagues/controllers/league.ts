@@ -38,8 +38,8 @@ export async function getLeague(
 }
 
 export async function getUserLeagues(userId: string) {
-  const leagues = await LeagueModel.find({ 'players.user': userId }).select(
-    basicLeagueInfo,
-  );
-  return leagues;
+  const leagues = await LeagueModel.find({ 'players.user': userId })
+    .select(basicLeagueInfo)
+    .lean();
+  return JSON.parse(JSON.stringify(leagues));
 }

@@ -137,7 +137,6 @@ export default function SignUpForm() {
       </Stack>
 
       <Button
-        fontFamily={'heading'}
         mt={8}
         w={'full'}
         type='submit'

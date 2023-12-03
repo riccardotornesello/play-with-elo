@@ -101,7 +101,6 @@ export default function SignInForm() {
       </Stack>
 
       <Button
-        fontFamily={'heading'}
         mt={8}
         w={'full'}
         type='submit'

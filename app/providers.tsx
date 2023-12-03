@@ -23,6 +23,13 @@ const theme = extendTheme(withDefaultColorScheme({ colorScheme: 'orange' }), {
       },
     },
   },
+  components: {
+    Button: {
+      baseStyle: {
+        fontFamily: 'heading',
+      },
+    },
+  },
 });
 
 export function Providers({ children }: { children: React.ReactNode }) {

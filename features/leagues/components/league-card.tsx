@@ -107,9 +107,9 @@ function LeagueCardAvatars({ players }: { players: any[] }) {
     <AvatarGroup>
       {players.map((player) => (
         <Avatar
-          key={player.name}
-          name={player.name}
-          src={player.url}
+          key={player._id}
+          name={player.teamName}
+          src={player.picture}
           size={{ base: 'xs', md: 'sm' }}
           position={'relative'}
           zIndex={2}

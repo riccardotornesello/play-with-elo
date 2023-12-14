@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import {
   Button,
@@ -9,9 +9,12 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SubmitHandler,useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { LeagueCreateSchema,leagueCreateSchema } from '../../features/leagues/schemas/leagues';
+import {
+  LeagueCreateSchema,
+  leagueCreateSchema,
+} from '../../features/leagues/schemas/leagues';
 import { ApiStatus, useMutation } from '../../hooks/api';
 import { pushFormErrors } from '../../lib/form';
 
@@ -19,11 +22,11 @@ export type LeagueCreationFormProps = {
   onSuccess: () => void;
 };
 
-export default function LeagueCreationForm({
-  onSuccess,
-}: LeagueCreationFormProps) {
+export default function LeagueCreationForm() {
   const { mutate, apiStatus } = useMutation('/api/leagues', {
-    onSuccess,
+    onSuccess: () => {
+      window.location.reload();
+    },
   });
 
   const {

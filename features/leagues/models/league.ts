@@ -3,7 +3,7 @@ import { participantSchema, Participant } from './participant';
 import { matchSchema, Match } from './match';
 
 export type League = {
-  _id: mongoose.Types.ObjectId;
+  _id: string;
   __v: number;
 
   createdAt: Date;

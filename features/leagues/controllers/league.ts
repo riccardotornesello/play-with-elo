@@ -26,3 +26,7 @@ export async function createLeague(
 export async function getUserLeagues(userId: string): Promise<League[]> {
   return await LeagueModel.find({ 'participants.user': userId }).lean();
 }
+
+export async function getLeague(id: string): Promise<League | null> {
+  return await LeagueModel.findById(id).lean();
+}

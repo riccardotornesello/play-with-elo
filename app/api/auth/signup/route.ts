@@ -23,7 +23,7 @@ export async function POST(request: Request) {
   // Validate the input
   const body = signUpSchema.safeParse(input);
   if (body.success === false) {
-    return Response.json(body.error, { status: 400 });
+    return Response.json(body.error.issues, { status: 400 });
   }
 
   // Initialize database connection
@@ -32,8 +32,8 @@ export async function POST(request: Request) {
   // Validate unique email and username
   try {
     await uniqueCredentialsSchema.parseAsync(input);
-  } catch (error) {
-    return Response.json(error, { status: 400 });
+  } catch (error: any) {
+    return Response.json(error.issues, { status: 400 });
   }
 
   // Create user

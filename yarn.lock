@@ -2232,6 +2232,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mantine/form@npm:^7.3.2":
+  version: 7.3.2
+  resolution: "@mantine/form@npm:7.3.2"
+  dependencies:
+    fast-deep-equal: "npm:^3.1.3"
+    klona: "npm:^2.0.6"
+  peerDependencies:
+    react: ^18.2.0
+  checksum: c02bbc014a0ae33054612cbc2295ededb2f1316eee602a0912ef4c806d77236a08b54e85f4c8e840034431930d90edc15fe359a40c246254afeacd72d8d57835
+  languageName: node
+  linkType: hard
+
 "@mantine/hooks@npm:7.3.1":
   version: 7.3.1
   resolution: "@mantine/hooks@npm:7.3.1"
@@ -10717,7 +10729,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"klona@npm:^2.0.4":
+"klona@npm:^2.0.4, klona@npm:^2.0.6":
   version: 2.0.6
   resolution: "klona@npm:2.0.6"
   checksum: 94eed2c6c2ce99f409df9186a96340558897b3e62a85afdc1ee39103954d2ebe1c1c4e9fe2b0952771771fa96d70055ede8b27962a7021406374fdb695fd4d01
@@ -11061,6 +11073,16 @@ __metadata:
   dependencies:
     tmpl: "npm:1.0.5"
   checksum: b0e6e599780ce6bab49cc413eba822f7d1f0dfebd1c103eaa3785c59e43e22c59018323cf9e1708f0ef5329e94a745d163fcbb6bff8e4c6742f9be9e86f3500c
+  languageName: node
+  linkType: hard
+
+"mantine-form-zod-resolver@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "mantine-form-zod-resolver@npm:1.1.0"
+  peerDependencies:
+    "@mantine/form": ">=7.0.0"
+    zod: ">=3.0.0"
+  checksum: 3ff086f2a5d7b9d3d56b09f16fdc27919000c2007279c2e5e6fe85c60c56ee75a13cfebaa1dd341c4ddafd73aba9a3c59a98ea41c59ea8d01c67483dc07ea1ad
   languageName: node
   linkType: hard
 
@@ -12406,6 +12428,7 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.23.2"
     "@mantine/core": "npm:7.3.1"
+    "@mantine/form": "npm:^7.3.2"
     "@mantine/hooks": "npm:7.3.1"
     "@next/bundle-analyzer": "npm:^14.0.1"
     "@next/eslint-plugin-next": "npm:^14.0.1"
@@ -12439,6 +12462,7 @@ __metadata:
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
     jsonwebtoken: "npm:^9.0.2"
+    mantine-form-zod-resolver: "npm:^1.1.0"
     mongoose: "npm:^8.0.3"
     next: "npm:14.0.1"
     postcss: "npm:^8.4.31"

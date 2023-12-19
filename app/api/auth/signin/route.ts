@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   // Validate the input
   const body = signInSchema.safeParse(input);
   if (body.success === false) {
-    return Response.json(body.error, { status: 400 });
+    return Response.json(body.error.issues, { status: 400 });
   }
 
   // Initialize DB connection

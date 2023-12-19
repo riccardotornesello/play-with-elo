@@ -9,10 +9,12 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: { children: any }) {
+  const defaultColorScheme = 'dark';
+
   return (
     <html lang="en">
       <head>
-        <ColorSchemeScript />
+        <ColorSchemeScript defaultColorScheme={defaultColorScheme} />
         <link rel="shortcut icon" href="/favicon.svg" />
         <meta
           name="viewport"
@@ -20,7 +22,7 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body>
-        <MantineProvider theme={theme} defaultColorScheme="dark">
+        <MantineProvider theme={theme} defaultColorScheme={defaultColorScheme}>
           {children}
         </MantineProvider>
       </body>

@@ -25,3 +25,7 @@ export async function findUserByUsername(username: string) {
 export async function findUserByEmail(email: string) {
   return UserModel.findOne({ email });
 }
+
+export async function getUser(userId: string) {
+  return UserModel.findById(userId);
+}

@@ -4,6 +4,9 @@ import { dbConnect } from '@/lib/mongodb';
 import { createLeague } from '@/features/leagues/controllers/league';
 
 export async function POST(request: Request) {
+  // Initialize database connection
+  await dbConnect();
+
   // Check authentication
   const user = await getSessionUser();
   if (!user) {
@@ -19,9 +22,6 @@ export async function POST(request: Request) {
   } catch (error) {
     return Response.json(error, { status: 400 });
   }
-
-  // Initialize database connection
-  await dbConnect();
 
   // Create league
   const league = await createLeague(

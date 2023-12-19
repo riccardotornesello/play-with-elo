@@ -6,12 +6,12 @@ import { dbConnect } from '@/lib/mongodb';
 import { getUserLeagues } from '@/features/leagues/controllers/league';
 
 export default async function DashboardPage() {
+  await dbConnect();
+
   const user = await getSessionUser();
   if (!user) {
     redirect('/auth/signin');
   }
-
-  await dbConnect();
 
   const leagues = await getUserLeagues(user._id.toString());
 

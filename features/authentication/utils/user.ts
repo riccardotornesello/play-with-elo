@@ -1,4 +1,3 @@
-import { dbConnect } from '@/lib/mongodb';
 import { User } from '@/features/users/types/user';
 import { getAccessTokenUserId } from '@/features/users/utils/jwt';
 import { getUser } from '@/features/users/controllers/user';
@@ -13,6 +12,5 @@ export async function getSessionUser(): Promise<User | null> {
     return null;
   }
 
-  await dbConnect();
   return await getUser(userId);
 }

@@ -6,7 +6,7 @@ import { zodResolver } from 'mantine-form-zod-resolver';
 import { useMutation, ApiStatus } from '@/hooks/api';
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ErrorInfo } from '@/components/ErrorInfo/ErrorInfo';
+import { ErrorInfo } from '@/components/InfoAlert/InfoAlert';
 import { convertResponseToFormError } from '@/lib/form';
 import { LeagueCreateSchema, leagueCreateSchema } from '../../schemas/create';
 
@@ -75,7 +75,7 @@ export function LeagueCreateForm(props: PaperProps) {
         <Button
           type="submit"
           radius="xl"
-          loading={apiStatus == ApiStatus.Loading || apiStatus == ApiStatus.Success}
+          loading={apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success}
         >
           Create
         </Button>

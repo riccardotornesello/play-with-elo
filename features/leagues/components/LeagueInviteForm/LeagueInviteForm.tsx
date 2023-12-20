@@ -5,7 +5,7 @@ import { TextInput, Paper, PaperProps, Button, Stack } from '@mantine/core';
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { useMutation, ApiStatus } from '@/hooks/api';
 import { useState } from 'react';
-import { ErrorInfo } from '@/components/ErrorInfo/ErrorInfo';
+import { ErrorInfo, SuccessInfo } from '@/components/InfoAlert/InfoAlert';
 import { convertResponseToFormError } from '@/lib/form';
 import {
   leagueInvitationCreateSchema,
@@ -31,9 +31,6 @@ export function LeagueInviteForm({ leagueId, ...props }: LeagueInviteFormProps) 
     onRun: () => {
       setErrorMessage(null);
     },
-    onSuccess: (data) => {
-      window.location.reload();
-    },
     onError: (errorBody, statusCode) => {
       if (statusCode == 400) {
         form.setErrors(convertResponseToFormError(errorBody));
@@ -57,12 +54,9 @@ export function LeagueInviteForm({ leagueId, ...props }: LeagueInviteFormProps) 
         </Stack>
 
         <ErrorInfo>{errorMessage}</ErrorInfo>
+        {apiStatus === ApiStatus.Success && <SuccessInfo>User invited</SuccessInfo>}
 
-        <Button
-          type="submit"
-          radius="xl"
-          loading={apiStatus == ApiStatus.Loading || apiStatus == ApiStatus.Success}
-        >
+        <Button type="submit" radius="xl" loading={apiStatus === ApiStatus.Loading}>
           Invite
         </Button>
       </form>

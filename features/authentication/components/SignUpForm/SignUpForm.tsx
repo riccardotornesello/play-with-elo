@@ -17,7 +17,7 @@ import { zodResolver } from 'mantine-form-zod-resolver';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useMutation, ApiStatus } from '@/hooks/api';
-import { ErrorInfo } from '@/components/ErrorInfo/ErrorInfo';
+import { ErrorInfo } from '@/components/InfoAlert/InfoAlert';
 import Link from 'next/link';
 import { convertResponseToFormError } from '@/lib/form';
 
@@ -112,7 +112,7 @@ export function SignUpForm(props: PaperProps) {
           <Button
             type="submit"
             radius="xl"
-            loading={apiStatus == ApiStatus.Loading || apiStatus == ApiStatus.Success}
+            loading={apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success}
           >
             Register
           </Button>

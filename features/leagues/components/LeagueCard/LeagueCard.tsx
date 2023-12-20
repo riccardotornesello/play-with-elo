@@ -22,7 +22,7 @@ export function LeagueCard({ league }: LeagueCardProps) {
         mt="md"
         radius="md"
       >
-        Book classic tour now
+        Open
       </Button>
     </Card>
   );

@@ -4,6 +4,8 @@ import { getSessionUser } from '@/features/authentication/utils/user';
 import { redirect } from 'next/navigation';
 import { dbConnect } from '@/lib/mongodb';
 import { getUserLeagues } from '@/features/leagues/controllers/league';
+import { UserInvitationsList } from '@/features/leagues/components/UserInvitationsList/UserInvitationsList';
+import { getUserInvitationLeagues } from '@/features/leagues/controllers/invitation';
 
 export default async function DashboardPage() {
   await dbConnect();
@@ -13,12 +15,16 @@ export default async function DashboardPage() {
     redirect('/auth/signin');
   }
 
-  const leagues = await getUserLeagues(user._id.toString());
+  const [leagues, invitations] = await Promise.all([
+    getUserLeagues(user._id.toString()),
+    getUserInvitationLeagues(user._id.toString()),
+  ]);
 
   return (
     <>
       <LeagueCreateForm />
       <LeaguesList leagues={leagues} />
+      <UserInvitationsList leagues={invitations} />
     </>
   );
 }

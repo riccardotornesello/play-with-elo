@@ -1,5 +1,6 @@
-import { Card } from '@mantine/core';
+import { Card, Grid, GridCol } from '@mantine/core';
 import { League } from '../../models/league';
+import { InviteAcceptFormButton } from '@/features/leagues/components/InviteAcceptFormButton/InviteAcceptFormButton';
 
 export type UserInvitationsListProps = {
   leagues: League[];
@@ -7,9 +8,14 @@ export type UserInvitationsListProps = {
 
 export function UserInvitationsList({ leagues }: UserInvitationsListProps) {
   return (
-    <Card>
+    <Card shadow="sm" padding="md">
       {leagues.map((league) => (
-        <div key={league._id}>{league.name}</div>
+        <Grid key={league._id}>
+          <GridCol span={6}>{league.name}</GridCol>
+          <GridCol span={6}>
+            <InviteAcceptFormButton leagueId={league._id} />
+          </GridCol>
+        </Grid>
       ))}
     </Card>
   );

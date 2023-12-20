@@ -1,3 +1,4 @@
+import { League } from '../models/league';
 import { Participant } from '../models/participant';
 
 /***************************
@@ -16,4 +17,10 @@ export function generateParticipantData(participant: IParticipantCreate, isAdmin
     isAdmin,
     rating: 1500,
   };
+}
+
+export async function registerLeaguePlayer(league: League, player: IParticipantCreate) {
+  league.participants.push(generateParticipantData(player));
+  league.pendingInvitedUsers.pull(player.user);
+  return await league.save();
 }

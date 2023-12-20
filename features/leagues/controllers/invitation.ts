@@ -14,3 +14,8 @@ export async function createLeagueInvitation(league: League, userId: string) {
 export async function getUserInvitationLeagues(userId: string) {
   return await LeagueModel.find({ pendingInvitedUsers: new ObjectId(userId) });
 }
+
+export async function removeInvitation(league: League, userId: string) {
+  league.pendingInvitedUsers.pull(new ObjectId(userId));
+  league.save();
+}

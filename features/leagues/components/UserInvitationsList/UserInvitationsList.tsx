@@ -1,6 +1,7 @@
 import { Card, Grid, GridCol } from '@mantine/core';
 import { League } from '../../models/league';
 import { InviteAcceptFormButton } from '@/features/leagues/components/InviteAcceptFormButton/InviteAcceptFormButton';
+import { InviteRejectFormButton } from '@/features/leagues/components/InviteRejectFormButton/InviteRejectFormButton';
 
 export type UserInvitationsListProps = {
   leagues: League[];
@@ -14,6 +15,7 @@ export function UserInvitationsList({ leagues }: UserInvitationsListProps) {
           <GridCol span={6}>{league.name}</GridCol>
           <GridCol span={6}>
             <InviteAcceptFormButton leagueId={league._id} />
+            <InviteRejectFormButton leagueId={league._id} />
           </GridCol>
         </Grid>
       ))}

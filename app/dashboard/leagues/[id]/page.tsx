@@ -6,6 +6,7 @@ import { getLeagueInfo } from '@/features/leagues/controllers/league';
 import { ObjectId } from 'mongodb';
 import { LeagueInviteForm } from '@/features/leagues/components/LeagueInviteForm/LeagueInviteForm';
 import { MatchCreateForm } from '@/features/matches/components/MatchCreateForm/MatchCreateForm';
+import { ParticipantsList } from '@/features/leagues/components/ParticipantsList/ParticipantsList';
 
 export default async function LeagueDetailPage({ params }: { params: { id: string } }) {
   await dbConnect();
@@ -42,6 +43,7 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
       <Text>{league.description}</Text>
       <LeagueInviteForm leagueId={league._id.toString()} />
       <MatchCreateForm league={league} />
+      <ParticipantsList participants={league.participants} />
     </>
   );
 }

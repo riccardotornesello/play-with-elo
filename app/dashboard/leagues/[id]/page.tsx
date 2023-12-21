@@ -2,9 +2,10 @@ import { Text } from '@mantine/core';
 import { dbConnect } from '@/lib/mongodb';
 import { getSessionUser } from '@/features/authentication/utils/user';
 import { redirect } from 'next/navigation';
-import { getLeague } from '@/features/leagues/controllers/league';
+import { getLeagueInfo } from '@/features/leagues/controllers/league';
 import { ObjectId } from 'mongodb';
 import { LeagueInviteForm } from '@/features/leagues/components/LeagueInviteForm/LeagueInviteForm';
+import { MatchCreateForm } from '@/features/matches/components/MatchCreateForm/MatchCreateForm';
 
 export default async function LeagueDetailPage({ params }: { params: { id: string } }) {
   await dbConnect();
@@ -19,7 +20,7 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
     return <div>404</div>;
   }
 
-  const league = await getLeague(params.id);
+  const league = await getLeagueInfo(params.id);
   if (!league) {
     return <div>404</div>;
   }
@@ -40,6 +41,7 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
       <Text>{league.name}</Text>
       <Text>{league.description}</Text>
       <LeagueInviteForm leagueId={league._id.toString()} />
+      <MatchCreateForm league={league} />
     </>
   );
 }

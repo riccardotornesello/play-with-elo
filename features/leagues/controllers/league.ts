@@ -30,3 +30,7 @@ export async function getUserLeagues(userId: string): Promise<League[]> {
 export async function getLeague(id: string): Promise<League | null> {
   return await LeagueModel.findById(id);
 }
+
+export async function getLeagueInfo(id: string): Promise<League | null> {
+  return await LeagueModel.findById(id).lean();
+}

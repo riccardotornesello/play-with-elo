@@ -15,7 +15,7 @@ export type League = {
 
   pendingInvitedUsers: mongoose.Types.ObjectId[];
   participants: Participant[];
-  matches?: Match[];
+  matches: Match[];
 };
 
 export const leagueSchema = new mongoose.Schema<League>(
@@ -25,8 +25,7 @@ export const leagueSchema = new mongoose.Schema<League>(
     startingRating: { type: Number, required: true, default: 1000 },
     pendingInvitedUsers: { type: [mongoose.Schema.Types.ObjectId], required: true, default: [] },
     participants: { type: [participantSchema], required: true },
-
-    matches: { type: [matchSchema], required: false },
+    matches: { type: [matchSchema], required: true, default: [] },
   },
   {
     timestamps: true,

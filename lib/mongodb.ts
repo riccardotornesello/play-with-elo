@@ -14,8 +14,9 @@ const MONGODB_URI =
 let cached = global.mongoose;
 
 if (!cached) {
+  cached = { conn: null, promise: null };
   // @ts-ignore
-  cached = global.mongoose = { conn: null, promise: null };
+  global.mongoose = { conn: null, promise: null };
 }
 
 export async function dbConnect() {
@@ -26,9 +27,7 @@ export async function dbConnect() {
     const opts = {
       bufferCommands: false,
     };
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose;
-    });
+    cached.promise = mongoose.connect(MONGODB_URI, opts);
   }
   try {
     cached.conn = await cached.promise;

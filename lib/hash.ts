@@ -14,7 +14,7 @@ export async function hashString(inputString: string): Promise<string> {
       (err, derivedKey) => {
         if (err) reject(err);
 
-        resolve(salt + ':' + derivedKey.toString('hex'));
+        resolve(`${salt}:${derivedKey.toString('hex')}`);
       }
     );
   });

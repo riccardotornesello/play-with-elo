@@ -11,10 +11,7 @@ export type ILeagueCreate = Pick<League, 'name' | 'description'>;
  * Functions
  ***************************/
 
-export async function createLeague(
-  league: ILeagueCreate,
-  team: ITeamCreate
-): Promise<League> {
+export async function createLeague(league: ILeagueCreate, team: ITeamCreate): Promise<League> {
   const newLeague = new LeagueModel({
     ...league,
     teams: [generateTeamData(team, true)],

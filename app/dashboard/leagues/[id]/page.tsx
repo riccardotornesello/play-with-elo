@@ -1,9 +1,9 @@
+import { ObjectId } from 'mongodb';
+import { redirect } from 'next/navigation';
 import { Text } from '@mantine/core';
 import { dbConnect } from '@/lib/mongodb';
 import { getSessionUser } from '@/features/authentication/utils/user';
-import { redirect } from 'next/navigation';
 import { getLeagueInfo } from '@/features/leagues/controllers/league';
-import { ObjectId } from 'mongodb';
 import { LeagueInviteForm } from '@/features/leagues/components/LeagueInviteForm/LeagueInviteForm';
 import { MatchCreateForm } from '@/features/matches/components/MatchCreateForm/MatchCreateForm';
 import { TeamsList } from '@/features/leagues/components/TeamsList/TeamsList';
@@ -27,11 +27,7 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
   }
 
   // Return 403 if user is not a member of the league
-  if (
-    !league.teams
-      .map((team) => team.user.toString())
-      .includes(user._id.toString())
-  ) {
+  if (!league.teams.map((team) => team.user.toString()).includes(user._id.toString())) {
     return <div>403</div>;
   }
 

@@ -36,34 +36,33 @@ export function calculateElo({ players }: CalculateElo): Map<string, number> {
   const pointsDifferenceWeight = config.pointsWeight[pointsDifference] || config.pointsWeight[10];
 
   const expectedResults = players.map((player, index) => {
-    let opponent;
-    if (index === 0) {
-      opponent = players[1];
-    } else {
-      opponent = players[0];
-    }
+    const opponent = players[index === 0 ? 1 : 0];
 
     return 1 / (1 + 10 ** ((opponent.rating - player.rating) / 400));
   });
 
   const actualResults = players.map((player, index) => {
-    if (player.points > players[index === 0 ? 1 : 0].points) {
+    const opponent = players[index === 0 ? 1 : 0];
+
+    if (player.points > opponent.points) {
       return 1;
-    } else if (player.points < players[index === 0 ? 1 : 0].points) {
-      return 0;
-    } else {
-      return 0.5;
     }
+
+    if (player.points < opponent.points) {
+      return 0;
+    }
+
+    return 0.5;
   });
 
-  const newRatings = players.map((player, index) => {
-    return Math.round(
+  const newRatings = players.map((player, index) =>
+    Math.round(
       player.rating +
         config.matchWeight *
           pointsDifferenceWeight *
           (actualResults[index] - expectedResults[index])
-    );
-  });
+    )
+  );
 
   const ratingMap = new Map();
   newRatings.forEach((rating, index) => {

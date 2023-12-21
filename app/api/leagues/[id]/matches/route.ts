@@ -1,13 +1,11 @@
-import { getSessionUser } from '@/features/authentication/utils/user';
 import { ObjectId } from 'mongodb';
+import { getSessionUser } from '@/features/authentication/utils/user';
 import { dbConnect } from '@/lib/mongodb';
-import { matchCreateSchema } from '@/features/matches/schemas/matches';
+import { matchCreateSchema, MatchCreateSchema } from '@/features/matches/schemas/matches';
 import { calculateElo } from '@/lib/elo';
 import { getLeague } from '@/features/leagues/controllers/league';
 import { generateValidationError } from '@/lib/errors';
-import { MatchCreateSchema } from '@/features/matches/schemas/matches';
 import { createMatch } from '@/features/matches/controllers/match';
-import { Team } from '@/features/leagues/models/team';
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
   // TODO: handle more than 2 users
@@ -37,14 +35,14 @@ export async function POST(request: Request, { params }: { params: { id: string 
   }
 
   // Check if the user is an admin
-  const team = league.teams.find((team) => team.user.toString() === user._id.toString());
+  const team = league.teams.find((t) => t.user.toString() === user._id.toString());
   if (!team || !team.isAdmin) {
     return Response.json({ message: 'Not an admin' }, { status: 403 });
   }
 
   // Check if the players exist
   const teamErrors = [];
-  for (let i = 0; i < body.teams.length; i++) {
+  for (let i = 0; i < body.teams.length; i += 1) {
     const player = league.teams.find((p) => p._id.toString() === body.teams[i].teamId);
     if (!player) {
       teamErrors.push(
@@ -57,15 +55,15 @@ export async function POST(request: Request, { params }: { params: { id: string 
   }
 
   // Calculate ELO
-  const teamsDataForEloCalculation = body.teams.map((team) => {
-    const teamData = league.teams.find((p) => p._id.toString() === team.teamId);
+  const teamsDataForEloCalculation = body.teams.map((bodyTeam) => {
+    const teamData = league.teams.find((t) => t._id.toString() === bodyTeam.teamId);
     if (!teamData) {
       throw new Error('Team not found');
     }
 
     return {
-      playerId: team.teamId,
-      points: team.points,
+      playerId: bodyTeam.teamId,
+      points: bodyTeam.points,
       rating: teamData.rating,
     };
   });
@@ -73,26 +71,26 @@ export async function POST(request: Request, { params }: { params: { id: string 
   const newRatings = calculateElo({ players: teamsDataForEloCalculation });
 
   // Create match
-  const matchTeamsOutput = body.teams.map((team) => {
-    const teamData = league.teams.find((p) => p._id.toString() === team.teamId);
+  const matchTeamsOutput = body.teams.map((bodyTeam) => {
+    const teamData = league.teams.find((p) => p._id.toString() === bodyTeam.teamId);
     if (!teamData) {
       throw new Error('Player not found');
     }
 
     return {
-      team: new ObjectId(team.teamId),
-      points: team.points,
-      ratingEarned: newRatings.get(team.teamId)! - teamData.rating,
+      team: new ObjectId(bodyTeam.teamId),
+      points: bodyTeam.points,
+      ratingEarned: newRatings.get(bodyTeam.teamId)! - teamData.rating,
     };
   });
 
-  const newTeamsData = body.teams.map((team) => {
-    const teamData = league.teams.find((p) => p._id.toString() === team.teamId);
+  const newTeamsData = body.teams.map((bodyTeam) => {
+    const teamData = league.teams.find((p) => p._id.toString() === bodyTeam.teamId);
     if (!teamData) {
       throw new Error('Player not found');
     }
 
-    const newRating = newRatings.get(team.teamId);
+    const newRating = newRatings.get(bodyTeam.teamId);
     if (!newRating) {
       throw new Error('New rating not found');
     }

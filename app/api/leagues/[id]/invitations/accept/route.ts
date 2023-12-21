@@ -35,9 +35,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
   }
 
   // Check if the user is already in the league
-  if (
-    league.teams.find((team) => team.user.toString() === user._id.toString())
-  ) {
+  if (league.teams.find((team) => team.user.toString() === user._id.toString())) {
     return Response.json({ message: 'Already in the league' }, { status: 403 });
   }
 

@@ -1,6 +1,6 @@
 import { Match } from '@/features/leagues/models/match';
 import { League } from '@/features/leagues/models/league';
-import { Participant } from '@/features/leagues/models/participant';
+import { Team } from '@/features/leagues/models/team';
 
 /***************************
  * Types
@@ -12,12 +12,12 @@ export type IMatchCreate = Pick<Match, 'scores' | 'playedAt'>;
  * Functions
  ***************************/
 
-export function createMatch(league: League, match: IMatchCreate, participants: any) {
+export function createMatch(league: League, match: IMatchCreate, teams: any) {
   league.matches.push(match);
 
-  for (let participant of participants) {
-    const item = league.participants.id(participant._id);
-    for (const [key, value] of Object.entries(participant)) {
+  for (let team of teams) {
+    const item = league.teams.id(team._id);
+    for (const [key, value] of Object.entries(team)) {
       if (key !== '_id') {
         item[key] = value;
       }

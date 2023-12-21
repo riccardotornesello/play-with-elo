@@ -25,20 +25,20 @@ export type MatchCreateFormProps = PaperProps & {
 export function MatchCreateForm({ league, ...props }: MatchCreateFormProps) {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const participants = league.participants.map((participant) => ({
-    value: participant._id.toString(),
-    label: participant.teamName,
+  const teams = league.teams.map((team) => ({
+    value: team._id.toString(),
+    label: team.teamName,
   }));
 
   const form = useForm<MatchCreateSchema>({
     initialValues: {
-      participants: [
+      teams: [
         {
-          participantId: '',
+          teamId: '',
           points: 0,
         },
         {
-          participantId: '',
+          teamId: '',
           points: 0,
         },
       ],
@@ -68,10 +68,10 @@ export function MatchCreateForm({ league, ...props }: MatchCreateFormProps) {
     <Paper radius="md" p="xl" withBorder {...props}>
       <form onSubmit={form.onSubmit((values) => mutate(values))}>
         <Stack>
-          <Select label="Player 1" data={participants} {...form.getInputProps('participants.0.participantId')} />
-          <NumberInput label="Points" {...form.getInputProps('participants.0.points')} />
-          <Select label="Player 2" data={participants} {...form.getInputProps('participants.1.participantId')} />
-          <NumberInput label="Points" {...form.getInputProps('participants.1.points')} />
+          <Select label="Player 1" data={teams} {...form.getInputProps('teams.0.teamId')} />
+          <NumberInput label="Points" {...form.getInputProps('teams.0.points')} />
+          <Select label="Player 2" data={teams} {...form.getInputProps('teams.1.teamId')} />
+          <NumberInput label="Points" {...form.getInputProps('teams.1.points')} />
           <DateTimePicker label="Date" {...form.getInputProps('date')} />
         </Stack>
 

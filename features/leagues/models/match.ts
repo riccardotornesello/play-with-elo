@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export type Score = {
-  participant: mongoose.Types.ObjectId;
+  team: mongoose.Types.ObjectId;
   points: number;
   ratingEarned: number;
 };
@@ -23,7 +23,7 @@ export const matchSchema = new mongoose.Schema<Match>(
     scores: {
       type: [
         {
-          participant: { type: mongoose.Schema.Types.ObjectId, required: true },
+          team: { type: mongoose.Schema.Types.ObjectId, required: true },
           points: { type: Number, required: true },
           ratingEarned: { type: Number, required: true },
         },

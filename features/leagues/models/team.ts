@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
 
-export type Participant = {
+export type Team = {
   _id: mongoose.Types.ObjectId;
-  __v: number;
 
   createdAt: Date;
   updatedAt: Date;
@@ -23,7 +22,7 @@ export type Participant = {
   ratingDraws: number;
 };
 
-export const participantSchema = new mongoose.Schema<Participant>(
+export const teamSchema = new mongoose.Schema<Team>(
   {
     user: { type: mongoose.Schema.Types.ObjectId, required: true },
     teamName: { type: String, required: true },

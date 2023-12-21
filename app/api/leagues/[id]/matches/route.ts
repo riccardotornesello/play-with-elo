@@ -7,7 +7,7 @@ import { getLeague } from '@/features/leagues/controllers/league';
 import { generateValidationError } from '@/lib/errors';
 import { MatchCreateSchema } from '@/features/matches/schemas/matches';
 import { createMatch } from '@/features/matches/controllers/match';
-import { Participant } from '@/features/leagues/models/participant';
+import { Team } from '@/features/leagues/models/team';
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
   // TODO: handle more than 2 users
@@ -37,78 +37,68 @@ export async function POST(request: Request, { params }: { params: { id: string 
   }
 
   // Check if the user is an admin
-  const participant = league.participants.find(
-    (participant) => participant.user.toString() === user._id.toString()
-  );
-  if (!participant || !participant.isAdmin) {
+  const team = league.teams.find((team) => team.user.toString() === user._id.toString());
+  if (!team || !team.isAdmin) {
     return Response.json({ message: 'Not an admin' }, { status: 403 });
   }
 
   // Check if the players exist
-  const participantErrors = [];
-  for (let i = 0; i < body.participants.length; i++) {
-    const player = league.participants.find(
-      (p) => p._id.toString() === body.participants[i].participantId
-    );
+  const teamErrors = [];
+  for (let i = 0; i < body.teams.length; i++) {
+    const player = league.teams.find((p) => p._id.toString() === body.teams[i].teamId);
     if (!player) {
-      participantErrors.push(
-        generateValidationError(['participants', i.toString(), 'participantId'], 'Player not found')
+      teamErrors.push(
+        generateValidationError(['teams', i.toString(), 'teamId'], 'Player not found')
       );
     }
   }
-  if (participantErrors.length > 0) {
-    return Response.json(participantErrors, { status: 400 });
+  if (teamErrors.length > 0) {
+    return Response.json(teamErrors, { status: 400 });
   }
 
   // Calculate ELO
-  const participantsDataForEloCalculation = body.participants.map((participant) => {
-    const participantData = league.participants.find(
-      (p) => p._id.toString() === participant.participantId
-    );
-    if (!participantData) {
-      throw new Error('Participant not found');
+  const teamsDataForEloCalculation = body.teams.map((team) => {
+    const teamData = league.teams.find((p) => p._id.toString() === team.teamId);
+    if (!teamData) {
+      throw new Error('Team not found');
     }
 
     return {
-      playerId: participant.participantId,
-      points: participant.points,
-      rating: participantData.rating,
+      playerId: team.teamId,
+      points: team.points,
+      rating: teamData.rating,
     };
   });
 
-  const newRatings = calculateElo({ players: participantsDataForEloCalculation });
+  const newRatings = calculateElo({ players: teamsDataForEloCalculation });
 
   // Create match
-  const matchParticipantsOutput = body.participants.map((participant) => {
-    const participantData = league.participants.find(
-      (p) => p._id.toString() === participant.participantId
-    );
-    if (!participantData) {
+  const matchTeamsOutput = body.teams.map((team) => {
+    const teamData = league.teams.find((p) => p._id.toString() === team.teamId);
+    if (!teamData) {
       throw new Error('Player not found');
     }
 
     return {
-      participant: new ObjectId(participant.participantId),
-      points: participant.points,
-      ratingEarned: newRatings.get(participant.participantId)! - participantData.rating,
+      team: new ObjectId(team.teamId),
+      points: team.points,
+      ratingEarned: newRatings.get(team.teamId)! - teamData.rating,
     };
   });
 
-  const newParticipantsData = body.participants.map((participant) => {
-    const participantData = league.participants.find(
-      (p) => p._id.toString() === participant.participantId
-    );
-    if (!participantData) {
+  const newTeamsData = body.teams.map((team) => {
+    const teamData = league.teams.find((p) => p._id.toString() === team.teamId);
+    if (!teamData) {
       throw new Error('Player not found');
     }
 
-    const newRating = newRatings.get(participant.participantId);
+    const newRating = newRatings.get(team.teamId);
     if (!newRating) {
       throw new Error('New rating not found');
     }
 
     const newData = {
-      _id: participantData._id,
+      _id: teamData._id,
       rating: newRating,
       ratingWins: 0,
       ratingLosses: 0,
@@ -119,25 +109,23 @@ export async function POST(request: Request, { params }: { params: { id: string 
     };
 
     // Update stats about rating
-    if (newRating > participantData.rating) {
+    if (newRating > teamData.rating) {
       newData.ratingWins += 1;
-    } else if (newRating < participantData.rating) {
+    } else if (newRating < teamData.rating) {
       newData.ratingLosses += 1;
     } else {
       newData.ratingDraws += 1;
     }
 
     // Find the player in the match
-    const matchScore = matchParticipantsOutput.find(
-      (p) => p.participant.toString() === participantData._id.toString()
-    );
+    const matchScore = matchTeamsOutput.find((p) => p.team.toString() === teamData._id.toString());
     if (!matchScore) {
       throw new Error('matchScore not found');
     }
 
     // Find the opponent in the match
-    const opponentScore = matchParticipantsOutput.find(
-      (p) => p.participant.toString() !== participantData._id.toString()
+    const opponentScore = matchTeamsOutput.find(
+      (p) => p.team.toString() !== teamData._id.toString()
     );
     if (!opponentScore) {
       throw new Error('opponentScore not found');
@@ -145,11 +133,11 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
     // Update stats about games
     if (matchScore.points > opponentScore.points) {
-      participantData.gameWins += 1;
+      teamData.gameWins += 1;
     } else if (matchScore.points < opponentScore.points) {
-      participantData.gameLosses += 1;
+      teamData.gameLosses += 1;
     } else {
-      participantData.gameDraws += 1;
+      teamData.gameDraws += 1;
     }
 
     return newData;
@@ -158,10 +146,10 @@ export async function POST(request: Request, { params }: { params: { id: string 
   await createMatch(
     league,
     {
-      scores: matchParticipantsOutput,
+      scores: matchTeamsOutput,
       playedAt: body.date,
     },
-    newParticipantsData
+    newTeamsData
   );
 
   return Response.json({}, { status: 200 });

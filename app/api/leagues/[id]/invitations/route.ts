@@ -32,10 +32,10 @@ export async function POST(request: Request, { params }: { params: { id: string 
   }
 
   // Check if the user is an admin
-  const participant = league.participants.find(
-    (participant) => participant.user.toString() === user._id.toString()
+  const team = league.teams.find(
+    (team) => team.user.toString() === user._id.toString()
   );
-  if (!participant || !participant.isAdmin) {
+  if (!team || !team.isAdmin) {
     return Response.json({ message: 'Not an admin' }, { status: 403 });
   }
 
@@ -49,8 +49,8 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
   // Check if the user is already in the league
   if (
-    league.participants.find(
-      (participant) => participant.user.toString() === invitedUser._id.toString()
+    league.teams.find(
+      (team) => team.user.toString() === invitedUser._id.toString()
     )
   ) {
     return Response.json(

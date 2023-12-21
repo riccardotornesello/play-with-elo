@@ -6,7 +6,7 @@ import { getLeagueInfo } from '@/features/leagues/controllers/league';
 import { ObjectId } from 'mongodb';
 import { LeagueInviteForm } from '@/features/leagues/components/LeagueInviteForm/LeagueInviteForm';
 import { MatchCreateForm } from '@/features/matches/components/MatchCreateForm/MatchCreateForm';
-import { ParticipantsList } from '@/features/leagues/components/ParticipantsList/ParticipantsList';
+import { TeamsList } from '@/features/leagues/components/TeamsList/TeamsList';
 
 export default async function LeagueDetailPage({ params }: { params: { id: string } }) {
   await dbConnect();
@@ -28,8 +28,8 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
 
   // Return 403 if user is not a member of the league
   if (
-    !league.participants
-      .map((participant) => participant.user.toString())
+    !league.teams
+      .map((team) => team.user.toString())
       .includes(user._id.toString())
   ) {
     return <div>403</div>;
@@ -43,7 +43,7 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
       <Text>{league.description}</Text>
       <LeagueInviteForm leagueId={league._id.toString()} />
       <MatchCreateForm league={league} />
-      <ParticipantsList participants={league.participants} />
+      <TeamsList teams={league.teams} />
     </>
   );
 }

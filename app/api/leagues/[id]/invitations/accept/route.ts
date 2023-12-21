@@ -1,7 +1,7 @@
 import { getSessionUser } from '@/features/authentication/utils/user';
 import { leagueInvitationAcceptSchema } from '@/features/leagues/schemas/invitation';
 import { dbConnect } from '@/lib/mongodb';
-import { registerLeaguePlayer } from '@/features/leagues/controllers/participant';
+import { registerLeaguePlayer } from '@/features/leagues/controllers/team';
 import { getLeague } from '@/features/leagues/controllers/league';
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
@@ -36,7 +36,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
   // Check if the user is already in the league
   if (
-    league.participants.find((participant) => participant.user.toString() === user._id.toString())
+    league.teams.find((team) => team.user.toString() === user._id.toString())
   ) {
     return Response.json({ message: 'Already in the league' }, { status: 403 });
   }

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-export const matchParticipantSchema = z.object({
-  participantId: z.string().min(1, { message: 'Player is required' }),
+export const matchTeamSchema = z.object({
+  teamId: z.string().min(1, { message: 'Player is required' }),
   points: z
     .number({
       invalid_type_error: 'An integer is required',
@@ -12,16 +12,16 @@ export const matchParticipantSchema = z.object({
 });
 
 export const matchCreateSchema = z.object({
-  participants: z
-    .array(matchParticipantSchema)
+  teams: z
+    .array(matchTeamSchema)
     .min(2)
     .max(2)
-    .refine((data) => data[0].participantId !== data[1].participantId, {
+    .refine((data) => data[0].teamId !== data[1].teamId, {
       message: "The players can't be the same",
-      path: ['1', 'participantId'],
+      path: ['1', 'teamId'],
     }),
   date: z.coerce.date(),
 });
 
-export type MatchParticipantSchema = z.infer<typeof matchParticipantSchema>;
+export type MatchTeamSchema = z.infer<typeof matchTeamSchema>;
 export type MatchCreateSchema = z.infer<typeof matchCreateSchema>;

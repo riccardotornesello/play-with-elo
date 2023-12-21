@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { participantSchema, Participant } from './participant';
+import { Team, teamSchema } from './team';
 import { matchSchema, Match } from './match';
 
 export type League = {
@@ -14,7 +14,7 @@ export type League = {
   startingRating: number;
 
   pendingInvitedUsers: mongoose.Types.ObjectId[];
-  participants: Participant[];
+  teams: Team[];
   matches: Match[];
 };
 
@@ -24,7 +24,7 @@ export const leagueSchema = new mongoose.Schema<League>(
     description: { type: String, required: true },
     startingRating: { type: Number, required: true, default: 1000 },
     pendingInvitedUsers: { type: [mongoose.Schema.Types.ObjectId], required: true, default: [] },
-    participants: { type: [participantSchema], required: true },
+    teams: { type: [teamSchema], required: true },
     matches: { type: [matchSchema], required: true, default: [] },
   },
   {

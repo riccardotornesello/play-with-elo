@@ -1,5 +1,5 @@
 import { LeagueModel, League } from '../models/league';
-import { IParticipantCreate, generateParticipantData } from './participant';
+import { ITeamCreate, generateTeamData } from './team';
 
 /***************************
  * Types
@@ -13,18 +13,18 @@ export type ILeagueCreate = Pick<League, 'name' | 'description'>;
 
 export async function createLeague(
   league: ILeagueCreate,
-  participant: IParticipantCreate
+  team: ITeamCreate
 ): Promise<League> {
   const newLeague = new LeagueModel({
     ...league,
-    participants: [generateParticipantData(participant, true)],
+    teams: [generateTeamData(team, true)],
   });
   await newLeague.save();
   return newLeague;
 }
 
 export async function getUserLeagues(userId: string): Promise<League[]> {
-  return await LeagueModel.find({ 'participants.user': userId });
+  return await LeagueModel.find({ 'teams.user': userId });
 }
 
 export async function getLeague(id: string): Promise<League | null> {

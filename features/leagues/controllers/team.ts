@@ -21,6 +21,6 @@ export function generateTeamData(team: ITeamCreate, isAdmin = false) {
 
 export async function registerLeaguePlayer(league: League, team: ITeamCreate) {
   league.teams.push(generateTeamData(team));
-  league.pendingInvitedUsers.pull(player.user);
+  league.pendingInvitedUsers.pull(team.user);
   return await league.save();
 }

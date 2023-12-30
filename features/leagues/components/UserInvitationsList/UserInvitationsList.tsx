@@ -1,4 +1,4 @@
-import { Card, Grid, GridCol } from '@mantine/core';
+import { Box, Grid, GridCol } from '@mantine/core';
 import { League } from '../../models/league';
 import { InviteAcceptFormButton } from '@/features/leagues/components/InviteAcceptFormButton/InviteAcceptFormButton';
 import { InviteRejectFormButton } from '@/features/leagues/components/InviteRejectFormButton/InviteRejectFormButton';
@@ -8,8 +8,12 @@ export type UserInvitationsListProps = {
 };
 
 export function UserInvitationsList({ leagues }: UserInvitationsListProps) {
+  if (leagues.length == 0) {
+    return <Box>You have no invitations</Box>;
+  }
+
   return (
-    <Card shadow="sm" padding="md">
+    <Box>
       {leagues.map((league) => (
         <Grid key={league._id}>
           <GridCol span={6}>{league.name}</GridCol>
@@ -19,6 +23,6 @@ export function UserInvitationsList({ leagues }: UserInvitationsListProps) {
           </GridCol>
         </Grid>
       ))}
-    </Card>
+    </Box>
   );
 }

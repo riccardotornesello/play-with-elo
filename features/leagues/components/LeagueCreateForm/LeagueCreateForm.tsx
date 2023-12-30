@@ -1,16 +1,16 @@
 'use client';
 
 import { useForm } from '@mantine/form';
-import { TextInput, Paper, PaperProps, Button, Stack } from '@mantine/core';
+import { TextInput, Button, Stack } from '@mantine/core';
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { useMutation, ApiStatus } from '@/hooks/api';
 import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { ErrorInfo } from '@/components/InfoAlert/InfoAlert';
 import { convertResponseToFormError } from '@/lib/form';
 import { LeagueCreateSchema, leagueCreateSchema } from '../../schemas/create';
 
-export function LeagueCreateForm(props: PaperProps) {
+export function LeagueCreateForm() {
   const router = useRouter();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -42,33 +42,31 @@ export function LeagueCreateForm(props: PaperProps) {
   });
 
   return (
-    <Paper radius="md" p="xl" withBorder {...props}>
-      <form onSubmit={form.onSubmit((values) => mutate(values))}>
-        <Stack>
-          <TextInput
-            required
-            label="League name"
-            placeholder="Your league"
-            radius="md"
-            {...form.getInputProps('name')}
-          />
+    <form onSubmit={form.onSubmit((values) => mutate(values))}>
+      <Stack>
+        <TextInput
+          required
+          label="League name"
+          placeholder="Your league"
+          radius="md"
+          {...form.getInputProps('name')}
+        />
 
-          <TextInput
-            required
-            label="League description"
-            placeholder="Your league description"
-            radius="md"
-            {...form.getInputProps('description')}
-          />
+        <TextInput
+          required
+          label="League description"
+          placeholder="Your league description"
+          radius="md"
+          {...form.getInputProps('description')}
+        />
 
-          <TextInput
-            required
-            label="Team name"
-            placeholder="The name your team will be known as"
-            radius="md"
-            {...form.getInputProps('teamName')}
-          />
-        </Stack>
+        <TextInput
+          required
+          label="Team name"
+          placeholder="The name your team will be known as"
+          radius="md"
+          {...form.getInputProps('teamName')}
+        />
 
         <ErrorInfo>{errorMessage}</ErrorInfo>
 
@@ -79,7 +77,7 @@ export function LeagueCreateForm(props: PaperProps) {
         >
           Create
         </Button>
-      </form>
-    </Paper>
+      </Stack>
+    </form>
   );
 }

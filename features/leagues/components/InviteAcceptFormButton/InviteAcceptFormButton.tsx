@@ -72,20 +72,18 @@ function InviteAcceptForm({ leagueId }: InviteAcceptFormProps) {
           required
           label="Team name"
           placeholder="The name of your team in this league"
-          radius="md"
           {...form.getInputProps('teamName')}
         />
+
+        <ErrorInfo>{errorMessage}</ErrorInfo>
+
+        <Button
+          type="submit"
+          loading={apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success}
+        >
+          Accept
+        </Button>
       </Stack>
-
-      <ErrorInfo>{errorMessage}</ErrorInfo>
-
-      <Button
-        type="submit"
-        radius="xl"
-        loading={apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success}
-      >
-        Accept
-      </Button>
     </form>
   );
 }

@@ -50,7 +50,6 @@ function InviteRejectForm({ leagueId }: InviteRejectFormProps) {
       <ErrorInfo>{errorMessage}</ErrorInfo>
 
       <Button
-        radius="xl"
         loading={apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success}
         onClick={() => {
           mutate({});

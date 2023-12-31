@@ -48,7 +48,6 @@ export function LeagueCreateForm() {
           required
           label="League name"
           placeholder="Your league"
-          radius="md"
           {...form.getInputProps('name')}
         />
 
@@ -56,7 +55,6 @@ export function LeagueCreateForm() {
           required
           label="League description"
           placeholder="Your league description"
-          radius="md"
           {...form.getInputProps('description')}
         />
 
@@ -64,7 +62,6 @@ export function LeagueCreateForm() {
           required
           label="Team name"
           placeholder="The name your team will be known as"
-          radius="md"
           {...form.getInputProps('teamName')}
         />
 
@@ -72,7 +69,6 @@ export function LeagueCreateForm() {
 
         <Button
           type="submit"
-          radius="xl"
           loading={apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success}
         >
           Create

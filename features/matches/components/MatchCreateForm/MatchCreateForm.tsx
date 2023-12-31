@@ -65,17 +65,16 @@ export function MatchCreateForm({ league, ...props }: MatchCreateFormProps) {
         <Select label="Player 2" data={teams} {...form.getInputProps('teams.1.teamId')} />
         <NumberInput label="Points" {...form.getInputProps('teams.1.points')} />
         <DateTimePicker label="Date" {...form.getInputProps('date')} />
+
+        <ErrorInfo>{errorMessage}</ErrorInfo>
+
+        <Button
+          type="submit"
+          loading={apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success}
+        >
+          Create
+        </Button>
       </Stack>
-
-      <ErrorInfo>{errorMessage}</ErrorInfo>
-
-      <Button
-        type="submit"
-        radius="xl"
-        loading={apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success}
-      >
-        Create
-      </Button>
     </form>
   );
 }

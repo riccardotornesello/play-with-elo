@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { redirect } from 'next/navigation';
-import { Text, Container, Title, Paper, Box } from '@mantine/core';
+import { Text, Card, Title, Paper, Flex } from '@mantine/core';
 import { dbConnect } from '@/lib/mongodb';
 import { getSessionUser } from '@/features/authentication/utils/user';
 import { getLeagueInfo } from '@/features/leagues/controllers/league';
@@ -34,12 +34,12 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
   }
 
   return (
-    <Container size="xl">
-      <Paper>
+    <>
+      <Card>
         <Title order={3}>{league.name}</Title>
         <Text>{league.description}</Text>
         {userTeam.isAdmin && (
-          <Box>
+          <Flex gap="md" mt="md">
             <ModalButton
               title="Invite a team"
               content={<LeagueInviteForm leagueId={league._id.toString()} />}
@@ -50,14 +50,14 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
             <ModalButton title="Add a match" content={<MatchCreateForm league={league} />}>
               Add a match
             </ModalButton>
-          </Box>
+          </Flex>
         )}
-      </Paper>
+      </Card>
 
       <Paper mt={10}>
         <Title order={4}>Teams ranking</Title>
         <TeamsList teams={league.teams} />
       </Paper>
-    </Container>
+    </>
   );
 }

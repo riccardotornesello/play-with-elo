@@ -1,4 +1,4 @@
-import { Container, Title, Box } from '@mantine/core';
+import { Title, Box } from '@mantine/core';
 import { redirect } from 'next/navigation';
 import { LeaguesList } from '@/features/leagues/components/LeaguesList/LeaguesList';
 import { getSessionUser } from '@/features/authentication/utils/user';
@@ -21,13 +21,13 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <Container size="xl">
+    <>
       <UserInvitationsButton leagues={invitations} />
 
       <Box mt={10}>
         <Title order={3}>Your leagues</Title>
         <LeaguesList leagues={leagues} />
       </Box>
-    </Container>
+    </>
   );
 }

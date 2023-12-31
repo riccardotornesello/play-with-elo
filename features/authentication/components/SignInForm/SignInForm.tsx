@@ -55,7 +55,7 @@ export function SignInForm(props: PaperProps) {
   });
 
   return (
-    <Paper radius="md" p="xl" withBorder {...props}>
+    <Paper p="xl" withBorder {...props}>
       <Text size="lg" fw={500}>
         Welcome back to Play with Elo!
       </Text>
@@ -66,7 +66,6 @@ export function SignInForm(props: PaperProps) {
             required
             label="Username or email"
             placeholder="hello@mantine.dev"
-            radius="md"
             {...form.getInputProps('username')}
           />
 
@@ -74,7 +73,6 @@ export function SignInForm(props: PaperProps) {
             required
             label="Password"
             placeholder="Your password"
-            radius="md"
             {...form.getInputProps('password')}
           />
         </Stack>
@@ -87,7 +85,6 @@ export function SignInForm(props: PaperProps) {
           </Anchor>
           <Button
             type="submit"
-            radius="xl"
             loading={apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success}
           >
             Login

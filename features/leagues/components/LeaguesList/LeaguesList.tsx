@@ -15,7 +15,7 @@ export function LeaguesList({ leagues }: LeaguesListProps) {
 
   return (
     <SimpleGrid cols={3} my={10}>
-      <ModalButton title="Create a league" content={<LeagueCreateForm />} h="100%">
+      <ModalButton title="Create a league" content={<LeagueCreateForm />} h="100%" fz="lg">
         Create a league
       </ModalButton>
       {leagues.map((league) => (
@@ -46,20 +46,14 @@ interface LeagueCardProps {
 
 function LeagueCard({ league }: LeagueCardProps) {
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
+    <Card shadow="sm" padding="lg" withBorder>
       <Text fw={500}>{league.name}</Text>
 
       <Text size="sm" c="dimmed">
         {league.description}
       </Text>
 
-      <Button
-        component={Link}
-        href={`/dashboard/leagues/${league._id}`}
-        fullWidth
-        mt="md"
-        radius="md"
-      >
+      <Button component={Link} href={`/dashboard/leagues/${league._id}`} fullWidth mt="md">
         Open
       </Button>
     </Card>

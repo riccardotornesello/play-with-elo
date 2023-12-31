@@ -47,17 +47,16 @@ export function LeagueInviteForm({ leagueId, ...props }: LeagueInviteFormProps) 
           required
           label="Username"
           placeholder="The username of the person you want to invite"
-          radius="md"
           {...form.getInputProps('username')}
         />
+
+        <ErrorInfo>{errorMessage}</ErrorInfo>
+        <SuccessInfo>{apiStatus === ApiStatus.Success ? 'User invited' : null}</SuccessInfo>
+
+        <Button type="submit" loading={apiStatus === ApiStatus.Loading}>
+          Invite
+        </Button>
       </Stack>
-
-      <ErrorInfo>{errorMessage}</ErrorInfo>
-      {apiStatus === ApiStatus.Success && <SuccessInfo>User invited</SuccessInfo>}
-
-      <Button type="submit" radius="xl" loading={apiStatus === ApiStatus.Loading}>
-        Invite
-      </Button>
     </form>
   );
 }

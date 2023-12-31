@@ -55,7 +55,7 @@ export function SignUpForm(props: PaperProps) {
   });
 
   return (
-    <Paper radius="md" p="xl" withBorder {...props}>
+    <Paper p="xl" withBorder {...props}>
       <Text size="lg" fw={500}>
         Welcome back to Play with Elo!
       </Text>
@@ -66,7 +66,6 @@ export function SignUpForm(props: PaperProps) {
             required
             label="Username"
             placeholder="Player 1"
-            radius="md"
             {...form.getInputProps('username')}
           />
 
@@ -74,7 +73,6 @@ export function SignUpForm(props: PaperProps) {
             required
             label="Email"
             placeholder="your@email.com"
-            radius="md"
             {...form.getInputProps('email')}
           />
 
@@ -82,7 +80,6 @@ export function SignUpForm(props: PaperProps) {
             required
             label="Repeat email"
             placeholder="your@email.com"
-            radius="md"
             {...form.getInputProps('confirmEmail')}
           />
 
@@ -90,7 +87,6 @@ export function SignUpForm(props: PaperProps) {
             required
             label="Password"
             placeholder="Your password"
-            radius="md"
             {...form.getInputProps('password')}
           />
 
@@ -98,7 +94,6 @@ export function SignUpForm(props: PaperProps) {
             required
             label="Repeat password"
             placeholder="Your password"
-            radius="md"
             {...form.getInputProps('confirmPassword')}
           />
         </Stack>
@@ -111,7 +106,6 @@ export function SignUpForm(props: PaperProps) {
           </Anchor>
           <Button
             type="submit"
-            radius="xl"
             loading={apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success}
           >
             Register

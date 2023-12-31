@@ -1,7 +1,17 @@
 'use client';
 
-import { createTheme } from '@mantine/core';
+import { createTheme, rem } from '@mantine/core';
 
 export const theme = createTheme({
-  /* Put your mantine theme override here */
+  primaryColor: 'yellow',
+  fontFamily: 'Titillium Web, sans-serif',
+  headings: {
+    fontFamily: 'Georgia, serif',
+    sizes: {
+      h1: { fontSize: '50px' },
+      h2: { fontSize: '40px' },
+      h3: { fontSize: '30px' },
+    },
+  },
+  defaultRadius: 'xs',
 });

@@ -1,45 +1,33 @@
-import { Box, Flex, Heading } from '@chakra-ui/react';
-import InvitationsList from '../../components/invitations/invitations-list';
-import LeagueCreationForm from '../../components/leagues/league-creation-form';
-import LeaguesList from '../../features/leagues/components/leagues-list';
-import ModalButton from '../../components/modal-button';
-import { getUser } from '../../features/auth/utils/user';
-import { getUserInvitations } from '../../features/leagues/controllers/invitation';
-import { getUserLeagues } from '../../features/leagues/controllers/league';
-import dbConnect from '../../lib/mongodb';
+import { Title, Box } from '@mantine/core';
 import { redirect } from 'next/navigation';
+import { LeaguesList } from '@/features/leagues/components/LeaguesList/LeaguesList';
+import { getSessionUser } from '@/features/authentication/utils/user';
+import { dbConnect } from '@/lib/mongodb';
+import { getUserLeagues } from '@/features/leagues/controllers/league';
+import { getUserInvitationLeaguesInfo } from '@/features/leagues/controllers/invitation';
+import { UserInvitationsButton } from '@/features/leagues/components/UserInvitationsButton/UserInvitationsButton';
 
-export default async function HomePage() {
-  const user = await getUser();
+export default async function DashboardPage() {
+  await dbConnect();
+
+  const user = await getSessionUser();
   if (!user) {
     redirect('/auth/signin');
   }
 
-  await dbConnect();
-
   const [leagues, invitations] = await Promise.all([
     getUserLeagues(user._id.toString()),
-    getUserInvitations(user._id.toString()),
+    getUserInvitationLeaguesInfo(user._id.toString()),
   ]);
 
   return (
     <>
-      <Flex justifyContent='space-between' alignItems='center' mb={4}>
-        <Heading as='h2' size='lg' mr={4}>
-          Your leagues
-        </Heading>
+      <UserInvitationsButton leagues={invitations} />
 
-        <Box>
-          <ModalButton text='Invitations' mr={3}>
-            <InvitationsList invitations={invitations} />
-          </ModalButton>
-          <ModalButton text='Create new league'>
-            <LeagueCreationForm />
-          </ModalButton>
-        </Box>
-      </Flex>
-
-      <LeaguesList leagues={leagues} />
+      <Box mt={10}>
+        <Title order={3}>Your leagues</Title>
+        <LeaguesList leagues={leagues} />
+      </Box>
     </>
   );
 }

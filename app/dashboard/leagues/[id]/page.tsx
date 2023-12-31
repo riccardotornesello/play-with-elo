@@ -1,89 +1,63 @@
-import {
-  Box,
-  Button,
-  Modal,
-  ModalContent,
-  ModalOverlay,
-  Stack,
-  useDisclosure,
-} from '@chakra-ui/react';
-import LeagueDescription from '../../../../components/leagues/league-description';
-import LeagueInvitationForm from '../../../../components/leagues/league-invitation-form';
-import LeagueRanking from '../../../../components/leagues/league-ranking';
-import { getUser } from '../../../../features/auth/utils/user';
-import MatchCreationForm from '../../../../features/leagues/components/match-creation-form';
-import MatchesList from '../../../../features/leagues/components/matches-list';
-import { getLeague } from '../../../../features/leagues/controllers/league';
-import dbConnect from '../../../../lib/mongodb';
+import { ObjectId } from 'mongodb';
+import { redirect } from 'next/navigation';
+import { Text, Card, Title, Paper, Flex } from '@mantine/core';
+import { dbConnect } from '@/lib/mongodb';
+import { getSessionUser } from '@/features/authentication/utils/user';
+import { getLeagueInfo } from '@/features/leagues/controllers/league';
+import { LeagueInviteForm } from '@/features/leagues/components/LeagueInviteForm/LeagueInviteForm';
+import { MatchCreateForm } from '@/features/matches/components/MatchCreateForm/MatchCreateForm';
+import { TeamsList } from '@/features/leagues/components/TeamsList/TeamsList';
+import { ModalButton } from '@/components/ModalButton/ModalButton';
 
-export default async function LeagueDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  // TODO: handle 404 and 403
-  const playerDisclosure = useDisclosure();
-  const matchDisclosure = useDisclosure();
-
+export default async function LeagueDetailPage({ params }: { params: { id: string } }) {
   await dbConnect();
 
-  const user = await getUser();
+  const user = await getSessionUser();
   if (!user) {
-    return <div>401</div>;
+    redirect(`/auth/signin?redirect=/dashboard/leagues/${params.id}`);
   }
 
-  const leagueId = params.id;
+  // If the league id is not valid, return 404
+  if (!ObjectId.isValid(params.id)) {
+    return <div>404</div>;
+  }
 
-  const league = await getLeague(leagueId, {
-    name: 1,
-    description: 1,
-    players: 1,
-    matches: { $slice: -5 },
-  });
+  const league = await getLeagueInfo(params.id);
   if (!league) {
     return <div>404</div>;
   }
 
-  const userPlayer = league.players.find(
-    (player) => player.user.toString() === user._id.toString(),
-  );
-  const isAdmin = userPlayer && userPlayer.isAdmin;
+  // Find the user's team in the league and return 403 if it doesn't exist
+  const userTeam = league.teams.find((team) => team.user.toString() === user._id.toString());
+  if (!userTeam) {
+    return <div>403</div>;
+  }
 
   return (
-    <Stack>
-      <LeagueDescription league={league}>
-        <Button w='100%' onClick={playerDisclosure.onOpen}>
-          Invite player
-        </Button>
-        <Button w='100%' onClick={matchDisclosure.onOpen}>
-          Add match
-        </Button>
-      </LeagueDescription>
+    <>
+      <Card>
+        <Title order={3}>{league.name}</Title>
+        <Text>{league.description}</Text>
+        {userTeam.isAdmin && (
+          <Flex gap="md" mt="md">
+            <ModalButton
+              title="Invite a team"
+              content={<LeagueInviteForm leagueId={league._id.toString()} />}
+            >
+              Invite a team
+            </ModalButton>
 
-      <Modal
-        isOpen={playerDisclosure.isOpen}
-        onClose={playerDisclosure.onClose}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <Box p='6'>
-            <LeagueInvitationForm />
-          </Box>
-        </ModalContent>
-      </Modal>
+            <ModalButton title="Add a match" content={<MatchCreateForm league={league} />}>
+              Add a match
+            </ModalButton>
+          </Flex>
+        )}
+      </Card>
 
-      <Modal isOpen={matchDisclosure.isOpen} onClose={matchDisclosure.onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <Box p='6'>
-            <MatchCreationForm league={league} />
-          </Box>
-        </ModalContent>
-      </Modal>
-
-      <LeagueRanking players={league.players} />
-
-      <MatchesList league={league} />
-    </Stack>
+      <Paper mt={10}>
+        <Title order={4}>Teams ranking</Title>
+        <TeamsList teams={league.teams} />
+      </Paper>
+    </>
   );
 }

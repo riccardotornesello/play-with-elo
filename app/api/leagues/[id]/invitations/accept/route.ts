@@ -1,18 +1,14 @@
-import { getUser } from '../../../../../../features/auth/utils/user';
-import { leagueInvitationAcceptSchema } from '../../../../../../features/leagues/schemas/invitation';
-import dbConnect from '../../../../../../lib/mongodb';
-import { removeInvitation } from '../../../../../../features/leagues/controllers/invitation';
-import { registerLeaguePlayer } from '../../../../../../features/leagues/controllers/player';
+import { getSessionUser } from '@/features/authentication/utils/user';
+import { leagueInvitationAcceptSchema } from '@/features/leagues/schemas/invitation';
+import { dbConnect } from '@/lib/mongodb';
+import { registerLeaguePlayer } from '@/features/leagues/controllers/team';
+import { getLeague } from '@/features/leagues/controllers/league';
 
-export async function POST(
-  request: Request,
-  { params }: { params: { id: string } },
-) {
-  // TODO: prevent double entry in players array
-  // TODO: check that the invitation exists
+export async function POST(request: Request, { params }: { params: { id: string } }) {
+  await dbConnect();
 
   // Check authentication
-  const user = await getUser();
+  const user = await getSessionUser();
   if (!user) {
     return Response.json({ message: 'Unauthorized' }, { status: 401 });
   }
@@ -27,14 +23,24 @@ export async function POST(
     return Response.json(error, { status: 400 });
   }
 
-  await dbConnect();
+  // Get the league
+  const league = await getLeague(params.id);
+  if (!league) {
+    return Response.json({ message: 'League not found' }, { status: 404 });
+  }
 
-  await registerLeaguePlayer(params.id, {
-    user: user._id,
-    teamName: body.teamName,
-  });
+  // Check if the user has been invited
+  if (!league.pendingInvitedUsers.map((id) => id.toString()).includes(user._id.toString())) {
+    return Response.json({ message: 'Not invited' }, { status: 403 });
+  }
 
-  await removeInvitation(params.id, user._id.toString());
+  // Check if the user is already in the league
+  if (league.teams.find((team) => team.user.toString() === user._id.toString())) {
+    return Response.json({ message: 'Already in the league' }, { status: 403 });
+  }
+
+  // Register the user
+  await registerLeaguePlayer(league, { user: user._id, teamName: body.teamName });
 
   return Response.json({}, { status: 200 });
 }

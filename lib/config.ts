@@ -1,18 +1,10 @@
-const config = {
-  security: {
-    secretKey: process.env.SECRET_KEY,
+export default {
+  jwt: {
+    secretKey: process.env.SECRET_KEY || '',
   },
-  telegram: {
-    token: process.env.TELEGRAM_TOKEN,
-    chatId: process.env.TELEGRAM_CHAT_ID,
-  },
-  platform: {
-    url: process.env.PLATFORM_BASE_URL,
-  },
-  mailjet: {
-    apiKey: process.env.MJ_APIKEY_PUBLIC,
-    apiSecret: process.env.MJ_APIKEY_PRIVATE,
+  hash: {
+    iterations: 10000,
+    keylen: 64,
+    digest: 'sha512',
   },
 };
-
-export default config;

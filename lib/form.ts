@@ -1,13 +1,19 @@
-import { UseFormSetError } from 'react-hook-form';
+export function convertResponseToFormError(response: any) {
+  const errors: { [key: string]: string[] } = {};
 
-export function pushFormErrors(
-  responseBody: any,
-  setError: UseFormSetError<any>,
-) {
-  responseBody.issues.forEach((issue: any) => {
-    setError(issue.path.join('.'), {
-      type: 'manual',
-      message: issue.message,
-    });
+  response.forEach((issue: any) => {
+    const path = issue.path.join('.');
+    if (!errors[path]) {
+      errors[path] = [];
+    }
+    errors[path].push(issue.message);
   });
+
+  // Convert the arrays to strings
+  const output: { [key: string]: string } = {};
+  Object.keys(errors).forEach((key) => {
+    output[key] = errors[key].join(', ');
+  });
+
+  return output;
 }

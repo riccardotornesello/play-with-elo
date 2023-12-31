@@ -1,14 +1,10 @@
 import { z } from 'zod';
-import { signUpSchema } from '../../../../features/auth/schemas/signup';
-import dbConnect from '../../../../lib/mongodb';
-import {
-  createUser,
-  findUserByUsername,
-  findUserByEmail,
-} from '../../../../features/auth/controllers/user';
-import { createAccessToken } from '../../../../features/auth/lib/jwt';
-import { hashPassword } from '../../../../features/auth/lib/hash';
-import config from '../../../../features/auth/config';
+import { signUpSchema } from '@/features/users/schemas/signup';
+import { dbConnect } from '@/lib/mongodb';
+import { createUser, findUserByUsername, findUserByEmail } from '@/features/users/controllers/user';
+import { createAccessToken } from '@/features/users/utils/jwt';
+import { hashString } from '@/lib/hash';
+import config from '@/features/users/config';
 
 const uniqueCredentialsSchema = z.object({
   username: z.string().refine(async (val) => {
@@ -27,7 +23,7 @@ export async function POST(request: Request) {
   // Validate the input
   const body = signUpSchema.safeParse(input);
   if (body.success === false) {
-    return Response.json(body.error, { status: 400 });
+    return Response.json(body.error.issues, { status: 400 });
   }
 
   // Initialize database connection
@@ -36,15 +32,15 @@ export async function POST(request: Request) {
   // Validate unique email and username
   try {
     await uniqueCredentialsSchema.parseAsync(input);
-  } catch (error) {
-    return Response.json(error, { status: 400 });
+  } catch (error: any) {
+    return Response.json(error.issues, { status: 400 });
   }
 
   // Create user
   const user = await createUser({
     username: body.data.username,
     email: body.data.email,
-    password: await hashPassword(body.data.password),
+    password: await hashString(body.data.password),
   });
 
   // Create access token
@@ -58,6 +54,6 @@ export async function POST(request: Request) {
       headers: {
         'Set-Cookie': `accessToken=${accessToken}; HttpOnly; Path=/; Max-Age=${config.auth.accessTokenDuration}`,
       },
-    },
+    }
   );
 }

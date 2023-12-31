@@ -1,45 +1,33 @@
-// Db
 import { LeagueModel, League } from '../models/league';
-// Common
-import {
-  ILeagueCreate,
-  IPlayerCreate,
-  generatePlayerData,
-  basicLeagueInfo,
-} from './common';
+import { ITeamCreate, generateTeamData } from './team';
 
 /***************************
- * Leagues
+ * Types
  ***************************/
 
-export async function createLeague(
-  league: ILeagueCreate,
-  player: IPlayerCreate,
-): Promise<League> {
+export type ILeagueCreate = Pick<League, 'name' | 'description'>;
+
+/***************************
+ * Functions
+ ***************************/
+
+export async function createLeague(league: ILeagueCreate, team: ITeamCreate): Promise<League> {
   const newLeague = new LeagueModel({
     ...league,
-    players: [generatePlayerData(player, true)],
+    teams: [generateTeamData(team, true)],
   });
   await newLeague.save();
   return newLeague;
 }
 
-export async function getLeague(
-  leagueId: string,
-  fields: any | null = null,
-): Promise<League | null> {
-  const league = fields
-    ? await LeagueModel.findById(leagueId, {
-        __v: 1,
-        ...fields,
-      })
-    : await LeagueModel.findById(leagueId);
-  return league;
+export async function getUserLeagues(userId: string): Promise<League[]> {
+  return await LeagueModel.find({ 'teams.user': userId });
 }
 
-export async function getUserLeagues(userId: string) {
-  const leagues = await LeagueModel.find({ 'players.user': userId })
-    .select(basicLeagueInfo)
-    .lean();
-  return JSON.parse(JSON.stringify(leagues));
+export async function getLeague(id: string): Promise<League | null> {
+  return await LeagueModel.findById(id);
+}
+
+export async function getLeagueInfo(id: string): Promise<League | null> {
+  return await LeagueModel.findById(id).lean();
 }

@@ -1,37 +1,21 @@
-// Db
-import { LeagueModel } from '../models/league';
-// Common
-import { basicLeagueInfo } from './common';
+import { ObjectId } from 'mongodb';
+import { League, LeagueModel } from '../models/league';
 
 /***************************
- * Invitations
+ * Functions
  ***************************/
 
-export async function createLeagueInvitation(leagueId: string, userId: string) {
-  return LeagueModel.updateOne(
-    { _id: leagueId },
-    {
-      $addToSet: {
-        invitations: userId,
-      },
-    },
-  );
+export async function createLeagueInvitation(league: League, userId: string) {
+  league.pendingInvitedUsers.push(new ObjectId(userId));
+
+  return await league.save();
 }
 
-export async function getUserInvitations(userId: string) {
-  const invitations = await LeagueModel.find({ invitations: userId }).select(
-    basicLeagueInfo,
-  );
-  return invitations || [];
+export async function getUserInvitationLeaguesInfo(userId: string): Promise<League[]> {
+  return await LeagueModel.find({ pendingInvitedUsers: new ObjectId(userId) }).lean();
 }
 
-export async function removeInvitation(leagueId: string, userId: string) {
-  return LeagueModel.updateOne(
-    { _id: leagueId },
-    {
-      $pull: {
-        invitations: userId,
-      },
-    },
-  );
+export async function removeInvitation(league: League, userId: string) {
+  league.pendingInvitedUsers.pull(new ObjectId(userId));
+  league.save();
 }

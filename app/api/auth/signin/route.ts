@@ -1,12 +1,9 @@
-import dbConnect from '../../../../lib/mongodb';
-import {
-  findUserByUsername,
-  findUserByEmail,
-} from '../../../../features/auth/controllers/user';
-import { createAccessToken } from '../../../../features/auth/lib/jwt';
-import { verifyPassword } from '../../../../features/auth/lib/hash';
-import { signInSchema } from '../../../../features/auth/schemas/signin';
-import config from '../../../../features/auth/config';
+import { dbConnect } from '@/lib/mongodb';
+import { findUserByUsername, findUserByEmail } from '@/features/users/controllers/user';
+import { createAccessToken } from '@/features/users/utils/jwt';
+import { verifyHash } from '@/lib/hash';
+import config from '@/features/users/config';
+import { signInSchema } from '@/features/users/schemas/signin';
 
 export async function POST(request: Request) {
   const input = await request.json();
@@ -14,7 +11,7 @@ export async function POST(request: Request) {
   // Validate the input
   const body = signInSchema.safeParse(input);
   if (body.success === false) {
-    return Response.json(body.error, { status: 400 });
+    return Response.json(body.error.issues, { status: 400 });
   }
 
   // Initialize DB connection
@@ -29,10 +26,7 @@ export async function POST(request: Request) {
   }
 
   // Verify password
-  const passwordIsValid = await verifyPassword(
-    body.data.password,
-    user.password,
-  );
+  const passwordIsValid = await verifyHash(body.data.password, user.password);
   if (!passwordIsValid) {
     return Response.json({ message: 'Invalid credentials' }, { status: 401 });
   }
@@ -48,6 +42,6 @@ export async function POST(request: Request) {
       headers: {
         'Set-Cookie': `accessToken=${accessToken}; HttpOnly; Path=/; Max-Age=${config.auth.accessTokenDuration}`,
       },
-    },
+    }
   );
 }

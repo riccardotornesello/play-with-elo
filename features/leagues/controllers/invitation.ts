@@ -11,7 +11,7 @@ export async function createLeagueInvitation(league: League, userId: string) {
   return await league.save();
 }
 
-export async function getUserInvitationLeaguesInfo(userId: string) {
+export async function getUserInvitationLeaguesInfo(userId: string): Promise<League[]> {
   return await LeagueModel.find({ pendingInvitedUsers: new ObjectId(userId) }).lean();
 }
 

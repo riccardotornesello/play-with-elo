@@ -12492,7 +12492,7 @@ __metadata:
     postcss: "npm:^8.4.31"
     postcss-preset-mantine: "npm:1.12.0"
     postcss-simple-vars: "npm:^7.0.1"
-    prettier: "npm:^3.0.3"
+    prettier: "npm:^3.1.1"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
     storybook: "npm:^7.5.2"
@@ -12747,7 +12747,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.0.3":
+"prettier@npm:^3.1.1":
   version: 3.1.1
   resolution: "prettier@npm:3.1.1"
   bin:

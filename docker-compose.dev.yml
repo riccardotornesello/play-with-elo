@@ -1,7 +1,7 @@
 services:
   mongo:
     image: mongo:7.0
-    command: [ --auth ]
+    command: [--auth]
     ports:
       - 27017:27017
     volumes:

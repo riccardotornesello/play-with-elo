@@ -13,5 +13,6 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
     'import/extensions': 'off',
+    '@next/next/no-page-custom-font': 'off',
   },
 };

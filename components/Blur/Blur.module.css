@@ -1,0 +1,10 @@
+.blur {
+  width: '30vw';
+  height: '560px';
+  z-index: -1;
+  fill: 'none';
+  position: 'absolute';
+  top: '-10px';
+  left: '-10px';
+  filter: 'blur(70px)';
+}

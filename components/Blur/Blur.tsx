@@ -1,23 +1,14 @@
+import classes from './Blur.module.scss';
+
 export function Blur({ style }: { style?: any }) {
-  //TODO: module CSS
-  // w={{ base: '100%', md: '40vw', lg: '30vw' }}
+  // TODO w={{ base: '100%', md: '40vw', lg: '30vw' }}
 
   return (
     <svg
-      style={{
-        width: '30vw',
-        height: '560px',
-        zIndex: -1,
-        viewBox: '0 0 528 560',
-        fill: 'none',
-        xmlns: 'http://www.w3.org/2000/svg',
-        position: 'absolute',
-        top: '-10px',
-        left: '-10px',
-        filter: 'blur(70px)',
-
-        ...style,
-      }}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 528 560"
+      className={classes.blur}
+      style={style}
     >
       <circle cx="71" cy="61" r="111" fill="#F56565" />
       <circle cx="244" cy="106" r="139" fill="#ED64A6" />

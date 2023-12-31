@@ -1,11 +1,13 @@
-import { Welcome } from '../components/Welcome/Welcome';
-import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
+import { Box, Title, Button } from '@mantine/core';
+import Link from 'next/link';
 
 export default function HomePage() {
   return (
-    <>
-      <Welcome />
-      <ColorSchemeToggle />
-    </>
+    <Box>
+      <Title order={1}>Welcome to Play with Elo!</Title>
+      <Button component={Link} href="/dashboard">
+        Get started
+      </Button>
+    </Box>
   );
 }

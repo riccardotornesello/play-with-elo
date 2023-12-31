@@ -1,4 +1,4 @@
-import classes from './Blur.module.scss';
+import classes from './Blur.module.css';
 
 export function Blur({ style }: { style?: any }) {
   // TODO w={{ base: '100%', md: '40vw', lg: '30vw' }}

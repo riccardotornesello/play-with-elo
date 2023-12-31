@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm } from '@mantine/form';
-import { NumberInput, PaperProps, Button, Stack, Select } from '@mantine/core';
+import { NumberInput, Button, Stack, Select } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { useMutation, ApiStatus } from '@/hooks/api';
@@ -9,13 +9,13 @@ import { useState } from 'react';
 import { ErrorInfo } from '@/components/InfoAlert/InfoAlert';
 import { convertResponseToFormError } from '@/lib/form';
 import { MatchCreateSchema, matchCreateSchema } from '../../schemas/matches';
-import { League } from '@/features/leagues/models/league';
+import { ILeague } from '@/features/leagues/models/league';
 
-export type MatchCreateFormProps = PaperProps & {
-  league: League;
+export type MatchCreateFormProps = {
+  league: ILeague;
 };
 
-export function MatchCreateForm({ league, ...props }: MatchCreateFormProps) {
+export function MatchCreateForm({ league }: MatchCreateFormProps) {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const teams = league.teams.map((team) => ({

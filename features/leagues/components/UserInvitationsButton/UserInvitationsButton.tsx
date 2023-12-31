@@ -3,11 +3,11 @@
 import { IconMail } from '@tabler/icons-react';
 import { Badge, Button, Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { League } from '../../models/league';
+import { ILeague } from '../../models/league';
 import { UserInvitationsList } from '../UserInvitationsList/UserInvitationsList';
 
 export type UserInvitationsButtonProps = {
-  leagues: League[];
+  leagues: ILeague[];
 };
 
 export function UserInvitationsButton({ leagues }: UserInvitationsButtonProps) {

@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb';
+import mongoose from 'mongoose';
 import { getSessionUser } from '@/features/authentication/utils/user';
 import { dbConnect } from '@/lib/mongodb';
 import { matchCreateSchema, MatchCreateSchema } from '@/features/matches/schemas/matches';
@@ -144,10 +145,10 @@ export async function POST(request: Request, { params }: { params: { id: string 
   await createMatch(
     league,
     {
-      scores: matchTeamsOutput,
+      scores: new mongoose.Types.DocumentArray(matchTeamsOutput),
       playedAt: body.date,
     },
-    newTeamsData
+    new mongoose.Types.DocumentArray(newTeamsData)
   );
 
   return Response.json({}, { status: 200 });

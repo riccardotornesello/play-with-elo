@@ -1,17 +1,17 @@
-import { LeagueModel, League } from '../models/league';
+import { LeagueModel, ILeague } from '../models/league';
 import { ITeamCreate, generateTeamData } from './team';
 
 /***************************
  * Types
  ***************************/
 
-export type ILeagueCreate = Pick<League, 'name' | 'description'>;
+export type ILeagueCreate = Pick<ILeague, 'name' | 'description'>;
 
 /***************************
  * Functions
  ***************************/
 
-export async function createLeague(league: ILeagueCreate, team: ITeamCreate): Promise<League> {
+export async function createLeague(league: ILeagueCreate, team: ITeamCreate) {
   const newLeague = new LeagueModel({
     ...league,
     teams: [generateTeamData(team, true)],
@@ -20,14 +20,14 @@ export async function createLeague(league: ILeagueCreate, team: ITeamCreate): Pr
   return newLeague;
 }
 
-export async function getUserLeagues(userId: string): Promise<League[]> {
+export async function getUserLeagues(userId: string) {
   return await LeagueModel.find({ 'teams.user': userId });
 }
 
-export async function getLeague(id: string): Promise<League | null> {
+export async function getLeague(id: string) {
   return await LeagueModel.findById(id);
 }
 
-export async function getLeagueInfo(id: string): Promise<League | null> {
+export async function getLeagueInfo(id: string) {
   return await LeagueModel.findById(id).lean();
 }

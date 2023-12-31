@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 
-export type Team = {
+export interface ITeam {
   _id: mongoose.Types.ObjectId;
+  __v: number;
 
   createdAt: Date;
   updatedAt: Date;
@@ -20,9 +21,9 @@ export type Team = {
   ratingWins: number;
   ratingLosses: number;
   ratingDraws: number;
-};
+}
 
-export const teamSchema = new mongoose.Schema<Team>(
+export const teamSchema = new mongoose.Schema<ITeam>(
   {
     user: { type: mongoose.Schema.Types.ObjectId, required: true },
     teamName: { type: String, required: true },

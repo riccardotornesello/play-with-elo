@@ -1,11 +1,11 @@
 import { SimpleGrid, Card, Text, Button, Center, Stack } from '@mantine/core';
-import { League } from '../../models/league';
+import { ILeague } from '../../models/league';
 import Link from 'next/link';
 import { ModalButton } from '@/components/ModalButton/ModalButton';
 import { LeagueCreateForm } from '../LeagueCreateForm/LeagueCreateForm';
 
 export type LeaguesListProps = {
-  leagues: League[];
+  leagues: ILeague[];
 };
 
 export function LeaguesList({ leagues }: LeaguesListProps) {
@@ -19,7 +19,7 @@ export function LeaguesList({ leagues }: LeaguesListProps) {
         Create a league
       </ModalButton>
       {leagues.map((league) => (
-        <LeagueCard key={league._id} league={league} />
+        <LeagueCard key={league._id.toString()} league={league} />
       ))}
     </SimpleGrid>
   );
@@ -41,7 +41,7 @@ function NoLeaguesCard() {
 }
 
 interface LeagueCardProps {
-  league: League;
+  league: ILeague;
 }
 
 function LeagueCard({ league }: LeagueCardProps) {

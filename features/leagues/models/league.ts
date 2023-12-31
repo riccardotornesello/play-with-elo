@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-import { Team, teamSchema } from './team';
-import { matchSchema, Match } from './match';
+import { ITeam, teamSchema } from './team';
+import { matchSchema, IMatch } from './match';
 
-export type League = {
-  _id: string;
+export interface ILeague {
+  _id: mongoose.Types.ObjectId;
   __v: number;
 
   createdAt: Date;
@@ -13,12 +13,12 @@ export type League = {
   description: string;
   startingRating: number;
 
-  pendingInvitedUsers: mongoose.Types.ObjectId[];
-  teams: Team[];
-  matches: Match[];
-};
+  pendingInvitedUsers: mongoose.Types.Array<mongoose.Types.ObjectId>;
+  teams: mongoose.Types.DocumentArray<ITeam>;
+  matches: mongoose.Types.DocumentArray<IMatch>;
+}
 
-export const leagueSchema = new mongoose.Schema<League>(
+export const leagueSchema = new mongoose.Schema<ILeague>(
   {
     name: { type: String, required: true },
     description: { type: String, required: true },
@@ -33,4 +33,5 @@ export const leagueSchema = new mongoose.Schema<League>(
   }
 );
 
-export const LeagueModel = mongoose.models.League || mongoose.model('League', leagueSchema);
+export const LeagueModel: mongoose.Model<ILeague> =
+  mongoose.models.League || mongoose.model<ILeague>('League', leagueSchema);

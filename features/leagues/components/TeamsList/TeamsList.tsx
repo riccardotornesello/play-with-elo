@@ -10,10 +10,10 @@ import {
   Box,
   BoxProps,
 } from '@mantine/core';
-import { Team } from '../../models/team';
+import { ITeam } from '../../models/team';
 
 export type TeamsListProps = {
-  teams: Team[];
+  teams: ITeam[];
 };
 
 export function TeamsList({ teams }: TeamsListProps) {
@@ -46,7 +46,7 @@ export function Podium({ teams }: TeamsListProps) {
 }
 
 type PodiumTeamProps = BoxProps & {
-  team: Team;
+  team: ITeam;
 };
 
 export function PodiumTeam({ team, ...props }: PodiumTeamProps) {

@@ -1,33 +1,36 @@
 import mongoose from 'mongoose';
 
-export type Score = {
+export interface IScore {
+  _id: mongoose.Types.ObjectId;
+  __v: number;
+
   team: mongoose.Types.ObjectId;
   points: number;
   ratingEarned: number;
-};
+}
 
-export type Match = {
+export interface IMatch {
   _id: mongoose.Types.ObjectId;
   __v: number;
 
   createdAt: Date;
   updatedAt: Date;
 
-  scores: Score[];
+  scores: mongoose.Types.DocumentArray<IScore>;
 
   playedAt: Date;
-};
+}
 
-export const matchSchema = new mongoose.Schema<Match>(
+export const scoreSchema = new mongoose.Schema<IScore>({
+  team: { type: mongoose.Schema.Types.ObjectId, required: true },
+  points: { type: Number, required: true },
+  ratingEarned: { type: Number, required: true },
+});
+
+export const matchSchema = new mongoose.Schema<IMatch>(
   {
     scores: {
-      type: [
-        {
-          team: { type: mongoose.Schema.Types.ObjectId, required: true },
-          points: { type: Number, required: true },
-          ratingEarned: { type: Number, required: true },
-        },
-      ],
+      type: [scoreSchema],
       required: true,
     },
     playedAt: { type: Date, required: true },

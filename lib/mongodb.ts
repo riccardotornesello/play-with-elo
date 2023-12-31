@@ -38,3 +38,7 @@ export async function dbConnect() {
 
   return cached.conn;
 }
+
+export function documentToJson<T>(document: T): any {
+  return JSON.parse(JSON.stringify(document));
+}

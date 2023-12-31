@@ -1,16 +1,16 @@
 import mongoose from 'mongoose';
 
-export interface IScore {
-  _id: mongoose.Types.ObjectId;
+export interface IScore<T = mongoose.Types.ObjectId> {
+  _id: T;
   __v: number;
 
-  team: mongoose.Types.ObjectId;
+  team: T;
   points: number;
   ratingEarned: number;
 }
 
-export interface IMatch {
-  _id: mongoose.Types.ObjectId;
+export interface IMatch<T = mongoose.Types.ObjectId> {
+  _id: T;
   __v: number;
 
   createdAt: Date;

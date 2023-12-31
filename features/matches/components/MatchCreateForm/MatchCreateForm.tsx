@@ -12,7 +12,7 @@ import { MatchCreateSchema, matchCreateSchema } from '../../schemas/matches';
 import { ILeague } from '@/features/leagues/models/league';
 
 export type MatchCreateFormProps = {
-  league: ILeague;
+  league: ILeague<string>;
 };
 
 export function MatchCreateForm({ league }: MatchCreateFormProps) {

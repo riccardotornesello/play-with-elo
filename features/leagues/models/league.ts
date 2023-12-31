@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 import { ITeam, teamSchema } from './team';
 import { matchSchema, IMatch } from './match';
 
-export interface ILeague {
-  _id: mongoose.Types.ObjectId;
+export interface ILeague<T = mongoose.Types.ObjectId> {
+  _id: T;
   __v: number;
 
   createdAt: Date;
@@ -13,9 +13,9 @@ export interface ILeague {
   description: string;
   startingRating: number;
 
-  pendingInvitedUsers: mongoose.Types.Array<mongoose.Types.ObjectId>;
-  teams: mongoose.Types.DocumentArray<ITeam>;
-  matches: mongoose.Types.DocumentArray<IMatch>;
+  pendingInvitedUsers: mongoose.Types.Array<T>;
+  teams: mongoose.Types.DocumentArray<ITeam<T>>;
+  matches: mongoose.Types.DocumentArray<IMatch<T>>;
 }
 
 export const leagueSchema = new mongoose.Schema<ILeague>(

@@ -27,7 +27,3 @@ export async function getUserLeagues(userId: string) {
 export async function getLeague(id: string) {
   return await LeagueModel.findById(id);
 }
-
-export async function getLeagueInfo(id: string) {
-  return await LeagueModel.findById(id).lean();
-}

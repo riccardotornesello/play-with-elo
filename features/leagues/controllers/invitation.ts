@@ -12,7 +12,7 @@ export async function createLeagueInvitation(league: HydratedDocument<ILeague>, 
 }
 
 export async function getUserInvitationLeaguesInfo(userId: string) {
-  return await LeagueModel.find({ pendingInvitedUsers: new ObjectId(userId) }).lean();
+  return await LeagueModel.find({ pendingInvitedUsers: new ObjectId(userId) });
 }
 
 export async function removeInvitation(league: HydratedDocument<ILeague>, userId: string) {

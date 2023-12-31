@@ -13,7 +13,7 @@ import {
 import { ITeam } from '../../models/team';
 
 export type TeamsListProps = {
-  teams: ITeam[];
+  teams: ITeam<string>[];
 };
 
 export function TeamsList({ teams }: TeamsListProps) {
@@ -46,7 +46,7 @@ export function Podium({ teams }: TeamsListProps) {
 }
 
 type PodiumTeamProps = BoxProps & {
-  team: ITeam;
+  team: ITeam<string>;
 };
 
 export function PodiumTeam({ team, ...props }: PodiumTeamProps) {

@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
-export interface ITeam {
-  _id: mongoose.Types.ObjectId;
+export interface ITeam<T = mongoose.Types.ObjectId> {
+  _id: T;
   __v: number;
 
   createdAt: Date;
   updatedAt: Date;
 
-  user: mongoose.Types.ObjectId;
+  user: T;
 
   teamName: string;
   isAdmin: boolean;

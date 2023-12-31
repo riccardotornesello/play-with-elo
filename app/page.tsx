@@ -1,13 +1,40 @@
-import { Box, Title, Button } from '@mantine/core';
+import { Box, Title, Button, Center, Container, Stack, Badge, Image, Text } from '@mantine/core';
 import Link from 'next/link';
+import Logo from '@/assets/pictures/logo.png';
+import Blur from '@/components/Blur/Blur';
 
 export default function HomePage() {
   return (
-    <Box>
-      <Title order={1}>Welcome to Play with Elo!</Title>
-      <Button component={Link} href="/dashboard">
-        Get started
-      </Button>
-    </Box>
+    <Center mih="100vh" miw="100vw">
+      <Container size="xl">
+        <Stack p={5} w="100%">
+          <Box maw={100} ta="center">
+            <Badge>Beta</Badge>
+            <Image src={Logo.src} alt="Play with ELO" />
+          </Box>
+
+          <Title order={2} mt={5}>
+            Outplay Friends & Games.
+            <br />
+            Show Your Strength!
+          </Title>
+
+          <Text>
+            Play with ELO is a project born overnight to determine the best player in the office
+            without scheduling of games.
+            <br />
+            The solution is the ELO algorithm!
+          </Text>
+
+          <Box>
+            <Button component={Link} href="/dashboard" px={6} mt={5}>
+              Get started
+            </Button>
+          </Box>
+        </Stack>
+      </Container>
+
+      <Blur />
+    </Center>
   );
 }

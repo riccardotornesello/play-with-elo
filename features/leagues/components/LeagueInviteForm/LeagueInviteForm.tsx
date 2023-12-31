@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm } from '@mantine/form';
-import { TextInput, Paper, PaperProps, Button, Stack } from '@mantine/core';
+import { TextInput, PaperProps, Button, Stack } from '@mantine/core';
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { useMutation, ApiStatus } from '@/hooks/api';
 import { useState } from 'react';
@@ -41,25 +41,23 @@ export function LeagueInviteForm({ leagueId, ...props }: LeagueInviteFormProps) 
   });
 
   return (
-    <Paper radius="md" p="xl" withBorder {...props}>
-      <form onSubmit={form.onSubmit((values) => mutate(values))}>
-        <Stack>
-          <TextInput
-            required
-            label="Username"
-            placeholder="The username of the person you want to invite"
-            radius="md"
-            {...form.getInputProps('username')}
-          />
-        </Stack>
+    <form onSubmit={form.onSubmit((values) => mutate(values))}>
+      <Stack>
+        <TextInput
+          required
+          label="Username"
+          placeholder="The username of the person you want to invite"
+          radius="md"
+          {...form.getInputProps('username')}
+        />
+      </Stack>
 
-        <ErrorInfo>{errorMessage}</ErrorInfo>
-        {apiStatus === ApiStatus.Success && <SuccessInfo>User invited</SuccessInfo>}
+      <ErrorInfo>{errorMessage}</ErrorInfo>
+      {apiStatus === ApiStatus.Success && <SuccessInfo>User invited</SuccessInfo>}
 
-        <Button type="submit" radius="xl" loading={apiStatus === ApiStatus.Loading}>
-          Invite
-        </Button>
-      </form>
-    </Paper>
+      <Button type="submit" radius="xl" loading={apiStatus === ApiStatus.Loading}>
+        Invite
+      </Button>
+    </form>
   );
 }

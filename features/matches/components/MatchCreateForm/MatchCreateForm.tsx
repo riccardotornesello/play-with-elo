@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm } from '@mantine/form';
-import { NumberInput, Paper, PaperProps, Button, Stack, Select } from '@mantine/core';
+import { NumberInput, PaperProps, Button, Stack, Select } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { useMutation, ApiStatus } from '@/hooks/api';
@@ -58,26 +58,24 @@ export function MatchCreateForm({ league, ...props }: MatchCreateFormProps) {
   });
 
   return (
-    <Paper radius="md" p="xl" withBorder {...props}>
-      <form onSubmit={form.onSubmit((values) => mutate(values))}>
-        <Stack>
-          <Select label="Player 1" data={teams} {...form.getInputProps('teams.0.teamId')} />
-          <NumberInput label="Points" {...form.getInputProps('teams.0.points')} />
-          <Select label="Player 2" data={teams} {...form.getInputProps('teams.1.teamId')} />
-          <NumberInput label="Points" {...form.getInputProps('teams.1.points')} />
-          <DateTimePicker label="Date" {...form.getInputProps('date')} />
-        </Stack>
+    <form onSubmit={form.onSubmit((values) => mutate(values))}>
+      <Stack>
+        <Select label="Player 1" data={teams} {...form.getInputProps('teams.0.teamId')} />
+        <NumberInput label="Points" {...form.getInputProps('teams.0.points')} />
+        <Select label="Player 2" data={teams} {...form.getInputProps('teams.1.teamId')} />
+        <NumberInput label="Points" {...form.getInputProps('teams.1.points')} />
+        <DateTimePicker label="Date" {...form.getInputProps('date')} />
+      </Stack>
 
-        <ErrorInfo>{errorMessage}</ErrorInfo>
+      <ErrorInfo>{errorMessage}</ErrorInfo>
 
-        <Button
-          type="submit"
-          radius="xl"
-          loading={apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success}
-        >
-          Create
-        </Button>
-      </form>
-    </Paper>
+      <Button
+        type="submit"
+        radius="xl"
+        loading={apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success}
+      >
+        Create
+      </Button>
+    </form>
   );
 }

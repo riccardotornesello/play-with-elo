@@ -1,12 +1,13 @@
 import { ObjectId } from 'mongodb';
 import { redirect } from 'next/navigation';
-import { Text } from '@mantine/core';
+import { Text, Container, Title, Paper, Box } from '@mantine/core';
 import { dbConnect } from '@/lib/mongodb';
 import { getSessionUser } from '@/features/authentication/utils/user';
 import { getLeagueInfo } from '@/features/leagues/controllers/league';
 import { LeagueInviteForm } from '@/features/leagues/components/LeagueInviteForm/LeagueInviteForm';
 import { MatchCreateForm } from '@/features/matches/components/MatchCreateForm/MatchCreateForm';
 import { TeamsList } from '@/features/leagues/components/TeamsList/TeamsList';
+import { ModalButton } from '@/components/ModalButton/ModalButton';
 
 export default async function LeagueDetailPage({ params }: { params: { id: string } }) {
   await dbConnect();
@@ -26,20 +27,37 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
     return <div>404</div>;
   }
 
-  // Return 403 if user is not a member of the league
-  if (!league.teams.map((team) => team.user.toString()).includes(user._id.toString())) {
+  // Find the user's team in the league and return 403 if it doesn't exist
+  const userTeam = league.teams.find((team) => team.user.toString() === user._id.toString());
+  if (!userTeam) {
     return <div>403</div>;
   }
 
   return (
-    <>
-      <Text>League detail page</Text>
-      <Text>{league._id}</Text>
-      <Text>{league.name}</Text>
-      <Text>{league.description}</Text>
-      <LeagueInviteForm leagueId={league._id.toString()} />
-      <MatchCreateForm league={league} />
-      <TeamsList teams={league.teams} />
-    </>
+    <Container size="xl">
+      <Paper>
+        <Title order={3}>{league.name}</Title>
+        <Text>{league.description}</Text>
+        {userTeam.isAdmin && (
+          <Box>
+            <ModalButton
+              title="Invite a team"
+              content={<LeagueInviteForm leagueId={league._id.toString()} />}
+            >
+              Invite a team
+            </ModalButton>
+
+            <ModalButton title="Add a match" content={<MatchCreateForm league={league} />}>
+              Add a match
+            </ModalButton>
+          </Box>
+        )}
+      </Paper>
+
+      <Paper mt={10}>
+        <Title order={4}>Teams ranking</Title>
+        <TeamsList teams={league.teams} />
+      </Paper>
+    </Container>
   );
 }

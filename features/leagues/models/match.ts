@@ -16,7 +16,7 @@ export interface IMatch<T = mongoose.Types.ObjectId> {
   createdAt: Date;
   updatedAt: Date;
 
-  scores: mongoose.Types.DocumentArray<IScore>;
+  scores: mongoose.Types.DocumentArray<IScore<T>>;
 
   playedAt: Date;
 }

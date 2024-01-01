@@ -11,6 +11,7 @@ import { ModalButton } from '@/components/ModalButton/ModalButton';
 import { ILeague } from '@/features/leagues/models/league';
 import { IconChevronLeft } from '@tabler/icons-react';
 import Link from 'next/link';
+import { MatchesList } from '@/features/matches/components/MatchesList/MatchesList';
 
 export default async function LeagueDetailPage({ params }: { params: { id: string } }) {
   await dbConnect();
@@ -67,6 +68,11 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
       <Paper mt={10}>
         <Title order={4}>Teams ranking</Title>
         <TeamsList teams={leagueData.teams} />
+      </Paper>
+
+      <Paper mt={10}>
+        <Title order={4}>Matches</Title>
+        <MatchesList matches={leagueData.matches} teams={leagueData.teams} />
       </Paper>
     </>
   );

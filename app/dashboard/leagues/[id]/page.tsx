@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { redirect } from 'next/navigation';
-import { Text, Card, Title, Paper, Flex } from '@mantine/core';
+import { Text, Card, Title, Paper, Flex, Button, Group } from '@mantine/core';
 import { dbConnect, documentToJson } from '@/lib/mongodb';
 import { getSessionUser } from '@/features/authentication/utils/user';
 import { getLeague } from '@/features/leagues/controllers/league';
@@ -9,6 +9,8 @@ import { MatchCreateForm } from '@/features/matches/components/MatchCreateForm/M
 import { TeamsList } from '@/features/leagues/components/TeamsList/TeamsList';
 import { ModalButton } from '@/components/ModalButton/ModalButton';
 import { ILeague } from '@/features/leagues/models/league';
+import { IconChevronLeft } from '@tabler/icons-react';
+import Link from 'next/link';
 
 export default async function LeagueDetailPage({ params }: { params: { id: string } }) {
   await dbConnect();
@@ -38,24 +40,29 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
 
   return (
     <>
-      <Card>
-        <Title order={3}>{leagueData.name}</Title>
-        <Text>{leagueData.description}</Text>
-        {userTeam.isAdmin && (
-          <Flex gap="md" mt="md">
-            <ModalButton
-              title="Invite a team"
-              content={<LeagueInviteForm leagueId={leagueData._id} />}
-            >
-              Invite a team
-            </ModalButton>
+      <Group>
+        <Button component={Link} href="/dashboard">
+          <IconChevronLeft />
+        </Button>
+        <Card style={{ flexGrow: 1 }}>
+          <Title order={3}>{leagueData.name}</Title>
+          <Text>{leagueData.description}</Text>
+          {userTeam.isAdmin && (
+            <Flex gap="md" mt="md">
+              <ModalButton
+                title="Invite a team"
+                content={<LeagueInviteForm leagueId={leagueData._id} />}
+              >
+                Invite a team
+              </ModalButton>
 
-            <ModalButton title="Add a match" content={<MatchCreateForm league={leagueData} />}>
-              Add a match
-            </ModalButton>
-          </Flex>
-        )}
-      </Card>
+              <ModalButton title="Add a match" content={<MatchCreateForm league={leagueData} />}>
+                Add a match
+              </ModalButton>
+            </Flex>
+          )}
+        </Card>
+      </Group>
 
       <Paper mt={10}>
         <Title order={4}>Teams ranking</Title>

@@ -89,6 +89,8 @@ function HeaderUserMenu() {
         <Menu.Label>Settings</Menu.Label>
         <Menu.Item
           leftSection={<IconLogout style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
+          component={Link}
+          href="/auth/signout"
         >
           Logout
         </Menu.Item>

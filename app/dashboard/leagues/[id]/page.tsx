@@ -46,7 +46,7 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
           <IconChevronLeft />
         </Button>
         <Card style={{ flexGrow: 1 }}>
-          <Title order={3}>{leagueData.name}</Title>
+          <Title order={2}>{leagueData.name}</Title>
           <Text>{leagueData.description}</Text>
           {userTeam.isAdmin && (
             <Flex gap="md" mt="md">
@@ -65,13 +65,13 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
         </Card>
       </Group>
 
-      <Paper mt={10}>
-        <Title order={4}>Teams ranking</Title>
+      <Paper mt="xl">
+        <Title order={3}>Teams ranking</Title>
         <TeamsList teams={leagueData.teams} />
       </Paper>
 
-      <Paper mt={10}>
-        <Title order={4}>Matches</Title>
+      <Paper mt="xl">
+        <Title order={3}>Matches</Title>
         <MatchesList matches={leagueData.matches} teams={leagueData.teams} />
       </Paper>
     </>

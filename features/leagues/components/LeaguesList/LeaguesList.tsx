@@ -14,8 +14,14 @@ export function LeaguesList({ leagues }: LeaguesListProps) {
   }
 
   return (
-    <SimpleGrid cols={3} my={10}>
-      <ModalButton title="Create a league" content={<LeagueCreateForm />} h="100%" fz="lg">
+    <SimpleGrid cols={{ base: 1, lg: 3 }} my={10}>
+      <ModalButton
+        title="Create a league"
+        content={<LeagueCreateForm />}
+        h="100%"
+        fz="lg"
+        mih="100px"
+      >
         Create a league
       </ModalButton>
       {leagues.map((league) => (

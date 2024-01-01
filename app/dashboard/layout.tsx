@@ -6,9 +6,7 @@ export default function DashboardLayout({ children }: { children: any }) {
     <>
       <Header />
 
-      <Container size="xl" p="xl">
-        {children}
-      </Container>
+      <Container p="xl">{children}</Container>
     </>
   );
 }

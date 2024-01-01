@@ -14,4 +14,16 @@ export const theme = createTheme({
     },
   },
   defaultRadius: 'xs',
+  components: {
+    Button: {
+      defaultProps: {
+        px: 'lg',
+      },
+    },
+    Container: {
+      defaultProps: {
+        size: 'xl',
+      },
+    },
+  },
 });

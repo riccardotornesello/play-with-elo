@@ -25,17 +25,17 @@ import Logo from '@/assets/pictures/logo.png';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+type Tab = {
+  label: string;
+  href: string;
+};
+
+const tabs: Tab[] = [];
+
 const user = {
   name: 'User',
   image: '',
 };
-
-const tabs = [
-  {
-    label: 'Dashboard',
-    href: '/dashboard',
-  },
-];
 
 export function Header() {
   const [opened, { toggle }] = useDisclosure(false);
@@ -43,11 +43,15 @@ export function Header() {
   return (
     <>
       <header className={classes.header}>
-        <Container className={classes.mainSection} size="md">
+        <Container className={classes.mainSection}>
           <Group justify="space-between">
             <Flex>
-              <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-              <Image src={Logo.src} alt="Play with ELO" w={28} />
+              {tabs.length > 0 && (
+                <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+              )}
+              <Anchor component={Link} href="/dashboard">
+                <Image src={Logo.src} alt="Play with ELO" w={28} />
+              </Anchor>
             </Flex>
 
             <HeaderTabs />
@@ -102,6 +106,10 @@ function HeaderUserMenu() {
 function HeaderTabs() {
   const pathname = usePathname();
 
+  if (tabs.length === 0) {
+    return null;
+  }
+
   return (
     <Tabs
       defaultValue="Home"
@@ -131,6 +139,10 @@ interface HeaderDrawerProps {
 }
 
 function HeaderDrawer({ opened, toggle }: HeaderDrawerProps) {
+  if (tabs.length === 0) {
+    return null;
+  }
+
   return (
     <Drawer
       opened={opened}

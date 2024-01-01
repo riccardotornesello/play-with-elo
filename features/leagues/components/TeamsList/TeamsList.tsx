@@ -8,9 +8,11 @@ import {
   Grid,
   GridCol,
   Box,
-  BoxProps,
+  Flex,
 } from '@mantine/core';
 import { ITeam } from '../../models/team';
+import { IconAwardFilled } from '@tabler/icons-react';
+import classes from './TeamsList.module.css';
 
 export type TeamsListProps = {
   teams: ITeam<string>[];
@@ -33,25 +35,44 @@ export function Podium({ teams }: TeamsListProps) {
   return (
     <Grid align="flex-end">
       <GridCol span={4} h="110px">
-        {teams.length > 1 && <PodiumTeam team={teams[1]} style={{ border: '1px solid gray' }} />}
+        {teams.length > 1 && <PodiumTeam team={teams[1]} position={2} />}
       </GridCol>
       <GridCol span={4} h="150px">
-        <PodiumTeam team={teams[0]} style={{ border: '1px solid yellow' }} />
+        <PodiumTeam team={teams[0]} position={1} />
       </GridCol>
       <GridCol span={4} h="100px">
-        {teams.length > 2 && <PodiumTeam team={teams[2]} style={{ border: '1px solid brown' }} />}
+        {teams.length > 2 && <PodiumTeam team={teams[2]} position={3} />}
       </GridCol>
     </Grid>
   );
 }
 
-type PodiumTeamProps = BoxProps & {
+type PodiumTeamProps = {
   team: ITeam<string>;
+  position: number;
 };
 
-export function PodiumTeam({ team, ...props }: PodiumTeamProps) {
+export function PodiumTeam({ team, position }: PodiumTeamProps) {
+  const colors = {
+    1: 'yellow',
+    2: 'gray',
+    3: 'brown',
+  };
+
+  const color: string = colors[position];
+
   return (
-    <Box h="100%" ta="center" {...props}>
+    <Box h="100%" ta="center" pos="relative" style={{ border: `1px solid ${color}` }}>
+      <Flex align="center" className={classes.teamAward}>
+        <IconAwardFilled
+          size={32}
+          style={{
+            color: color,
+          }}
+        />
+        {position}
+      </Flex>
+
       <Box>{team.teamName}</Box>
       <Box>{team.rating}</Box>
       <Box>

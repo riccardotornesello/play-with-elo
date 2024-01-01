@@ -6,14 +6,14 @@ import Blur from '@/components/Blur/Blur';
 export default function HomePage() {
   return (
     <Center mih="100vh" miw="100vw">
-      <Container size="xl">
-        <Stack p={5} w="100%">
+      <Container>
+        <Stack w="100%">
           <Box maw={100} ta="center">
             <Badge>Beta</Badge>
             <Image src={Logo.src} alt="Play with ELO" />
           </Box>
 
-          <Title order={2} mt={5}>
+          <Title order={2} mt="lg">
             Outplay Friends & Games.
             <br />
             Show Your Strength!
@@ -26,8 +26,8 @@ export default function HomePage() {
             The solution is the ELO algorithm!
           </Text>
 
-          <Box>
-            <Button component={Link} href="/dashboard" px={6} mt={5}>
+          <Box mt="lg">
+            <Button component={Link} href="/dashboard">
               Get started
             </Button>
           </Box>

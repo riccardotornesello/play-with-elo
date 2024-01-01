@@ -1,17 +1,7 @@
 'use client';
 
 import { useForm } from '@mantine/form';
-import {
-  TextInput,
-  PasswordInput,
-  Text,
-  Paper,
-  Group,
-  PaperProps,
-  Button,
-  Anchor,
-  Stack,
-} from '@mantine/core';
+import { TextInput, PasswordInput, Group, Button, Anchor, Stack } from '@mantine/core';
 import { SignInSchema, signInSchema } from '@/features/users/schemas/signin';
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { useMutation, ApiStatus } from '@/hooks/api';
@@ -21,7 +11,7 @@ import { ErrorInfo } from '@/components/InfoAlert/InfoAlert';
 import Link from 'next/link';
 import { convertResponseToFormError } from '@/lib/form';
 
-export function SignInForm(props: PaperProps) {
+export function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -55,42 +45,36 @@ export function SignInForm(props: PaperProps) {
   });
 
   return (
-    <Paper p="xl" withBorder {...props}>
-      <Text size="lg" fw={500}>
-        Welcome back to Play with Elo!
-      </Text>
+    <form onSubmit={form.onSubmit((values) => mutate(values))}>
+      <Stack>
+        <TextInput
+          required
+          label="Username or email"
+          placeholder="hello@mantine.dev"
+          {...form.getInputProps('username')}
+        />
 
-      <form onSubmit={form.onSubmit((values) => mutate(values))}>
-        <Stack>
-          <TextInput
-            required
-            label="Username or email"
-            placeholder="hello@mantine.dev"
-            {...form.getInputProps('username')}
-          />
+        <PasswordInput
+          required
+          label="Password"
+          placeholder="Your password"
+          {...form.getInputProps('password')}
+        />
+      </Stack>
 
-          <PasswordInput
-            required
-            label="Password"
-            placeholder="Your password"
-            {...form.getInputProps('password')}
-          />
-        </Stack>
+      <ErrorInfo>{errorMessage}</ErrorInfo>
 
-        <ErrorInfo>{errorMessage}</ErrorInfo>
-
-        <Group justify="space-between" mt="xl">
-          <Anchor component={Link} href="/auth/signup" c="dimmed" size="xs">
-            Don't have an account? Register
-          </Anchor>
-          <Button
-            type="submit"
-            loading={apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success}
-          >
-            Login
-          </Button>
-        </Group>
-      </form>
-    </Paper>
+      <Group justify="space-between" mt="xl">
+        <Anchor component={Link} href="/auth/signup" c="dimmed" size="xs">
+          Don't have an account? Click here to register
+        </Anchor>
+        <Button
+          type="submit"
+          loading={apiStatus === ApiStatus.Loading || apiStatus === ApiStatus.Success}
+        >
+          Login
+        </Button>
+      </Group>
+    </form>
   );
 }

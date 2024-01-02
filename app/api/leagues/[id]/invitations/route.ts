@@ -1,14 +1,11 @@
 import { getSessionUser } from '@/features/authentication/utils/user';
 import { leagueInvitationCreateSchema } from '@/features/leagues/schemas/invitation';
-import { dbConnect } from '@/lib/mongodb';
 import { getLeague } from '@/features/leagues/controllers/league';
 import { findUserByUsername } from '@/features/users/controllers/user';
 import { createLeagueInvitation } from '@/features/leagues/controllers/invitation';
 import { generateValidationError } from '@/lib/errors';
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
-  await dbConnect();
-
   // Check authentication
   const user = await getSessionUser();
   if (!user) {

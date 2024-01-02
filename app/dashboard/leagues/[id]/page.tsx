@@ -1,7 +1,9 @@
 import { ObjectId } from 'mongodb';
 import { redirect } from 'next/navigation';
 import { Text, Card, Title, Paper, Flex, Button, Group } from '@mantine/core';
-import { dbConnect, documentToJson } from '@/lib/mongodb';
+import { IconChevronLeft } from '@tabler/icons-react';
+import Link from 'next/link';
+import { documentToJson } from '@/lib/mongodb';
 import { getSessionUser } from '@/features/authentication/utils/user';
 import { getLeague } from '@/features/leagues/controllers/league';
 import { LeagueInviteForm } from '@/features/leagues/components/LeagueInviteForm/LeagueInviteForm';
@@ -9,13 +11,9 @@ import { MatchCreateForm } from '@/features/matches/components/MatchCreateForm/M
 import { TeamsList } from '@/features/leagues/components/TeamsList/TeamsList';
 import { ModalButton } from '@/components/ModalButton/ModalButton';
 import { ILeague } from '@/features/leagues/models/league';
-import { IconChevronLeft } from '@tabler/icons-react';
-import Link from 'next/link';
 import { MatchesList } from '@/features/matches/components/MatchesList/MatchesList';
 
 export default async function LeagueDetailPage({ params }: { params: { id: string } }) {
-  await dbConnect();
-
   const user = await getSessionUser();
   if (!user) {
     redirect(`/auth/signin?redirect=/dashboard/leagues/${params.id}`);
@@ -26,7 +24,7 @@ export default async function LeagueDetailPage({ params }: { params: { id: strin
     return <div>404</div>;
   }
 
-  let league = await getLeague(params.id);
+  const league = await getLeague(params.id);
   if (!league) {
     return <div>404</div>;
   }

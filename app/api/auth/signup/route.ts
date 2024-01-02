@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { signUpSchema } from '@/features/users/schemas/signup';
-import { dbConnect } from '@/lib/mongodb';
 import { createUser, findUserByUsername, findUserByEmail } from '@/features/users/controllers/user';
 import { createAccessToken } from '@/features/users/utils/jwt';
 import { hashString } from '@/lib/hash';
@@ -25,9 +24,6 @@ export async function POST(request: Request) {
   if (body.success === false) {
     return Response.json(body.error.issues, { status: 400 });
   }
-
-  // Initialize database connection
-  await dbConnect();
 
   // Validate unique email and username
   try {

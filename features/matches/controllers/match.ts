@@ -1,7 +1,8 @@
+import { HydratedDocument } from 'mongoose';
+import { dbConnect } from '@/lib/mongodb';
 import { IMatch } from '@/features/leagues/models/match';
 import { ILeague } from '@/features/leagues/models/league';
 import { ITeam } from '@/features/leagues/models/team';
-import { HydratedDocument } from 'mongoose';
 
 /***************************
  * Types
@@ -13,11 +14,13 @@ export type IMatchCreate = Pick<IMatch, 'scores' | 'playedAt'>;
  * Functions
  ***************************/
 
-export function createMatch(
+export async function createMatch(
   league: HydratedDocument<ILeague>,
   match: IMatchCreate,
   teams: ITeam[]
 ) {
+  await dbConnect();
+
   league.matches.push(match);
 
   for (let team of teams) {
@@ -34,5 +37,5 @@ export function createMatch(
     }
   }
 
-  return league.save();
+  return await league.save();
 }

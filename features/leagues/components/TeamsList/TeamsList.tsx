@@ -14,6 +14,12 @@ import { ITeam } from '../../models/team';
 import { IconAwardFilled } from '@tabler/icons-react';
 import classes from './TeamsList.module.css';
 
+const colors: { [key: number]: string } = {
+  1: 'yellow',
+  2: 'gray',
+  3: 'brown',
+};
+
 export type TeamsListProps = {
   teams: ITeam<string>[];
 };
@@ -27,7 +33,7 @@ export function TeamsList({ teams }: TeamsListProps) {
   );
 }
 
-export function Podium({ teams }: TeamsListProps) {
+function Podium({ teams }: TeamsListProps) {
   if (teams.length === 0) {
     return null;
   }
@@ -52,13 +58,7 @@ type PodiumTeamProps = {
   position: number;
 };
 
-export function PodiumTeam({ team, position }: PodiumTeamProps) {
-  const colors = {
-    1: 'yellow',
-    2: 'gray',
-    3: 'brown',
-  };
-
+function PodiumTeam({ team, position }: PodiumTeamProps) {
   const color: string = colors[position];
 
   return (
@@ -82,7 +82,7 @@ export function PodiumTeam({ team, position }: PodiumTeamProps) {
   );
 }
 
-export function TeamsTable({ teams }: TeamsListProps) {
+function TeamsTable({ teams }: TeamsListProps) {
   return (
     <Table>
       <TableThead>

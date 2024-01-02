@@ -1,4 +1,3 @@
-import { dbConnect } from '@/lib/mongodb';
 import { findUserByUsername, findUserByEmail } from '@/features/users/controllers/user';
 import { createAccessToken } from '@/features/users/utils/jwt';
 import { verifyHash } from '@/lib/hash';
@@ -13,9 +12,6 @@ export async function POST(request: Request) {
   if (body.success === false) {
     return Response.json(body.error.issues, { status: 400 });
   }
-
-  // Initialize DB connection
-  await dbConnect();
 
   // Find user by username or email
   const user = body.data.username.includes('@')

@@ -1,7 +1,6 @@
 import { ObjectId } from 'mongodb';
 import mongoose from 'mongoose';
 import { getSessionUser } from '@/features/authentication/utils/user';
-import { dbConnect } from '@/lib/mongodb';
 import { matchCreateSchema, MatchCreateSchema } from '@/features/matches/schemas/matches';
 import { calculateElo } from '@/lib/elo';
 import { getLeague } from '@/features/leagues/controllers/league';
@@ -10,8 +9,6 @@ import { createMatch } from '@/features/matches/controllers/match';
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
   // TODO: handle more than 2 users
-
-  await dbConnect();
 
   // Check authentication
   const user = await getSessionUser();

@@ -20,51 +20,39 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconLogout, IconChevronDown } from '@tabler/icons-react';
-import classes from './Header.module.css';
-import Logo from '@/assets/pictures/logo.png';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import Logo from '@/assets/pictures/logo.png';
+import classes from './Header.module.css';
 
 type Tab = {
   label: string;
   href: string;
 };
 
-const tabs: Tab[] = [];
+const tabs: Tab[] = [
+  {
+    label: 'Home',
+    href: '/dashboard',
+  },
+  {
+    label: 'Leagues',
+    href: '/dashboard/leagues',
+  },
+  {
+    label: 'Matches',
+    href: '/dashboard/matches',
+  },
+  {
+    label: 'Teams',
+    href: '/dashboard/teams',
+  },
+];
 
 const user = {
   name: 'User',
   image: '',
 };
-
-export function Header() {
-  const [opened, { toggle }] = useDisclosure(false);
-
-  return (
-    <>
-      <header className={classes.header}>
-        <Container className={classes.mainSection}>
-          <Group justify="space-between">
-            <Flex>
-              {tabs.length > 0 && (
-                <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-              )}
-              <Anchor component={Link} href="/dashboard">
-                <Image src={Logo.src} alt="Play with ELO" w={28} />
-              </Anchor>
-            </Flex>
-
-            <HeaderTabs />
-
-            <HeaderUserMenu />
-          </Group>
-        </Container>
-      </header>
-
-      <HeaderDrawer opened={opened} toggle={toggle} />
-    </>
-  );
-}
 
 function HeaderUserMenu() {
   const [userMenuOpened, setUserMenuOpened] = useState(false);
@@ -105,6 +93,7 @@ function HeaderUserMenu() {
 
 function HeaderTabs() {
   const pathname = usePathname();
+  const router = useRouter();
 
   if (tabs.length === 0) {
     return null;
@@ -124,8 +113,8 @@ function HeaderTabs() {
     >
       <Tabs.List>
         {tabs.map((tab, i) => (
-          <Tabs.Tab component={Link} href={tab['href']} value={tab['href']} key={i}>
-            {tab['label']}
+          <Tabs.Tab key={i} value={tab.href} onClick={() => router.push(tab.href)}>
+            {tab.label}
           </Tabs.Tab>
         ))}
       </Tabs.List>
@@ -155,11 +144,40 @@ function HeaderDrawer({ opened, toggle }: HeaderDrawerProps) {
     >
       <ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
         {tabs.map((tab, i) => (
-          <Anchor key={i} component={Link} href={tab['href']} className={classes.drawerLink}>
-            {tab['label']}
+          <Anchor key={i} component={Link} href={tab.href} className={classes.drawerLink}>
+            {tab.label}
           </Anchor>
         ))}
       </ScrollArea>
     </Drawer>
+  );
+}
+
+export function Header() {
+  const [opened, { toggle }] = useDisclosure(false);
+
+  return (
+    <>
+      <header className={classes.header}>
+        <Container className={classes.mainSection}>
+          <Group justify="space-between">
+            <Flex>
+              {tabs.length > 0 && (
+                <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+              )}
+              <Anchor component={Link} href="/dashboard">
+                <Image src={Logo.src} alt="Play with ELO" w={28} />
+              </Anchor>
+            </Flex>
+
+            <HeaderTabs />
+
+            <HeaderUserMenu />
+          </Group>
+        </Container>
+      </header>
+
+      <HeaderDrawer opened={opened} toggle={toggle} />
+    </>
   );
 }

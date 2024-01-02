@@ -30,24 +30,7 @@ type Tab = {
   href: string;
 };
 
-const tabs: Tab[] = [
-  {
-    label: 'Home',
-    href: '/dashboard',
-  },
-  {
-    label: 'Leagues',
-    href: '/dashboard/leagues',
-  },
-  {
-    label: 'Matches',
-    href: '/dashboard/matches',
-  },
-  {
-    label: 'Teams',
-    href: '/dashboard/teams',
-  },
-];
+const tabs: Tab[] = [];
 
 const user = {
   name: 'User',
